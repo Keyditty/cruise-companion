@@ -303,7 +303,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-for>
 </div>
-<button class="btn btn-primary" onClick="{{ openSession }}" style="align-self:flex-start;padding:14px 22px;font-size:16px"><i class="ph-duotone ph-coins" style="font-size:20px"></i>Log a session</button>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center"><button class="btn btn-primary" onClick="{{ openSession }}" style="padding:14px 22px;font-size:16px"><i class="ph-duotone ph-coins" style="font-size:20px"></i>Log a session</button><button class="btn btn-secondary" onClick="{{ openCasino }}" style="padding:14px 18px;font-size:15px"><i class="ph-duotone ph-pencil-simple"></i>Edit points</button></div>
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <h2 style="margin:0;font-size:22px">Sessions</h2>
 <sc-for list="{{ sessionRows }}" as="s" hint-placeholder-count="4">
@@ -374,8 +374,8 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;gap:var(--space-2)"><input class="input" placeholder="Add a friend or family member" value="{{ newPlayer }}" onChange="{{ setNewPlayer }}" onKeyDown="{{ playerKey }}"><button class="btn btn-secondary" onClick="{{ addPlayer }}">Add</button></div>
 </div>
 <div style="display:flex;flex-direction:column;gap:4px;padding-top:var(--space-2);border-top:1px solid var(--color-divider)">
-<button class="btn btn-ghost" onClick="{{ resetScores }}" style="align-self:flex-start;padding-left:0;color:var(--color-accent-2-700)"><i class="ph-duotone ph-arrow-counter-clockwise"></i>Reset scores</button>
-<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">Clears slots sessions, hunt finds, trivia and challenges for {{ shipName }} on this phone, and removes the sample cruise.</div>
+<button class="btn btn-ghost" onClick="{{ resetScores }}" style="align-self:flex-start;padding-left:0;color:var(--color-accent-2-700)"><i class="ph-duotone ph-arrow-counter-clockwise"></i>Reset game scores</button>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">Clears hunt finds, trivia and challenges for {{ shipName }} on this phone, and removes the sample cruise. Casino points stay; edit those under Slots › Edit points.</div>
 </div>
 </div>
 </sc-if>
@@ -786,6 +786,24 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-if>
 
+<sc-if value="{{ shCasino }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ clubName }} · {{ shipName }}</div><h2 style="margin:0;font-size:24px">Edit casino points</h2></div>
+<div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">Set each total to match your casino card. Your logged sessions stay as they are; the difference is saved as an adjustment.</div>
+<sc-for list="{{ casRows }}" as="r" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="font-size:17px;font-weight:600">{{ r.name }}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Casino points</label><input class="input" inputMode="numeric" value="{{ r.pts }}" onChange="{{ r.onPts }}"></div>
+<div class="field"><label>Win / loss ($)</label><input class="input" inputMode="decimal" value="{{ r.net }}" onChange="{{ r.onNet }}"></div>
+</div>
+</div>
+</sc-for>
+<button class="btn btn-primary btn-block" onClick="{{ saveCasino }}">Save</button>
+<button class="btn btn-ghost" onClick="{{ clearCasino }}" style="align-self:center;color:var(--color-accent-2-700)">Reset casino points to zero</button>
+</div>
+</sc-if>
+
 <sc-if value="{{ shDay }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ dayForm.dateLabel }} · {{ dayForm.label }}</div><h2 style="margin:0;font-size:24px">Edit this day</h2></div>
@@ -1044,7 +1062,7 @@ class Component extends DCLogic {
 
   defaultHunt() { return [['A towel animal on the bed', 10], ['Someone in a captain’s hat', 15], ['A rooster in port', 15], ['Matching couple outfits', 20], ['Another cruise line’s ship', 10], ['An iguana', 20], ['Sunset selfie, top deck', 25], ['A conga line', 20], ['Someone hitting a jackpot', 25]].map((x, i) => ({ id: i + 1, title: x[0], pts: x[1], by: null, author: 'App' })); }
   defaultPack() { return ['Passports', 'Boarding documents', 'Casino player cards', 'Magnetic hooks', 'Lanyards', 'Reef-safe sunscreen', 'Swimsuits', 'Evening outfits', 'Seasickness bands', 'Non-surge power strip'].map((t, i) => ({ id: i + 1, text: t, done: false })); }
-  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [] }; }
+  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {} }; }
   seed() {
     const D = (off, name, hours, aboard = '', tip = '') => ({ off, name, hours, aboard, tip });
     const P = (id, off, time, title, place, kind, conf = '') => ({ id, off, time, title, place, kind, conf });
@@ -1143,9 +1161,9 @@ class Component extends DCLogic {
   dayLine(x) { const range = x.from ? x.from + (x.until ? ' – ' + x.until : '') : ''; return [x.hours, range].filter(Boolean).join(' · '); }
   resetScores() {
     const c = this.cur().c;
-    if (!window.confirm('Reset all scores for ' + c.ship + ' on this phone? Slots sessions, hunt finds, trivia and challenges go back to zero, and the sample cruise is removed.')) return;
+    if (!window.confirm('Reset game scores for ' + c.ship + ' on this phone? Hunt finds, trivia and challenges go back to zero, and the sample cruise is removed. Casino points and slots sessions are kept.')) return;
     this.setState(st => {
-      const d = st.db[st.active] || this.emptyData(), db = { ...st.db, [st.active]: { ...d, sessions: [], hunt: d.hunt.map(h => ({ ...h, by: null })), trivia: {}, challenges: {} } };
+      const d = st.db[st.active] || this.emptyData(), db = { ...st.db, [st.active]: { ...d, hunt: d.hunt.map(h => ({ ...h, by: null })), trivia: {}, challenges: {} } };
       const cruises = st.cruises.filter(x => !x.sample || x.id === st.active);
       st.cruises.forEach(x => { if (!cruises.includes(x)) delete db[x.id]; });
       return { db, cruises, tq: 0 };
@@ -1190,7 +1208,7 @@ class Component extends DCLogic {
   short(n) { n = n || ''; if (/^at sea$/i.test(n)) return 'Sea'; return n.length > 9 ? n.split(/[ ,·]/)[0].slice(0, 9) : n; }
   isPast(c) { if (!c.start) return false; const end = this.dateOf(c, (+c.nights || 0) + 1); return end && end.getTime() < this.state.now; }
   statsOf(dd, n) {
-    const ss = dd.sessions.filter(x => x.who === n), pts = ss.reduce((a, x) => a + (+x.pts || 0), 0), net = ss.reduce((a, x) => a + (+x.net || 0), 0), jp = ss.filter(x => x.jp).length;
+    const ss = dd.sessions.filter(x => x.who === n), adj = (dd.casinoAdj || {})[n] || {}, pts = ss.reduce((a, x) => a + (+x.pts || 0), 0) + (+adj.pts || 0), net = ss.reduce((a, x) => a + (+x.net || 0), 0) + (+adj.net || 0), jp = ss.filter(x => x.jp).length;
     const hunt = dd.hunt.filter(h => h.by === n).reduce((a, h) => a + (+h.pts || 0), 0);
     const triv = Object.entries(dd.trivia || {}).filter(([q, a]) => a.who === n && this.TRIVIA[q] && a.pick === this.TRIVIA[q].a).length;
     const chal = Object.entries(dd.challenges || {}).filter(([k, w]) => this.claimers(w).includes(n)).reduce((a, [k]) => a + this.chalPts(dd, k), 0);
@@ -1449,6 +1467,13 @@ class Component extends DCLogic {
       gSlots: s.game === 'slots', gHunt: s.game === 'hunt', gTrivia: s.game === 'trivia', gBadges: s.game === 'badges',
       setSlots: set({ game: 'slots' }), setHunt: set({ game: 'hunt' }), setTrivia: set({ game: 'trivia' }), setBadges: set({ game: 'badges' }),
       crowns, slotBoard, clubName: brand.club, openSession,
+      openCasino: () => this.setState({ sheet: 'casino', fcas: Object.fromEntries(players.map(n => [n, { pts: String(st[n].pts), net: String(st[n].net) }])) }),
+      shCasino: s.sheet === 'casino',
+      casRows: players.map(n => { const f = (s.fcas || {})[n] || {}, setF = k => e => { const val = e.target.value; this.setState(x => ({ fcas: { ...x.fcas, [n]: { ...(x.fcas || {})[n], [k]: val } } })); }; return { name: n, pts: f.pts || '', net: f.net || '', onPts: setF('pts'), onNet: setF('net') }; }),
+      saveCasino: () => { const num = v => parseFloat(String(v || '').replace(/[−–]/g, '-').replace(/[^0-9.-]/g, '')) || 0;
+        this.upd(dd => { const adj = { ...(dd.casinoAdj || {}) }; players.forEach(n => { const f = (s.fcas || {})[n]; if (!f) return; const ss = dd.sessions.filter(x => x.who === n); adj[n] = { pts: Math.round(num(f.pts)) - ss.reduce((a, x) => a + (+x.pts || 0), 0), net: num(f.net) - ss.reduce((a, x) => a + (+x.net || 0), 0) }; }); return { casinoAdj: adj }; });
+        this.setState({ sheet: null }); },
+      clearCasino: () => { if (!window.confirm('Reset casino points for ' + c.ship + ' to zero? This deletes every slots session on this cruise.')) return; this.upd(() => ({ sessions: [], casinoAdj: {} })); this.setState({ sheet: null }); },
       sessionRows: [...d.sessions].reverse().map(x => ({ ...x, when: dateLabel(x.off), ptsLabel: (+x.pts || 0).toLocaleString(), jpLabel: x.jp ? ' · jackpot' : '', netLabel: fmt$(+x.net || 0), color: (+x.net || 0) >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: () => this.setState({ sheet: 'session', fs: { ...x, pts: String(x.pts), net: String(x.net) } }) })),
       noSessions: !d.sessions.length,
       bingo, bonus, noBonus: !bonus.length, huntFound: d.hunt.filter(h => h.by).length, huntTotal: d.hunt.length, bingoLine: bingos ? bingos + (bingos === 1 ? ' bingo' : ' bingos') : '', openClue: openQuick('clue'), openChal: openQuick('chal'), huntEdit: !!s.huntEdit, toggleHuntEdit: () => this.setState({ huntEdit: !s.huntEdit }), huntEditLabel: s.huntEdit ? 'Done' : 'Edit card', huntEditCls: s.huntEdit ? 'btn btn-primary' : 'btn btn-secondary',
