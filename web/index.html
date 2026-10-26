@@ -383,22 +383,21 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div data-screen-label="Camera" style="display:flex;flex-direction:column;gap:var(--space-4)">
 <div style="display:flex;justify-content:space-between;align-items:flex-end"><h1 style="margin:0;font-size:36px;line-height:1">Camera</h1><span style="font-size:12px;color:var(--color-neutral-700)">{{ srcLabel }}</span></div>
 
-<div ref="{{ stageRef }}" onPointerMove="{{ onDragMove }}" onPointerUp="{{ onDragEnd }}" onPointerLeave="{{ onDragEnd }}" style="position:relative;touch-action:none">
+<div ref="{{ stageRef }}" onPointerMove="{{ onDragMove }}" onPointerUp="{{ onDragEnd }}" onPointerLeave="{{ onDragEnd }}" style="position:relative;touch-action:none;width:min(100%,calc((100dvh - 280px) * .75),520px);align-self:center">
 <sc-if value="{{ isBackdrop }}">
-<div style="position:relative;aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;background:{{ sceneBg }}">
-<sc-if value="{{ hasCutout }}"><div style="position:absolute;inset:0;background:{{ cutoutBg }};filter:{{ cssFilter }}"></div></sc-if>
+<div style="position:relative;aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;background:var(--color-neutral-800)">
+<sc-if value="{{ hasCutout }}"><div style="position:absolute;inset:0;background:{{ sceneBg }}"></div><div style="position:absolute;inset:0;background:{{ cutoutBg }};filter:{{ cssFilter }}"></div></sc-if>
 <sc-if value="{{ noCutout }}" hint-placeholder-val="{{ true }}">
-<div style="position:absolute;left:14%;top:26%;width:72%;height:52%;overflow:hidden;border-radius:50% 50% 10px 10px / 34% 34% 10px 10px;border:5px solid var(--color-bg);box-shadow:var(--shadow-md);background:var(--color-neutral-800)">
 <sc-if value="{{ isLive }}"><video ref="{{ videoRef }}" autoPlay="{{ true }}" playsInline="{{ true }}" muted="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:{{ cssFilter }}"></video></sc-if>
 <sc-if value="{{ isDraft }}"><div style="position:absolute;inset:0;background:{{ draftBg }};filter:{{ cssFilter }}"></div></sc-if>
-<sc-if value="{{ isSample }}"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--color-neutral-300);font-size:13px;text-align:center;padding:20px"><span style="display:flex;flex-direction:column;align-items:center;gap:6px"><i class="ph-duotone ph-user-circle" style="font-size:44px"></i>You two go here</span></div></sc-if>
-</div>
+<sc-if value="{{ isSample }}"><div style="position:absolute;inset:0;background:{{ sceneBg }}"></div><div style="position:absolute;left:0;right:0;top:46%;display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;font-size:13px;text-shadow:0 1px 4px rgba(0,0,0,.5)"><i class="ph-duotone ph-user-circle" style="font-size:44px"></i>Your photo fills the frame</div></sc-if>
 </sc-if>
-<div style="position:absolute;top:5%;left:0;right:0;text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center">
-<span style="font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:var(--color-text)">{{ bdTop }}</span>
-<span style="font-size:{{ bdSize }};font-weight:600;line-height:1;letter-spacing:-.02em;color:var(--color-accent-2);text-shadow:2px 2px 0 var(--color-process-yellow)">{{ bdPort }}</span>
+<div style="position:absolute;inset:0;pointer-events:none;background:{{ overlayBg }}"></div>
+<div style="position:absolute;top:4.5%;left:4%;right:4%;text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:2px">
+<span style="font-size:13px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55)">{{ bdTop }}</span>
+<span style="font-size:{{ bdSize }};font-weight:600;line-height:1;letter-spacing:-.01em;color:#fff;-webkit-text-stroke:1.5px #201e1d;text-shadow:3px 3px 0 #d6006c,5px 5px 0 #edbb00,0 0 14px rgba(0,0,0,.35)">{{ bdPort }}</span>
 </div>
-<div style="position:absolute;bottom:2.5%;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text);pointer-events:none">{{ stampTop }}</div>
+<div style="position:absolute;bottom:2.4%;left:0;right:0;text-align:center;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none">{{ stampTop }}</div>
 </div>
 </sc-if>
 <sc-if value="{{ noBackdrop }}" hint-placeholder-val="{{ true }}">
@@ -431,6 +430,13 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-if>
 <sc-for list="{{ stickers }}" as="sk" hint-placeholder-count="0"><div onPointerDown="{{ sk.down }}" style="position:absolute;left:{{ sk.left }};top:{{ sk.top }};width:{{ sk.w }};aspect-ratio:{{ sk.ar }};transform:translate(-50%,-50%) rotate({{ sk.rot }});background:{{ sk.bg }};cursor:grab;touch-action:none;outline:{{ sk.ring }};outline-offset:4px;border-radius:6px;z-index:3"></div></sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:var(--space-2) 0">
+<sc-if value="{{ hasDraft }}"><button class="btn btn-ghost" onClick="{{ retake }}" style="justify-self:start"><i class="ph-duotone ph-arrow-counter-clockwise"></i>Retake</button></sc-if>
+<sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}"><button class="btn btn-ghost" onClick="{{ pickFile }}" style="justify-self:start"><i class="ph-duotone ph-images"></i>Library</button></sc-if>
+<sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}"><button onClick="{{ snap }}" aria-label="Take photo" style="width:74px;height:74px;border-radius:50%;border:4px solid var(--color-text);background:var(--color-accent);cursor:pointer;box-shadow:inset 0 0 0 4px var(--color-bg)" style-active="transform:scale(.94)"></button></sc-if>
+<sc-if value="{{ hasDraft }}"><button class="btn btn-primary" onClick="{{ saveDraft }}" style="padding:14px 18px"><i class="ph-duotone ph-floppy-disk"></i>Save to journal</button></sc-if>
+<span></span>
 </div>
 
 <div style="display:flex;flex-direction:column;gap:6px">
@@ -474,13 +480,6 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 <sc-if value="{{ showHeadline }}"><div class="field"><label>{{ headlineLabel }}</label><input class="input" value="{{ headline }}" onChange="{{ setHeadline }}"></div></sc-if>
 
-<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:var(--space-2) 0">
-<sc-if value="{{ hasDraft }}"><button class="btn btn-ghost" onClick="{{ retake }}" style="justify-self:start"><i class="ph-duotone ph-arrow-counter-clockwise"></i>Retake</button></sc-if>
-<sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}"><button class="btn btn-ghost" onClick="{{ pickFile }}" style="justify-self:start"><i class="ph-duotone ph-images"></i>Library</button></sc-if>
-<sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}"><button onClick="{{ snap }}" aria-label="Take photo" style="width:74px;height:74px;border-radius:50%;border:4px solid var(--color-text);background:var(--color-accent);cursor:pointer;box-shadow:inset 0 0 0 4px var(--color-bg)" style-active="transform:scale(.94)"></button></sc-if>
-<sc-if value="{{ hasDraft }}"><button class="btn btn-primary" onClick="{{ saveDraft }}" style="padding:14px 18px"><i class="ph-duotone ph-floppy-disk"></i>Save to journal</button></sc-if>
-<span></span>
-</div>
 <input type="file" accept="image/*" ref="{{ fileRef }}" onChange="{{ onFile }}" style="display:none">
 
 <div style="display:flex;flex-direction:column;gap:var(--space-3)">
@@ -971,24 +970,53 @@ class Component extends DCLogic {
   };
   leiSvg() { let s = ''; const cols = ['#d6006c', '#edbb00', '#ff90b1', '#62c5ee']; for (let i = 0; i <= 12; i++) { const a = Math.PI * i / 12, x = 80 + 66 * Math.cos(a), y = 22 + 72 * Math.sin(a); if (i < 12) { const a2 = Math.PI * (i + 0.5) / 12; s += "<ellipse cx='" + (80 + 66 * Math.cos(a2)).toFixed(1) + "' cy='" + (22 + 72 * Math.sin(a2)).toFixed(1) + "' rx='7' ry='3.5' fill='#006786' transform='rotate(" + (a2 * 180 / Math.PI + 90).toFixed(0) + ' ' + (80 + 66 * Math.cos(a2)).toFixed(1) + ' ' + (22 + 72 * Math.sin(a2)).toFixed(1) + ")'/>"; } s += "<circle cx='" + x.toFixed(1) + "' cy='" + y.toFixed(1) + "' r='12' fill='" + cols[i % 4] + "' stroke='#201e1d' stroke-width='2'/><circle cx='" + x.toFixed(1) + "' cy='" + y.toFixed(1) + "' r='4' fill='" + (i % 4 === 1 ? '#d6006c' : '#edbb00') + "'/>"; } return "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='220' viewBox='0 0 160 110'>" + s + '</svg>'; }
   stkUrl(k) { const svg = k === 'lei' ? this.leiSvg() : this.STK[k][2]; return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); }
-  palm(x, y, h, lean, L) {
-    const tx = x + lean, ty = y - h; let s = "<path d='M" + x + ' ' + y + ' Q' + (x + lean * 1.5) + ' ' + (y - h * 0.55) + ' ' + tx + ' ' + ty + "' stroke='#201e1d' stroke-width='" + (h * 0.045).toFixed(1) + "' fill='none' stroke-linecap='round'/>";
-    [-172, -140, -105, -70, -35, -5, 160].forEach(deg => { const a = deg * Math.PI / 180, ex = tx + L * Math.cos(a), ey = ty + L * Math.sin(a) + L * 0.3 * Math.abs(Math.cos(a)), mx = (tx + ex) / 2, my = (ty + ey) / 2, len = Math.hypot(ex - tx, ey - ty), nx = -(ey - ty) / len, ny = (ex - tx) / len, w = L * 0.2; s += "<path d='M" + tx.toFixed(1) + ' ' + ty.toFixed(1) + ' Q' + (mx + nx * w).toFixed(1) + ' ' + (my + ny * w).toFixed(1) + ' ' + ex.toFixed(1) + ' ' + ey.toFixed(1) + ' Q' + (mx - nx * w * 0.25).toFixed(1) + ' ' + (my - ny * w * 0.25).toFixed(1) + ' ' + tx.toFixed(1) + ' ' + ty.toFixed(1) + "Z' fill='#201e1d'/>"; });
-    return s + "<circle cx='" + (tx - 5) + "' cy='" + (ty + 7) + "' r='" + (L * 0.07).toFixed(1) + "' fill='#201e1d'/><circle cx='" + (tx + 6) + "' cy='" + (ty + 8) + "' r='" + (L * 0.07).toFixed(1) + "' fill='#201e1d'/>";
+  palm(x, y, h, lean, L, col = '#201e1d') {
+    const tx = x + lean, ty = y - h; let s = "<path d='M" + x + ' ' + y + ' Q' + (x + lean * 1.5) + ' ' + (y - h * 0.55) + ' ' + tx + ' ' + ty + "' stroke='" + col + "' stroke-width='" + (h * 0.045).toFixed(1) + "' fill='none' stroke-linecap='round'/>";
+    [-172, -140, -105, -70, -35, -5, 160].forEach(deg => { const a = deg * Math.PI / 180, ex = tx + L * Math.cos(a), ey = ty + L * Math.sin(a) + L * 0.3 * Math.abs(Math.cos(a)), mx = (tx + ex) / 2, my = (ty + ey) / 2, len = Math.hypot(ex - tx, ey - ty), nx = -(ey - ty) / len, ny = (ex - tx) / len, w = L * 0.2; s += "<path d='M" + tx.toFixed(1) + ' ' + ty.toFixed(1) + ' Q' + (mx + nx * w).toFixed(1) + ' ' + (my + ny * w).toFixed(1) + ' ' + ex.toFixed(1) + ' ' + ey.toFixed(1) + ' Q' + (mx - nx * w * 0.25).toFixed(1) + ' ' + (my - ny * w * 0.25).toFixed(1) + ' ' + tx.toFixed(1) + ' ' + ty.toFixed(1) + "Z' fill='" + col + "'/>"; });
+    return s + "<circle cx='" + (tx - 5) + "' cy='" + (ty + 7) + "' r='" + (L * 0.07).toFixed(1) + "' fill='" + col + "'/><circle cx='" + (tx + 6) + "' cy='" + (ty + 8) + "' r='" + (L * 0.07).toFixed(1) + "' fill='" + col + "'/>";
   }
+  // Palm leaves fanning out from (cx, cy) at the given angles (degrees, 0 = right, 90 = down).
+  fronds(cx, cy, L, angles, col) {
+    return angles.map(deg => { const a = deg * Math.PI / 180, ex = cx + L * Math.cos(a), ey = cy + L * Math.sin(a) + L * 0.18, mx = (cx + ex) / 2, my = (cy + ey) / 2, len = Math.hypot(ex - cx, ey - cy), nx = -(ey - cy) / len, ny = (ex - cx) / len, w = L * 0.16;
+      let leaf = "<path d='M" + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' Q' + (mx + nx * w).toFixed(1) + ' ' + (my + ny * w).toFixed(1) + ' ' + ex.toFixed(1) + ' ' + ey.toFixed(1) + ' Q' + (mx - nx * w * 0.2).toFixed(1) + ' ' + (my - ny * w * 0.2).toFixed(1) + ' ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + "Z' fill='" + col + "'/>";
+      for (let t = 0.25; t < 0.95; t += 0.14) { const px = cx + (ex - cx) * t + nx * w * 0.55 * Math.sin(Math.PI * t), py = cy + (ey - cy) * t + ny * w * 0.55 * Math.sin(Math.PI * t); leaf += "<path d='M" + px.toFixed(1) + ' ' + py.toFixed(1) + ' l' + (nx * w * 0.9).toFixed(1) + ' ' + (ny * w * 0.9).toFixed(1) + "' stroke='" + col + "' stroke-width='5' stroke-linecap='round'/>"; }
+      return leaf; }).join('');
+  }
+  // Beach scene used behind the cut-out of the two of you.
   sceneUrl() {
     if (this._scene) return this._scene;
-    let w = ''; [[670, 14, 18], [700, 20, 12], [740, 10, 22], [790, 24, 8], [850, 16, 16], [910, 22, 10]].forEach(([y, a, b]) => { w += "<path d='M0 " + y + " H720' stroke='#cbeeff' stroke-width='4' stroke-dasharray='" + a * 2 + ' ' + b * 2 + "'/>"; });
-    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='720' height='960' viewBox='0 0 720 960'><defs><pattern id='d' width='12' height='12' patternUnits='userSpaceOnUse'><circle cx='6' cy='6' r='2.3' fill='#99e0ff'/></pattern></defs>"
-      + "<rect width='720' height='960' fill='#f3f2f2'/><rect width='720' height='650' fill='url(#d)'/><circle cx='560' cy='300' r='130' fill='#edbb00'/><circle cx='566' cy='306' r='130' fill='none' stroke='#d6006c' stroke-width='3' opacity='.5'/>"
-      + "<path d='M70 210 q12 -12 24 0 q12 -12 24 0 M150 250 q8 -8 16 0 q8 -8 16 0' stroke='#201e1d' stroke-width='3.5' fill='none'/>"
-      + "<path d='M0 640 Q120 560 260 612 Q380 572 520 614 Q620 584 720 604 L720 660 L0 660Z' fill='#62c5ee'/><rect y='650' width='720' height='310' fill='#38a6cf'/>" + w
-      + "<path d='M300 646 L420 646 L412 658 L308 658Z M318 636 h86 v10 h-86Z M354 626 L358 614 L370 614 L368 626Z' fill='#f3f2f2' stroke='#201e1d' stroke-width='2'/>"
-      + "<path d='M0 960 L0 700 Q100 640 210 704 Q270 770 300 960Z' fill='#006786'/><path d='M720 960 L720 720 Q620 680 540 764 Q500 830 470 960Z' fill='#006786'/>"
-      + this.palm(70, 760, 420, 60, 140) + this.palm(170, 820, 300, -40, 110) + this.palm(650, 780, 400, -50, 135) + this.palm(560, 860, 260, 30, 100)
-      + "<path d='M0 960 Q360 892 720 960Z' fill='#edbb00'/></svg>";
+    let clouds = ''; [[150, 170, 1], [430, 120, .8], [610, 230, .7]].forEach(([cx, cy, k]) => { clouds += "<g fill='#fff' opacity='.92' transform='translate(" + cx + ' ' + cy + ') scale(' + k + ")'><ellipse cx='0' cy='0' rx='70' ry='24'/><ellipse cx='-34' cy='-14' rx='34' ry='26'/><ellipse cx='22' cy='-22' rx='40' ry='32'/></g>"; });
+    let glints = ''; for (let i = 0; i < 26; i++) { const y = 590 + (i * 37) % 190, x0 = (i * 151) % 680, w = 20 + (i * 13) % 50; glints += "<path d='M" + x0 + ' ' + y + ' h' + w + "' stroke='#fff' stroke-opacity='.45' stroke-width='3' stroke-linecap='round'/>"; }
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='720' height='960' viewBox='0 0 720 960'><defs>"
+      + "<linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#3fb6ea'/><stop offset='.62' stop-color='#a9e6fb'/><stop offset='1' stop-color='#ffe3a3'/></linearGradient>"
+      + "<radialGradient id='sun'><stop offset='0' stop-color='#fffbe6'/><stop offset='.55' stop-color='#ffe07a'/><stop offset='1' stop-color='#ffe07a' stop-opacity='0'/></radialGradient>"
+      + "<linearGradient id='sea' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#2cc5df'/><stop offset='1' stop-color='#0a7fb0'/></linearGradient>"
+      + "<linearGradient id='sand' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#f7e2b0'/><stop offset='1' stop-color='#e6bf7c'/></linearGradient></defs>"
+      + "<rect width='720' height='580' fill='url(#sky)'/><circle cx='520' cy='440' r='170' fill='url(#sun)'/><circle cx='520' cy='440' r='62' fill='#fff3b8'/>" + clouds
+      + "<path d='M0 582 Q90 520 190 560 Q260 500 360 566 L360 584 L0 584Z' fill='#2f7f6b'/><path d='M470 584 Q560 540 720 556 L720 584Z' fill='#3d9179'/>"
+      + this.palm(250, 560, 70, 6, 26, '#1f4d3f') + this.palm(300, 566, 56, -5, 22, '#1f4d3f') + this.palm(640, 560, 60, 4, 22, '#1f4d3f')
+      + "<rect y='580' width='720' height='240' fill='url(#sea)'/>" + glints
+      + "<path d='M0 800 Q180 770 360 792 Q540 812 720 786 L720 960 L0 960Z' fill='url(#sand)'/><path d='M0 800 Q180 770 360 792 Q540 812 720 786' stroke='#fff' stroke-width='6' fill='none' opacity='.8'/>"
+      + this.palm(-20, 960, 560, 70, 170, '#173d32') + this.palm(740, 960, 600, -80, 180, '#173d32') + '</svg>';
     this._scene = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     return this._scene;
+  }
+  // Postcard frame laid over the photo: shade for the title, palm fronds in the corners, surf along the bottom.
+  overlayUrl() {
+    if (this._overlay) return this._overlay;
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='720' height='960' viewBox='0 0 720 960'><defs>"
+      + "<linearGradient id='top' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#003a52' stop-opacity='.72'/><stop offset='.6' stop-color='#003a52' stop-opacity='.28'/><stop offset='1' stop-color='#003a52' stop-opacity='0'/></linearGradient>"
+      + "<linearGradient id='w1' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#55d3ec'/><stop offset='1' stop-color='#1fa6cc'/></linearGradient>"
+      + "<linearGradient id='w2' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#169ac4'/><stop offset='1' stop-color='#0a6f96'/></linearGradient></defs>"
+      + "<rect width='720' height='330' fill='url(#top)'/>"
+      + this.fronds(-20, -20, 210, [8, 30, 52, 74], '#0f3a2f') + this.fronds(-30, -10, 170, [18, 44, 66], '#1b5a45') + this.fronds(740, -20, 210, [172, 150, 128, 106], '#0f3a2f') + this.fronds(750, -10, 170, [162, 136, 114], '#1b5a45')
+      + "<path d='M560 300 q10 -10 20 0 q10 -10 20 0 M610 330 q7 -7 14 0 q7 -7 14 0' stroke='#fff' stroke-width='4' fill='none' stroke-linecap='round'/>"
+      + "<path d='M0 842 C110 812 230 868 360 840 S600 812 720 842 V960 H0Z' fill='url(#w1)' opacity='.93'/>"
+      + "<path d='M0 878 C140 852 270 900 400 876 S630 852 720 880 V960 H0Z' fill='url(#w2)'/>"
+      + "<path d='M0 878 C140 852 270 900 400 876 S630 852 720 880' stroke='#fff' stroke-width='5' fill='none' stroke-linecap='round' stroke-dasharray='60 18 24 18' opacity='.85'/>"
+      + "<path d='M0 842 C110 812 230 868 360 840 S600 812 720 842' stroke='#e9fbff' stroke-width='4' fill='none' opacity='.9'/></svg>";
+    this._overlay = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    return this._overlay;
   }
   archPath(x, px, py, pw, ph) { const r = ph * 0.34; x.beginPath(); x.moveTo(px, py + r); x.ellipse(px + pw / 2, py + r, pw / 2, r, 0, Math.PI, 0); x.lineTo(px + pw, py + ph - 10); x.quadraticCurveTo(px + pw, py + ph, px + pw - 10, py + ph); x.lineTo(px + 10, py + ph); x.quadraticCurveTo(px, py + ph, px, py + ph - 10); x.closePath(); }
   async segment() {
@@ -1199,14 +1227,16 @@ class Component extends DCLogic {
     };
     const wrap = (t, px, py, mw, lh, max) => { const w = t.split(' '); let line = '', n = 0; for (let i = 0; i < w.length; i++) { const test = line ? line + ' ' + w[i] : w[i]; if (x.measureText(test).width > mw && line) { x.fillText(line, px, py + n * lh); line = w[i]; n++; if (n >= max) return; } else line = test; } x.fillText(line, px, py + n * lh); };
     if (s.backdrop) {
-      const scene = await this.loadImg(this.sceneUrl()); x.drawImage(scene, 0, 0, W, H);
-      if (s.cutout && s.cutFor === s.draft) { const ci = await this.loadImg(s.cutout); photo(0, 0, W, H, false, ci, true); }
-      else { photo(101, 250, 518, 499, true); x.save(); this.archPath(x, 101, 250, 518, 499); x.lineWidth = 10; x.strokeStyle = paper; x.stroke(); x.restore(); }
+      if (s.cutout && s.cutFor === s.draft) { x.drawImage(await this.loadImg(this.sceneUrl()), 0, 0, W, H); photo(0, 0, W, H, false, await this.loadImg(s.cutout), true); }
+      else photo(0, 0, W, H);
+      x.drawImage(await this.loadImg(this.overlayUrl()), 0, 0, W, H);
       const aboard = s.backdrop === 'aboard', port = aboard ? c.ship.replace(/^(Celebrity|Princess)\s*/, '') : s.backdrop;
-      x.textAlign = 'center'; x.fillStyle = ink; x.font = '29px ' + serif; try { x.letterSpacing = '9px'; } catch (e) {} x.fillText(aboard ? 'WELCOME ABOARD' : 'WELCOME TO', W / 2 + 4, 78); try { x.letterSpacing = '0px'; } catch (e) {}
-      let fz = port.length > 10 ? 84 : 107; x.font = '600 ' + fz + 'px ' + serif; while (x.measureText(port).width > W - 60 && fz > 40) { fz -= 4; x.font = '600 ' + fz + 'px ' + serif; }
-      x.fillStyle = yellow; x.fillText(port, W / 2 + 4, 82 + fz * 0.95 + 4); x.fillStyle = mag; x.fillText(port, W / 2, 82 + fz * 0.95);
-      x.fillStyle = ink; x.font = '22px ' + serif; x.fillText(st.top.toUpperCase(), W / 2, H - 26); x.textAlign = 'left';
+      x.textAlign = 'center'; x.shadowColor = 'rgba(0,0,0,.55)'; x.shadowBlur = 6; x.fillStyle = '#fff'; x.font = '600 27px ' + serif; try { x.letterSpacing = '9px'; } catch (e) {} x.fillText(aboard ? 'WELCOME ABOARD' : 'WELCOME TO', W / 2 + 4, 76); try { x.letterSpacing = '0px'; } catch (e) {}
+      let fz = port.length > 10 ? 84 : 107; x.font = '600 ' + fz + 'px ' + serif; while (x.measureText(port).width > W - 70 && fz > 40) { fz -= 4; x.font = '600 ' + fz + 'px ' + serif; }
+      const py = 84 + fz * 0.95; x.shadowBlur = 0; x.shadowColor = 'transparent';
+      x.fillStyle = yellow; x.fillText(port, W / 2 + 10, py + 10); x.fillStyle = mag; x.fillText(port, W / 2 + 6, py + 6);
+      x.lineJoin = 'round'; x.lineWidth = 6; x.strokeStyle = ink; x.strokeText(port, W / 2, py); x.fillStyle = '#fff'; x.fillText(port, W / 2, py);
+      x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 6; x.font = '600 22px ' + serif; x.fillText(st.top.toUpperCase(), W / 2, H - 24); x.shadowBlur = 0; x.shadowColor = 'transparent'; x.textAlign = 'left';
     } else if (s.frame === 'front') {
       x.fillStyle = paper; x.fillRect(0, 0, W, H); x.fillStyle = ink; x.fillRect(28, 28, W - 56, 6); x.fillRect(28, 38, W - 56, 2);
       x.font = '600 58px ' + serif; x.fillText('The Daily Voyager', 28, 102);
@@ -1442,10 +1472,10 @@ class Component extends DCLogic {
       stkRemove: () => this.setState(x => ({ stickers: x.stickers.filter(k => k.id !== x.selSticker), selSticker: null })),
       stkClear: set({ stickers: [], selSticker: null }),
       backdropChips: [[null, 'None'], ['aboard', 'Welcome aboard'], ...[...new Set(days.filter(x => x.off >= 0 && !/^at sea$/i.test(x.name)).map(x => x.name))].map(p => [p, 'Welcome to ' + p])].map(([id, label]) => ({ label, ...chip(s.backdrop === id), pick: () => this.setState({ backdrop: id }) })),
-      isBackdrop: !!s.backdrop, noBackdrop: !s.backdrop, sceneBg: 'center/cover no-repeat url("' + this.sceneUrl() + '")',
+      isBackdrop: !!s.backdrop, noBackdrop: !s.backdrop, sceneBg: 'center/cover no-repeat url("' + this.sceneUrl() + '")', overlayBg: '0 0/100% 100% no-repeat url("' + this.overlayUrl() + '")',
       bdTop: s.backdrop === 'aboard' ? 'Welcome aboard' : 'Welcome to', bdPort: s.backdrop === 'aboard' ? (c.ship.replace(/^(Celebrity|Princess)\s*/, '') || c.ship) : (s.backdrop || ''), bdSize: (s.backdrop || '').length > 10 ? '40px' : '52px',
       hasCutout: !!(s.backdrop && s.draft && s.cutout && s.cutFor === s.draft), noCutout: !(s.backdrop && s.draft && s.cutout && s.cutFor === s.draft), cutoutBg: s.cutout ? 'center/cover no-repeat url(' + s.cutout + ')' : 'none',
-      showSegMsg: !!s.backdrop, segMsg: !s.draft ? 'Snap or pick a photo and we’ll cut you out and put you in front of the island.' : s.seg === 'working' ? 'Cutting you out of the background…' : s.seg === 'fail' ? 'Couldn’t cut out the background here, so your photo sits in the window.' : 'You’re on the island. Add a hat, then save.', saveDraft: () => this.bake(), pickFile: () => this.fileEl && this.fileEl.click(),
+      showSegMsg: !!s.backdrop, segMsg: !s.draft ? 'Snap or pick a photo. We’ll try to cut you out and put you on the beach; if that can’t run, your photo fills the postcard.' : s.seg === 'working' ? 'Cutting you out of the background…' : s.seg === 'fail' ? 'Couldn’t cut out the background here, so your photo fills the postcard.' : 'You’re on the island. Add a hat, then save.', saveDraft: () => this.bake(), pickFile: () => this.fileEl && this.fileEl.click(),
       snap: () => { const vd = this.video; if (srcMode !== 'live' || !vd || !vd.videoWidth) { this.fileEl && this.fileEl.click(); return; } const cv = document.createElement('canvas'); cv.width = vd.videoWidth; cv.height = vd.videoHeight; const x = cv.getContext('2d'); x.translate(cv.width, 0); x.scale(-1, 1); x.drawImage(vd, 0, 0); this.setState({ draft: cv.toDataURL('image/jpeg', 0.88) }); },
       onFile: async e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return; try { const src = await this.readImg(f, 1400); this.setState({ draft: src }); } catch (err) {} },
       photos: d.photos.map(p => ({ bg: 'center/cover no-repeat url(' + p.src + ')', open: () => this.setState({ sheet: 'viewer', viewerId: p.id }) })), noPhotos: !d.photos.length, hasPhotos: d.photos.length > 0, photoCount: d.photos.length + (d.photos.length === 1 ? ' photo' : ' photos'),
