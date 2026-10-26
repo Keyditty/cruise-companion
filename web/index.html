@@ -372,6 +372,10 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ playerTags }}" as="pt" hint-placeholder-count="2"><span class="tag tag-neutral">{{ pt.name }}</span></sc-for></div>
 <div style="display:flex;gap:var(--space-2)"><input class="input" placeholder="Add a friend or family member" value="{{ newPlayer }}" onChange="{{ setNewPlayer }}" onKeyDown="{{ playerKey }}"><button class="btn btn-secondary" onClick="{{ addPlayer }}">Add</button></div>
 </div>
+<div style="display:flex;flex-direction:column;gap:4px;padding-top:var(--space-2);border-top:1px solid var(--color-divider)">
+<button class="btn btn-ghost" onClick="{{ resetScores }}" style="align-self:flex-start;padding-left:0;color:var(--color-accent-2-700)"><i class="ph-duotone ph-arrow-counter-clockwise"></i>Reset scores</button>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">Clears slots sessions, hunt finds, trivia and challenges for {{ shipName }} on this phone, and removes the sample cruise.</div>
+</div>
 </div>
 </sc-if>
 
@@ -990,7 +994,7 @@ class Component extends DCLogic {
     const P = (id, off, time, title, place, kind, conf = '') => ({ id, off, time, title, place, kind, conf });
     const apex = Object.assign(this.emptyData(), {
       plans: [P(1, -3, '8:00 AM', 'Drive to Orlando', 'Home → Disney', 'land'), P(2, -3, '10:00 AM', 'Magic Kingdom', 'Walt Disney World', 'land', 'WDW-58812'), P(3, -3, '4:00 PM', 'Hotel check-in', 'Disney Springs area', 'land', 'HTL-30417'), P(4, -2, '9:00 AM', 'EPCOT', 'Walt Disney World', 'land', 'WDW-58813'), P(5, -1, '11:00 AM', 'Drive to the coast', 'Orlando → Cocoa Beach', 'land'), P(6, -1, '3:00 PM', 'Port hotel check-in', 'Cocoa Beach', 'land', 'HTL-30588'), P(7, 0, '10:30 AM', 'Port parking', 'Cruise terminal lot', 'land', 'PRK-11902'), P(8, 0, '11:30 AM', 'Boarding window', 'Cruise terminal', 'ship', 'BRD-1130'), P(9, 0, '4:00 PM', 'Sail-away drinks', 'Rooftop Garden', 'ship'), P(10, 1, '9:00 AM', 'Duval Street & Southernmost Point', 'Key West', 'shore'), P(11, 2, '10:00 AM', 'Couples massage', 'The Spa', 'ship', 'SPA-2281'), P(12, 2, '2:00 PM', 'Slots tournament', 'Casino', 'ship'), P(13, 2, '8:00 PM', 'Steakhouse dinner', 'Fine Cut Steakhouse', 'ship', 'DIN-8823'), P(14, 3, '9:00 AM', 'Snorkel & beach club', 'Cozumel', 'shore', 'EX-40912'), P(15, 4, '8:00 AM', 'Stingray City', 'Grand Cayman', 'shore', 'EX-41187'), P(16, 5, '9:30 PM', 'Evening show', 'The Theatre', 'ship', 'SHW-0394'), P(17, 6, '7:00 PM', 'Le Petit Chef', 'Specialty dining', 'ship', 'DIN-9002'), P(18, 7, '7:30 AM', 'Disembark & get the car', 'Terminal lot', 'land')],
-      sessions: [{ id: 1, who: 'Toni', machine: 'Buffalo Gold', off: 0, pts: 410, net: 72, jp: false }, { id: 2, who: 'Matthew', machine: 'Lightning Link', off: 0, pts: 520, net: -60, jp: false }, { id: 3, who: 'Matthew', machine: 'Wheel of Fortune', off: 2, pts: 300, net: 125, jp: true }, { id: 4, who: 'Toni', machine: 'Dragon Link', off: 2, pts: 380, net: 38, jp: false }],
+      sessions: [],
       spends: [{ id: 1, what: 'Disney hotel, 2 nights', when: 'Oct 28', amt: 540 }, { id: 2, what: 'Port hotel', when: 'Oct 30', amt: 189 }, { id: 3, what: 'Port parking, 7 days', when: 'Oct 31', amt: 125 }],
       budget: 2500,
       notes: [{ id: 1, text: 'Watch sunset from the Rooftop Garden on a sea day', by: 'Toni', done: false }, { id: 2, text: 'Try every martini on the menu (over the week)', by: 'Matthew', done: false }],
@@ -998,7 +1002,6 @@ class Component extends DCLogic {
       crew: [{ id: 1, name: 'Ana', role: 'Bartender', where: 'Martini Bar', r: 5, note: 'Remembered our order every night', tip: true, survey: true }, { id: 2, name: 'Rizal', role: 'Room steward', where: 'Deck 9, our hallway', r: 4, note: 'Towel animals every evening', tip: false, survey: false }],
       spots: [{ id: 1, deck: 4, name: 'Casino', note: 'Toni’s lucky row by the bar' }, { id: 2, deck: 14, name: 'Rooftop Garden', note: 'Sail-away and sunsets' }],
     });
-    apex.hunt[2].by = 'Toni'; apex.hunt[4].by = 'Matthew';
     const edge = Object.assign(this.emptyData(), {
       sessions: [{ id: 1, who: 'Matthew', machine: 'Buffalo', off: 1, pts: 640, net: 210, jp: true }, { id: 2, who: 'Toni', machine: 'Lightning Link', off: 2, pts: 880, net: -45, jp: false }],
       food: [{ id: 1, name: 'Lobster tail', where: 'Main dining room', r: 5, by: 'Toni', note: '', photo: '' }],
@@ -1073,6 +1076,16 @@ class Component extends DCLogic {
     if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file] }); } catch (e) {} return; }
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }
+  resetScores() {
+    const c = this.cur().c;
+    if (!window.confirm('Reset all scores for ' + c.ship + ' on this phone? Slots sessions, hunt finds, trivia and challenges go back to zero, and the sample cruise is removed.')) return;
+    this.setState(st => {
+      const d = st.db[st.active] || this.emptyData(), db = { ...st.db, [st.active]: { ...d, sessions: [], hunt: d.hunt.map(h => ({ ...h, by: null })), trivia: {}, challenges: {} } };
+      const cruises = st.cruises.filter(x => !x.sample || x.id === st.active);
+      st.cruises.forEach(x => { if (!cruises.includes(x)) delete db[x.id]; });
+      return { db, cruises, tq: 0 };
+    });
   }
   async onSyncFile(e) {
     const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
@@ -1419,7 +1432,7 @@ class Component extends DCLogic {
       exportSummary: (() => { const all = Object.values(s.db); const n = k => all.reduce((a, x) => a + ((x && x[k]) || []).length, 0); return s.cruises.length + ' cruises, ' + n('sessions') + ' slots sessions, ' + n('plans') + ' plans and ' + n('photos') + ' photos'; })(),
       hasSyncIn: !!s.syncIn, syncInWhen: s.syncIn ? 'Saved ' + new Date(s.syncIn.saved).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '',
       syncInSummary: s.syncIn ? s.syncIn.cruises.length + ' cruises · ' + Object.values(s.syncIn.db).reduce((a, x) => a + ((x && x.sessions) || []).length, 0) + ' slots sessions' : '',
-      syncMerge: () => this.applySync(false), syncReplace: () => this.applySync(true), syncMsg: s.syncMsg,
+      resetScores: () => this.resetScores(), syncMerge: () => this.applySync(false), syncReplace: () => this.applySync(true), syncMsg: s.syncMsg,
       fUp: s.fleetView === 'up', fHist: s.fleetView === 'hist', fClubs: s.fleetView === 'clubs', setFUp: set({ fleetView: 'up' }), setFHist: set({ fleetView: 'hist' }), setFClubs: set({ fleetView: 'clubs' }),
       upcomingRows: s.cruises.filter(x => !this.isPast(x)).map(x => ({ ship: x.ship, when: whenOf(x), route: routeOf(x), active: x.id === s.active, pick: () => this.setState({ active: x.id, overlay: null, tab: 'today', preview: null, selOff: 0, track: false }), edit: openCruiseEdit(x) })),
       pastRows: s.cruises.filter(x => this.isPast(x)).map(x => { const dd = s.db[x.id] || this.emptyData(), loved = dd.food.filter(f => f.r >= 4).length, crew = dd.crew.filter(y => y.survey || y.r >= 4).length; return { ship: x.ship, when: whenOf(x), route: routeOf(x), sample: !!x.sample, blurb: loved + ' favorites · ' + crew + ' crew to remember · ' + dd.photos.length + ' photos', wrap: () => this.setState({ overlay: 'wrap', wrapId: x.id }) }; }),
