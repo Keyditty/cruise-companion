@@ -149,8 +149,8 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <sc-if value="{{ hasImo }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-2)">
 <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Where’s {{ shipShort }} now</div>
-<div style="display:flex;gap:var(--space-2);flex-wrap:wrap"><sc-for list="{{ trackLinks }}" as="tl" hint-placeholder-count="3"><a class="{{ tl.cls }}" href="{{ tl.href }}" target="_blank" rel="noopener" style="text-decoration:none"><i class="ph-duotone ph-navigation-arrow"></i>{{ tl.label }}</a></sc-for></div>
-<div style="font-size:12px;color:var(--color-neutral-700)">Live ship position from free trackers · IMO {{ imo }}</div>
+<a class="btn btn-secondary" href="{{ trackLink }}" target="_blank" rel="noopener" style="align-self:flex-start;text-decoration:none"><i class="ph-duotone ph-navigation-arrow"></i>Live position on MarineTraffic</a>
+<div style="font-size:12px;color:var(--color-neutral-700)">Opens MarineTraffic’s live ship map · IMO {{ imo }}</div>
 </div>
 </sc-if>
 
@@ -1357,7 +1357,7 @@ class Component extends DCLogic {
       hasPreviewPort: !!firstPort, previewPort: () => this.setState({ preview: firstPort ? firstPort.off : 0 }), backToCountdown: set({ preview: null }),
       hd: hdDay ? { kicker: dateLabel(on) + ' · ' + labelOf(on), name: hdDay.name, hours: hdDay.hours, aboard: hdDay.aboard, tip: hdDay.tip } : {},
       hasStops: stops.length > 0, stops, hasImo: !!c.imo, imo: c.imo || '', shipShort: c.ship.replace(/^(Celebrity|Princess)\s*/, '') || c.ship,
-      trackLinks: [['MarineTraffic', 'https://www.marinetraffic.com/en/ais/details/ships/imo:'], ['VesselFinder', 'https://www.vesselfinder.com/vessels/details/'], ['CruiseMapper', 'https://www.cruisemapper.com/?imo=']].map((t, i) => ({ label: t[0], href: t[1] + (c.imo || ''), cls: i ? 'btn btn-ghost' : 'btn btn-secondary' })),
+      trackLink: 'https://www.marinetraffic.com/en/ais/details/ships/imo:' + (c.imo || ''),
       standings, chal, chalHead: onboard ? 'Today’s challenges' : 'Warm-up challenges',
       planHead: onboard ? 'Today’s plans' : 'First up · ' + dateLabel(firstPlanOff), homePlans, noHomePlans: !homePlans.length,
       goPlans: set({ tab: 'plans' }), goPlay: set({ tab: 'play', game: 'slots' }), goPacking: set({ tab: 'trip', tripTab: 'pack' }), packDone: pDone, packTotal: d.pack.length,
