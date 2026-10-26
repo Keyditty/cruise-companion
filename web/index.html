@@ -148,10 +148,9 @@ body{background:var(--color-bg);overscroll-behavior:none}
 
 <sc-if value="{{ hasImo }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-2)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Where’s {{ shipShort }} now</span><a href="{{ vfLink }}" target="_blank" rel="noopener" style="font-size:13px">Open tracker</a></div>
-<sc-if value="{{ trackOn }}"><iframe src="{{ vfSrc }}" title="Live ship position" style="width:100%;height:260px;border:0;border-radius:var(--radius-lg);background:var(--color-surface)"></iframe></sc-if>
-<sc-if value="{{ trackOff }}" hint-placeholder-val="{{ true }}"><button class="btn btn-secondary" onClick="{{ showTrack }}" style="align-self:flex-start"><i class="ph-duotone ph-navigation-arrow"></i>Show live position</button></sc-if>
-<div style="font-size:12px;color:var(--color-neutral-700)">Live AIS position from VesselFinder · IMO {{ imo }}</div>
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Where’s {{ shipShort }} now</div>
+<a class="btn btn-secondary" href="{{ trackLink }}" target="_blank" rel="noopener" style="align-self:flex-start;text-decoration:none"><i class="ph-duotone ph-navigation-arrow"></i>Live position on CruiseMapper</a>
+<div style="font-size:12px;color:var(--color-neutral-700)">Opens CruiseMapper’s live ship map · IMO {{ imo }}</div>
 </div>
 </sc-if>
 
@@ -1001,7 +1000,7 @@ class Component extends DCLogic {
     this.state = Object.assign(this.seed(), saved, {
       tab: 'today', planView: 'days', selOff: 0, resFilter: 'all', game: 'slots', tripTab: 'pack', fleetView: 'up',
       preview: null, sheet: null, overlay: null, wrapId: null, fp: {}, fs: {}, ff: {}, fc: {}, fcr: {}, qType: null, qf: {}, whoId: null, viewerId: null,
-      newPlayer: '', filter: 'natural', frame: 'stamp', headline: '', draft: null, cam: 'idle', tq: 0, tWho: 'Matthew', reel: null, track: false,
+      newPlayer: '', filter: 'natural', frame: 'stamp', headline: '', draft: null, cam: 'idle', tq: 0, tWho: 'Matthew', reel: null,
       impText: '', shots: [], impBusy: false, impMsg: '', found: [], now: Date.now(),
       backdrop: null, stickers: [], selSticker: null, cutout: null, cutFor: null, seg: 'idle',
     });
@@ -1271,8 +1270,7 @@ class Component extends DCLogic {
       hasPreviewPort: !!firstPort, previewPort: () => this.setState({ preview: firstPort ? firstPort.off : 0 }), backToCountdown: set({ preview: null }),
       hd: hdDay ? { kicker: dateLabel(on) + ' · ' + labelOf(on), name: hdDay.name, hours: hdDay.hours, aboard: hdDay.aboard, tip: hdDay.tip } : {},
       hasStops: stops.length > 0, stops, hasImo: !!c.imo, imo: c.imo || '', shipShort: c.ship.replace(/^(Celebrity|Princess)\s*/, '') || c.ship,
-      vfSrc: 'https://www.vesselfinder.com/aismap?imo=' + (c.imo || '') + '&names=true&track=true&zoom=6', vfLink: 'https://www.vesselfinder.com/vessels/details/' + (c.imo || ''),
-      trackOn: s.track, trackOff: !s.track, showTrack: set({ track: true }),
+      trackLink: 'https://www.cruisemapper.com/?imo=' + (c.imo || ''),
       standings, chal, chalHead: onboard ? 'Today’s challenges' : 'Warm-up challenges',
       planHead: onboard ? 'Today’s plans' : 'First up · ' + dateLabel(firstPlanOff), homePlans, noHomePlans: !homePlans.length,
       goPlans: set({ tab: 'plans' }), goPlay: set({ tab: 'play', game: 'slots' }), goPacking: set({ tab: 'trip', tripTab: 'pack' }), packDone: pDone, packTotal: d.pack.length,

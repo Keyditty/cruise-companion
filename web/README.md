@@ -8,4 +8,6 @@ Static site built from `project/Cruise Companion.dc.html`. No build step: serve 
 - Data lives in the phone's browser storage (`localStorage`, key `mt-cruise-v3`): each phone has its own copy.
 - HTTPS is required for the camera and the offline cache.
 
+Publishing: pushing to `main` runs `.github/workflows/pages.yml`, which publishes this folder to GitHub Pages.
+
 Local preview: `python3 -m http.server -d web 8000`, then open http://localhost:8000.
