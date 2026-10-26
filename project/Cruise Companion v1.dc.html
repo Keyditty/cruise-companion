@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/broadsheet-a2805618-dec5-4e15-9c58-0dee9ebb64cf/styles.css">
+<script src="_ds/broadsheet-a2805618-dec5-4e15-9c58-0dee9ebb64cf/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+<style>body{margin:0;background:var(--color-neutral-300);font-family:var(--font-body);color:var(--color-text)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}*{box-sizing:border-box}.scr::-webkit-scrollbar{display:none}.scr{scrollbar-width:none}.btn,.seg-opt{white-space:nowrap}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px">
+<div data-screen-label="Phone" style="position:relative;width:390px;height:844px;flex:none;background:var(--color-bg);border-radius:48px;box-shadow:0 0 0 10px var(--color-neutral-900),var(--shadow-lg);overflow:hidden;display:flex;flex-direction:column">
+
+<div style="height:50px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 8px;font-size:15px;font-weight:600">
+<span>9:41</span>
+<div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:var(--color-neutral-900)"></div>
+<span style="display:flex;gap:6px;font-size:16px"><i class="ph-duotone ph-wifi-high"></i><i class="ph-duotone ph-battery-high"></i></span>
+</div>
+
+<div class="scr" ref="{{ scrollRef }}" style="flex:1;overflow-y:auto;padding:var(--space-3) var(--space-4) var(--space-8)">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Home" style="display:flex;flex-direction:column;gap:var(--space-8)">
+<sc-if value="{{ preSail }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Matthew &amp; Toni · Celebrity Apex</div>
+<div style="display:flex;align-items:baseline;gap:var(--space-2)"><span style="font-size:112px;font-weight:600;line-height:1;letter-spacing:-.04em;color:var(--color-accent)">{{ cdDays }}</span><span style="font-size:22px">{{ cdUnit }} to sail</span></div>
+<div style="font-size:15px;color:var(--color-neutral-700)">{{ cdRest }} · Sat, Oct 31 from Port Canaveral</div>
+<div style="display:flex;gap:var(--space-2);margin-top:var(--space-2);flex-wrap:wrap;align-items:center"><button class="btn btn-secondary" onClick="{{ goPacking }}"><i class="ph-duotone ph-suitcase-rolling"></i>Packing {{ packDone }}/{{ packTotal }}</button><button class="btn btn-ghost" onClick="{{ previewOnboard }}">Preview a port day</button></div>
+</div>
+</sc-if>
+<sc-if value="{{ onboard }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ homeDay.date }} · {{ homeDay.label }}</div><button class="btn btn-ghost" onClick="{{ backToCountdown }}" style="font-size:12px">Countdown</button></div>
+<h1 style="margin:0;font-size:52px;line-height:.95;letter-spacing:-.02em">{{ homeDay.name }}</h1>
+<div style="font-size:15px;color:var(--color-neutral-700)">{{ homeDay.hours }}</div>
+<sc-if value="{{ homeDay.aboard }}"><div style="display:flex;align-items:center;gap:8px;margin-top:var(--space-2);font-size:15px;color:var(--color-accent-2-700)"><i class="ph-duotone ph-bell-ringing" style="font-size:20px"></i>All aboard {{ homeDay.aboard }} · alerts at 90 and 45 min</div></sc-if>
+<sc-if value="{{ homeDay.tip }}"><div style="font-size:14px;line-height:1.5;font-style:italic;color:var(--color-neutral-800);margin-top:var(--space-1)">{{ homeDay.tip }}</div></sc-if>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1;min-width:0">{{ planHead }}</h2><button class="btn btn-ghost" onClick="{{ goPlans }}">All plans</button></div>
+<sc-for list="{{ homePlans }}" as="p" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:72px 1fr;gap:var(--space-3);align-items:baseline">
+<div style="font-size:13px;color:var(--color-neutral-700)">{{ p.time }}</div>
+<div style="display:flex;flex-direction:column;gap:3px"><div style="font-size:17px;font-weight:600;line-height:1.25">{{ p.title }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ p.place }} · {{ p.kindLabel }}</div></div>
+</div>
+</sc-for>
+<sc-if value="{{ noHomePlans }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Nothing planned. A rare free day.</div></sc-if>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1;min-width:0">Free-cruise goal</h2><button class="btn btn-ghost" onClick="{{ goPlay }}">Slots</button></div>
+<sc-for list="{{ slotBoard }}" as="g" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:5px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:17px;font-weight:600">{{ g.name }}</span><span style="font-size:14px"><span style="font-weight:600;color:{{ g.color }}">{{ g.ptsLabel }}</span> / {{ goalLabel }}</span></div>
+<div style="height:5px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:5px;border-radius:var(--radius-md);width:{{ g.pct }};background:{{ g.color }}"></div></div>
+<div style="font-size:12px;color:var(--color-neutral-700)">{{ g.left }} · {{ g.net }} win/loss</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<h2 style="margin:0;font-size:22px">Our cruises</h2>
+<sc-for list="{{ cruises }}" as="c" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:72px 1fr;gap:var(--space-3);align-items:baseline">
+<div style="font-size:13px;color:var(--color-neutral-700)">{{ c.when }}</div>
+<div style="display:flex;flex-direction:column;gap:3px"><div style="font-size:17px;font-weight:600;line-height:1.25">{{ c.ship }}</div><div style="font-size:13px;line-height:1.4;color:var(--color-neutral-700)">{{ c.route }}</div></div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlans }}">
+<div data-screen-label="Plans" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<div style="display:flex;justify-content:space-between;align-items:flex-end"><h1 style="margin:0;font-size:36px;line-height:1">Plans</h1><button class="btn btn-primary" onClick="{{ openPlan }}"><i class="ph-duotone ph-plus"></i>Add</button></div>
+<div class="seg" style="align-self:flex-start">
+<label class="seg-opt"><input type="radio" name="pv" checked="{{ planDays }}" onChange="{{ setPlanDays }}">Day by day</label>
+<label class="seg-opt"><input type="radio" name="pv" checked="{{ planRes }}" onChange="{{ setPlanRes }}">Reservations</label>
+</div>
+<sc-if value="{{ planDays }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-6)">
+<div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto;margin:0 -20px;padding:0 20px">
+<sc-for list="{{ dayChips }}" as="d" hint-placeholder-count="8">
+<button onClick="{{ d.pick }}" style="flex:none;width:64px;padding:var(--space-2) 0;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--color-divider);border-radius:var(--radius-md);cursor:pointer;font-family:var(--font-body);background:{{ d.bg }};color:{{ d.fg }}">
+<span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase">{{ d.top }}</span><span style="font-size:22px;font-weight:600;line-height:1">{{ d.n }}</span><span style="font-size:10px;white-space:nowrap">{{ d.short }}</span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:26px">{{ selDay.name }}</h2>
+<div style="font-size:14px;color:var(--color-neutral-700)">{{ selDay.date }} · {{ selDay.hours }}</div>
+<sc-if value="{{ selDay.aboard }}"><div style="font-size:14px;color:var(--color-accent-2-700)">All aboard {{ selDay.aboard }}</div></sc-if>
+<sc-if value="{{ selDay.tip }}"><div style="font-size:14px;line-height:1.5;font-style:italic;color:var(--color-neutral-800);margin-top:4px">{{ selDay.tip }}</div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ dayPlans }}" as="p" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:72px 1fr auto;gap:var(--space-3);align-items:baseline">
+<div style="font-size:13px;color:var(--color-neutral-700)">{{ p.time }}</div>
+<div style="display:flex;flex-direction:column;gap:3px"><div style="font-size:17px;font-weight:600;line-height:1.25">{{ p.title }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ p.place }}{{ p.confLine }}</div></div>
+<span class="{{ p.tagClass }}">{{ p.kindLabel }}</span>
+</div>
+</sc-for>
+<sc-if value="{{ noDayPlans }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Nothing yet for this day.</div></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ planRes }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+<sc-for list="{{ resFilters }}" as="f" hint-placeholder-count="4">
+<button class="btn btn-secondary" onClick="{{ f.pick }}" style="padding:6px 12px;font-size:13px;background:{{ f.bg }};color:{{ f.fg }}">{{ f.label }}</button>
+</sc-for>
+</div>
+<sc-for list="{{ reservations }}" as="r" hint-placeholder-count="4">
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center"><span class="card-kicker">{{ r.when }}</span><span class="{{ r.tagClass }}">{{ r.kindLabel }}</span></div>
+<div class="card-title">{{ r.title }}</div>
+<div class="card-meta"><i class="ph-duotone ph-map-pin"></i>{{ r.place }}</div>
+<div style="font-size:13px">Conf. <span style="letter-spacing:.04em;font-weight:600">{{ r.conf }}</span></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlay }}">
+<div data-screen-label="Play" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<h1 style="margin:0;font-size:36px;line-height:1">Play</h1>
+<div class="seg" style="align-self:flex-start">
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gSlots }}" onChange="{{ setSlots }}">Slots</label>
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gHunt }}" onChange="{{ setHunt }}">Hunt</label>
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gTrivia }}" onChange="{{ setTrivia }}">Trivia</label>
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gBadges }}" onChange="{{ setBadges }}">Badges</label>
+</div>
+
+<sc-if value="{{ gSlots }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-8)">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<h2 style="margin:0;font-size:22px">Crowns</h2>
+<sc-for list="{{ crowns }}" as="cr" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:32px 1fr auto;gap:var(--space-3);align-items:center">
+<i class="ph-duotone ph-crown-simple" style="font-size:28px;color:{{ cr.color }}"></i>
+<div style="display:flex;flex-direction:column;gap:1px"><div style="font-size:13px;color:var(--color-neutral-700)">{{ cr.title }}</div><div style="font-size:18px;font-weight:600">{{ cr.holder }}</div></div>
+<div style="font-size:15px">{{ cr.value }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-6)">
+<sc-for list="{{ slotBoard }}" as="b" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:17px;font-weight:600">{{ b.name }}</span><span style="font-size:13px;color:var(--color-neutral-700);white-space:nowrap">{{ b.meta }}</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.color }}">{{ b.ptsLabel }}</div><div style="font-size:12px;color:var(--color-neutral-700)">casino points</div></div>
+<div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.netColor }}">{{ b.net }}</div><div style="font-size:12px;color:var(--color-neutral-700)">win / loss</div></div>
+</div>
+<div style="height:5px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:5px;border-radius:var(--radius-md);width:{{ b.pct }};background:{{ b.color }}"></div></div>
+<div style="font-size:12px;color:var(--color-neutral-700)">{{ b.left }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Casino tier</label><input class="input" value="{{ tier }}" onChange="{{ setTier }}"></div>
+<div class="field"><label>Free-cruise goal (pts each)</label><input class="input" inputMode="numeric" value="{{ goal }}" onChange="{{ setGoal }}"></div>
+</div>
+<button class="btn btn-primary" onClick="{{ openSession }}" style="align-self:flex-start"><i class="ph-duotone ph-coins"></i>Log a session</button>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:22px">Sessions</h2>
+<sc-for list="{{ sessionRows }}" as="s" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:baseline">
+<div style="display:flex;flex-direction:column;gap:3px"><div style="font-size:16px;font-weight:600">{{ s.who }} · {{ s.machine }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ s.when }} · {{ s.ptsLabel }} pts{{ s.jpLabel }}</div></div>
+<div style="font-size:18px;font-weight:600;color:{{ s.color }}">{{ s.netLabel }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ gHunt }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-6)">
+<div style="display:flex;gap:var(--space-6)"><sc-for list="{{ huntBoard }}" as="hb" hint-placeholder-count="2"><div><div style="font-size:13px;color:var(--color-neutral-700)">{{ hb.name }}</div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ hb.color }}">{{ hb.pts }}</div></div></sc-for></div>
+<div style="font-size:15px;color:var(--color-neutral-700)">{{ huntFound }} of {{ huntTotal }} found. Tap who spotted it first.</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-6)">
+<sc-for list="{{ huntRows }}" as="h" hint-placeholder-count="6">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;justify-content:space-between;gap:var(--space-3);align-items:baseline"><div style="font-size:16px;font-weight:600;line-height:1.3;text-decoration:{{ h.strike }};color:{{ h.textColor }}">{{ h.title }}</div><div style="flex:none;font-size:13px;color:var(--color-neutral-700)">{{ h.pts }} pts</div></div>
+<div style="font-size:12px;color:var(--color-neutral-700)">{{ h.meta }}</div>
+<sc-if value="{{ h.open }}" hint-placeholder-val="{{ true }}"><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ h.claims }}" as="c" hint-placeholder-count="2"><button class="btn btn-secondary" onClick="{{ c.go }}" style="padding:5px 10px;font-size:12px">{{ c.name }}</button></sc-for></div></sc-if>
+<sc-if value="{{ h.done }}"><button class="btn btn-ghost" onClick="{{ h.undo }}" style="font-size:12px;align-self:flex-start">Undo</button></sc-if>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;gap:var(--space-2)"><input class="input" placeholder="Write a clue for the others…" value="{{ clue }}" onChange="{{ setClue }}" onKeyDown="{{ clueKey }}"><button class="btn btn-secondary" onClick="{{ addClue }}">Add</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ gTrivia }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Question {{ tqNum }} of {{ tqTotal }} · 20 pts</div>
+<h2 style="margin:0;font-size:26px;line-height:1.2;text-wrap:pretty">{{ tq.q }}</h2>
+<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-size:13px;color:var(--color-neutral-700)">Answering:</span><sc-for list="{{ tPlayers }}" as="tp" hint-placeholder-count="2"><button class="btn btn-secondary" onClick="{{ tp.pick }}" style="padding:5px 10px;font-size:12px;background:{{ tp.bg }};color:{{ tp.fg }}">{{ tp.name }}</button></sc-for></div>
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<sc-for list="{{ tOpts }}" as="o" hint-placeholder-count="4">
+<button onClick="{{ o.pick }}" style="text-align:left;padding:var(--space-3);border:1px solid var(--color-divider);border-radius:var(--radius-md);font:inherit;font-size:16px;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}</button>
+</sc-for>
+</div>
+<div style="font-size:14px;color:var(--color-neutral-700);font-style:italic;min-height:20px">{{ tResult }}</div>
+<div style="display:flex;justify-content:space-between"><button class="btn btn-secondary" onClick="{{ tPrev }}"><i class="ph-duotone ph-arrow-left"></i>Prev</button><button class="btn btn-secondary" onClick="{{ tNext }}">Next<i class="ph-duotone ph-arrow-right"></i></button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ gBadges }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ badges }}" as="bd" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:40px 1fr;gap:var(--space-3);align-items:center;opacity:{{ bd.op }}">
+<i class="{{ bd.icon }}" style="font-size:36px;color:{{ bd.color }}"></i>
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:16px;font-weight:600">{{ bd.title }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ bd.desc }} · {{ bd.who }}</div></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<h2 style="margin:0;font-size:18px">Players</h2>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ playerTags }}" as="pt" hint-placeholder-count="2"><span class="tag tag-neutral">{{ pt.name }}</span></sc-for></div>
+<div style="display:flex;gap:var(--space-2)"><input class="input" placeholder="Add a friend or family member" value="{{ newPlayer }}" onChange="{{ setNewPlayer }}" onKeyDown="{{ playerKey }}"><button class="btn btn-secondary" onClick="{{ addPlayer }}">Add</button></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCamera }}">
+<div data-screen-label="Camera" style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h1 style="margin:0;font-size:36px;line-height:1">Camera</h1>
+<div class="{{ viewClass }}" style="position:relative;aspect-ratio:3/4;border-radius:var(--radius-lg);background:var(--color-neutral-800);overflow:hidden">
+<video ref="{{ videoRef }}" autoPlay="{{ true }}" playsInline="{{ true }}" muted="{{ true }}" style="width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:{{ cssFilter }}"></video>
+<sc-if value="{{ noCam }}"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-2);color:var(--color-neutral-200);text-align:center;padding:var(--space-6)"><i class="ph-duotone ph-camera" style="font-size:40px"></i><div style="font-size:15px;line-height:1.4">{{ camMsg }}</div></div></sc-if>
+<sc-if value="{{ stamp }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:var(--space-3);bottom:var(--space-3);color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)"><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase">{{ stampTop }}</div><div style="font-size:24px;font-weight:600;line-height:1">{{ stampPort }}</div></div></sc-if>
+</div>
+<div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto">
+<sc-for list="{{ filterChips }}" as="f" hint-placeholder-count="5">
+<button class="btn btn-secondary" onClick="{{ f.pick }}" style="flex:none;padding:6px 12px;font-size:13px;background:{{ f.bg }};color:{{ f.fg }}">{{ f.label }}</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:var(--space-2) 0">
+<button class="btn btn-ghost" onClick="{{ pickFile }}" style="justify-self:start"><i class="ph-duotone ph-images"></i>Library</button>
+<button onClick="{{ snap }}" aria-label="Take photo" style="width:72px;height:72px;border-radius:50%;border:4px solid var(--color-text);background:var(--color-accent);cursor:pointer;box-shadow:inset 0 0 0 4px var(--color-bg)" style-active="transform:scale(.94)"></button>
+<button class="btn btn-ghost" onClick="{{ toggleStamp }}" style="justify-self:end"><i class="ph-duotone ph-stamp"></i>{{ stampBtn }}</button>
+</div>
+<input type="file" accept="image/*" ref="{{ fileRef }}" onChange="{{ onFile }}" style="display:none">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<h2 style="margin:0;font-size:22px">Trip journal</h2>
+<sc-if value="{{ noPhotos }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Shots land here, stamped with the day and port.</div></sc-if>
+<sc-if value="{{ hasPhotos }}"><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px">
+<sc-for list="{{ photos }}" as="ph" hint-placeholder-count="0">
+<div role="img" aria-label="Trip photo" style="width:100%;aspect-ratio:3/4;border-radius:var(--radius-sm);background:{{ ph.bg }}"></div>
+</sc-for>
+</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isTrip }}">
+<div data-screen-label="Trip" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<h1 style="margin:0;font-size:36px;line-height:1">Trip</h1>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+<sc-for list="{{ tripTabs }}" as="tt" hint-placeholder-count="5">
+<button class="btn btn-secondary" onClick="{{ tt.pick }}" style="padding:6px 12px;font-size:13px;background:{{ tt.bg }};color:{{ tt.fg }}">{{ tt.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ tPack }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="font-size:15px;color:var(--color-neutral-700)">{{ packDone }} of {{ packTotal }} packed</div>
+<sc-for list="{{ packRows }}" as="k" hint-placeholder-count="6">
+<button onClick="{{ k.toggle }}" style="display:flex;align-items:center;gap:var(--space-3);background:none;border:0;padding:6px 0;font:inherit;font-size:16px;text-align:left;cursor:pointer;color:{{ k.color }}"><i class="{{ k.icon }}" style="font-size:24px;color:var(--color-accent)"></i><span style="text-decoration:{{ k.strike }}">{{ k.text }}</span></button>
+</sc-for>
+<div style="display:flex;gap:var(--space-2);margin-top:var(--space-2)"><input class="input" placeholder="Add an item" value="{{ newPack }}" onChange="{{ setNewPack }}" onKeyDown="{{ packKey }}"><button class="btn btn-secondary" onClick="{{ addPack }}">Add</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tBudget }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div><div style="font-size:13px;color:var(--color-neutral-700)">Trip spending</div><div style="display:flex;align-items:baseline;gap:var(--space-2)"><span style="font-size:52px;font-weight:600;line-height:1">{{ spent }}</span><span style="font-size:15px;color:var(--color-neutral-700)">of {{ budgetLabel }}</span></div></div>
+<div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);background:{{ budgetColor }};width:{{ budgetPct }}"></div></div>
+<div style="font-size:13px;color:var(--color-neutral-700)">Casino win/loss is tracked separately under Play.</div>
+<sc-for list="{{ spendRows }}" as="sp" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:baseline"><div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:16px;font-weight:600">{{ sp.what }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ sp.when }}</div></div><div style="font-size:16px">{{ sp.amt }}</div></div>
+</sc-for>
+<div style="display:grid;grid-template-columns:1fr 84px auto;gap:var(--space-2)"><input class="input" placeholder="What" value="{{ sWhat }}" onChange="{{ setSWhat }}"><input class="input" inputMode="decimal" placeholder="$" value="{{ sAmt }}" onChange="{{ setSAmt }}"><button class="btn btn-secondary" onClick="{{ addSpend }}">Add</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tNotes }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ noteRows }}" as="n" hint-placeholder-count="4">
+<button onClick="{{ n.toggle }}" style="display:flex;gap:var(--space-3);align-items:flex-start;background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--color-text)"><i class="{{ n.icon }}" style="font-size:22px;color:var(--color-accent-2)"></i><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;line-height:1.4;text-decoration:{{ n.strike }}">{{ n.text }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ n.by }}</span></span></button>
+</sc-for>
+<div style="display:flex;gap:var(--space-2)"><input class="input" placeholder="Something we want to do" value="{{ newNote }}" onChange="{{ setNewNote }}" onKeyDown="{{ noteKey }}"><button class="btn btn-secondary" onClick="{{ addNote }}">Add</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tFood }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ foodRows }}" as="fd" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:center"><div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:16px;font-weight:600">{{ fd.name }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ fd.where }}</div></div>
+<div style="display:flex"><sc-for list="{{ fd.stars }}" as="st" hint-placeholder-count="5"><button onClick="{{ st.go }}" aria-label="Rate" style="background:none;border:0;padding:2px;cursor:pointer;font-size:18px;color:{{ st.color }}"><i class="ph-duotone ph-star"></i></button></sc-for></div></div>
+</sc-for>
+<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:var(--space-2)"><input class="input" placeholder="Dish or drink" value="{{ fName }}" onChange="{{ setFName }}"><input class="input" placeholder="Where" value="{{ fWhere }}" onChange="{{ setFWhere }}"><button class="btn btn-secondary" onClick="{{ addFood }}">Add</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ tSpots }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="font-size:14px;color:var(--color-neutral-700)">Favorite spots on Apex, by deck.</div>
+<sc-for list="{{ spotRows }}" as="sp" hint-placeholder-count="5">
+<div style="display:grid;grid-template-columns:52px 1fr;gap:var(--space-3);align-items:baseline">
+<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-700)">Deck {{ sp.deck }}</div>
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:16px;font-weight:600">{{ sp.name }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ sp.note }}</div></div>
+</div>
+</sc-for>
+<div style="display:grid;grid-template-columns:60px 1fr auto;gap:var(--space-2)"><input class="input" inputMode="numeric" placeholder="Deck" value="{{ spDeck }}" onChange="{{ setSpDeck }}"><input class="input" placeholder="Spot and why" value="{{ spName }}" onChange="{{ setSpName }}"><button class="btn btn-secondary" onClick="{{ addSpot }}">Pin</button></div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+
+<div style="flex:none;display:grid;grid-template-columns:repeat(5,1fr);padding:var(--space-2) var(--space-2) 26px;background:var(--color-bg);box-shadow:0 -1px 0 var(--color-divider)">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button onClick="{{ t.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;min-height:48px;justify-content:center;background:none;border:0;cursor:pointer;font-family:var(--font-body);font-size:11px;color:{{ t.color }}"><i class="{{ t.icon }}" style="font-size:26px"></i>{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ sheetOpen }}">
+<div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:color-mix(in srgb,var(--color-neutral-900) 40%,transparent);display:flex;align-items:flex-end">
+<div onClick="{{ stop }}" style="width:100%;background:var(--color-bg);border-radius:20px 20px 0 0;padding:var(--space-6) var(--space-4) 40px;display:flex;flex-direction:column;gap:var(--space-4);box-shadow:var(--shadow-lg)">
+<sc-if value="{{ sheetPlan }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">Add a plan</h2>
+<div class="field"><label>What</label><input class="input" placeholder="Couples massage" value="{{ fp.title }}" onChange="{{ fpTitle }}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Day</label><select class="input" value="{{ fp.day }}" onChange="{{ fpDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div class="field"><label>Time</label><input class="input" placeholder="7:30 PM" value="{{ fp.time }}" onChange="{{ fpTime }}"></div>
+</div>
+<div class="field"><label>Where</label><input class="input" placeholder="The Spa, Deck 5" value="{{ fp.place }}" onChange="{{ fpPlace }}"></div>
+<div class="field"><label>Confirmation # (optional)</label><input class="input" placeholder="SPA-2281" value="{{ fp.conf }}" onChange="{{ fpConf }}"></div>
+<div class="seg" style="align-self:flex-start">
+<label class="seg-opt"><input type="radio" name="fk" checked="{{ fpShip }}" onChange="{{ fpKindShip }}"><i class="ph-duotone ph-boat"></i>On ship</label>
+<label class="seg-opt"><input type="radio" name="fk" checked="{{ fpShore }}" onChange="{{ fpKindShore }}"><i class="ph-duotone ph-island"></i>Ashore</label>
+<label class="seg-opt"><input type="radio" name="fk" checked="{{ fpLand }}" onChange="{{ fpKindLand }}"><i class="ph-duotone ph-car"></i>Travel</label>
+</div>
+<button class="btn btn-primary btn-block" onClick="{{ savePlan }}" disabled="{{ planInvalid }}">Save plan</button>
+</div>
+</sc-if>
+<sc-if value="{{ sheetSession }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">Log a slots session</h2>
+<div class="field"><label>Who</label><select class="input" value="{{ fs.who }}" onChange="{{ fsWho }}"><sc-for list="{{ playerOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.v }}</option></sc-for></select></div>
+<div class="field"><label>Machine</label><input class="input" placeholder="Buffalo Gold" value="{{ fs.machine }}" onChange="{{ fsMachine }}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Casino points earned</label><input class="input" inputMode="numeric" placeholder="320" value="{{ fs.pts }}" onChange="{{ fsPts }}"></div>
+<div class="field"><label>Win / loss ($)</label><input class="input" inputMode="decimal" placeholder="-40 or 125" value="{{ fs.net }}" onChange="{{ fsNet }}"></div>
+</div>
+<label class="radio"><input type="checkbox" checked="{{ fs.jp }}" onChange="{{ fsJp }}" style="width:18px;height:18px;accent-color:var(--color-accent)">Hit a jackpot this session</label>
+<button class="btn btn-primary btn-block" onClick="{{ saveSession }}" disabled="{{ sessionInvalid }}">Save session</button>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  KEY = 'mt-cruise-v2';
+  DAYS = [
+    { id: 'p1', top: 'Oct', n: 28, short: 'Disney', name: 'Walt Disney World', date: 'Wed, Oct 28', hours: 'Pre-cruise · Magic Kingdom', label: 'Pre-cruise' },
+    { id: 'p2', top: 'Oct', n: 29, short: 'Disney', name: 'Walt Disney World', date: 'Thu, Oct 29', hours: 'Pre-cruise · EPCOT', label: 'Pre-cruise' },
+    { id: 'p3', top: 'Oct', n: 30, short: 'Hotel', name: 'Cocoa Beach', date: 'Fri, Oct 30', hours: 'Pre-cruise · hotel near the port', label: 'Pre-cruise', tip: 'About an hour from Disney to Port Canaveral. Park-and-cruise hotels can save on port parking.' },
+    { id: 'd1', top: 'Day', n: 1, short: 'Canaveral', name: 'Port Canaveral', date: 'Sat, Oct 31', hours: 'Embark late morning · sail 4:00 PM', aboard: '3:30 PM', label: 'Day 1 of 8' },
+    { id: 'd2', top: 'Day', n: 2, short: 'Key West', name: 'Key West', date: 'Sun, Nov 1', hours: 'In port 8:00 AM – 5:00 PM', aboard: '4:30 PM', label: 'Day 2 of 8', tip: 'Duval Street and Mallory Square are a short walk from the pier. Look out for the roosters.' },
+    { id: 'd3', top: 'Day', n: 3, short: 'Sea', name: 'At sea', date: 'Mon, Nov 2', hours: 'Full day at sea', label: 'Day 3 of 8' },
+    { id: 'd4', top: 'Day', n: 4, short: 'Cozumel', name: 'Cozumel', date: 'Tue, Nov 3', hours: 'In port 8:00 AM – 5:00 PM', aboard: '4:30 PM', label: 'Day 4 of 8', tip: 'There are several piers. Check which one you are docked at before booking a taxi back.' },
+    { id: 'd5', top: 'Day', n: 5, short: 'Cayman', name: 'Grand Cayman', date: 'Wed, Nov 4', hours: 'In port 7:00 AM – 3:00 PM', aboard: '2:30 PM', label: 'Day 5 of 8', tip: 'Tender port. Lines for the boats back get long the last hour, so head back early.' },
+    { id: 'd6', top: 'Day', n: 6, short: 'Sea', name: 'At sea', date: 'Thu, Nov 5', hours: 'Full day at sea', label: 'Day 6 of 8' },
+    { id: 'd7', top: 'Day', n: 7, short: 'Sea', name: 'At sea', date: 'Fri, Nov 6', hours: 'Full day at sea', label: 'Day 7 of 8' },
+    { id: 'd8', top: 'Day', n: 8, short: 'Home', name: 'Port Canaveral', date: 'Sat, Nov 7', hours: 'Arrive early morning · disembark', label: 'Day 8 of 8' },
+  ];
+  KINDS = { ship: ['On ship', 'tag tag-accent'], shore: ['Ashore', 'tag tag-accent-2'], land: ['Travel', 'tag tag-neutral'] };
+  TRIVIA = [
+    { q: 'Facing the bow, which side of the ship is port?', o: ['Left', 'Right'], a: 0 },
+    { q: 'Key West is closer to which city?', o: ['Miami', 'Havana'], a: 1 },
+    { q: 'What is the capital of the Cayman Islands?', o: ['George Town', 'Bodden Town', 'West Bay'], a: 0 },
+    { q: 'Cozumel belongs to which Mexican state?', o: ['Yucatán', 'Quintana Roo', 'Campeche'], a: 1 },
+    { q: 'A ship doing 20 knots is going about…', o: ['15 mph', '23 mph', '30 mph'], a: 1 },
+    { q: 'What is the very back of a ship called?', o: ['Bow', 'Stern', 'Keel'], a: 1 },
+  ];
+  seed() {
+    const P = (id, day, time, title, place, kind, conf = '') => ({ id, day, time, title, place, kind, conf });
+    return {
+      players: ['Matthew', 'Toni'],
+      plans: [
+        P(1, 'p1', '8:00 AM', 'Drive to Orlando', 'Home → Disney', 'land'),
+        P(2, 'p1', '10:00 AM', 'Magic Kingdom', 'Walt Disney World', 'land', 'WDW-58812'),
+        P(3, 'p1', '4:00 PM', 'Hotel check-in', 'Disney Springs area', 'land', 'HTL-30417'),
+        P(4, 'p2', '9:00 AM', 'EPCOT', 'Walt Disney World', 'land', 'WDW-58813'),
+        P(5, 'p3', '11:00 AM', 'Drive to the coast', 'Orlando → Cocoa Beach', 'land'),
+        P(6, 'p3', '3:00 PM', 'Port hotel check-in', 'Cocoa Beach', 'land', 'HTL-30588'),
+        P(7, 'd1', '10:30 AM', 'Port parking', 'Cruise terminal lot', 'land', 'PRK-11902'),
+        P(8, 'd1', '11:30 AM', 'Boarding window', 'Cruise terminal', 'ship', 'BRD-1130'),
+        P(9, 'd1', '4:00 PM', 'Sail-away drinks', 'Rooftop Garden', 'ship'),
+        P(10, 'd1', '7:30 PM', 'Dinner', 'Main dining room', 'ship'),
+        P(11, 'd2', '9:00 AM', 'Duval Street & Southernmost Point', 'Key West', 'shore'),
+        P(12, 'd2', '12:30 PM', 'Conch fritters lunch', 'Mallory Square', 'shore'),
+        P(13, 'd3', '10:00 AM', 'Couples massage', 'The Spa', 'ship', 'SPA-2281'),
+        P(14, 'd3', '2:00 PM', 'Slots tournament', 'Casino', 'ship'),
+        P(15, 'd3', '8:00 PM', 'Steakhouse dinner', 'Fine Cut Steakhouse', 'ship', 'DIN-8823'),
+        P(16, 'd4', '9:00 AM', 'Snorkel & beach club', 'Cozumel', 'shore', 'EX-40912'),
+        P(17, 'd5', '8:00 AM', 'Stingray City', 'Grand Cayman', 'shore', 'EX-41187'),
+        P(18, 'd6', '9:30 PM', 'Evening show', 'The Theatre', 'ship', 'SHW-0394'),
+        P(19, 'd7', '7:00 PM', 'Le Petit Chef', 'Specialty dining', 'ship', 'DIN-9002'),
+        P(20, 'd8', '7:30 AM', 'Disembark & get the car', 'Terminal lot', 'land'),
+        P(21, 'd8', '9:00 AM', 'Drive home', 'Port Canaveral → Home', 'land'),
+      ],
+      sessions: [
+        { id: 1, who: 'Toni', machine: 'Buffalo Gold', day: 'd1', pts: 410, net: 72, jp: false },
+        { id: 2, who: 'Matthew', machine: 'Lightning Link', day: 'd1', pts: 520, net: -60, jp: false },
+        { id: 3, who: 'Matthew', machine: 'Wheel of Fortune', day: 'd3', pts: 300, net: 125, jp: true },
+        { id: 4, who: 'Toni', machine: 'Dragon Link', day: 'd3', pts: 380, net: 38, jp: false },
+      ],
+      hunt: [
+        { id: 1, title: 'A towel animal on the bed', pts: 10, by: null, author: 'App' },
+        { id: 2, title: 'Someone wearing a captain’s hat', pts: 15, by: null, author: 'App' },
+        { id: 3, title: 'A Key West rooster', pts: 15, by: 'Toni', author: 'App' },
+        { id: 4, title: 'The Magic Carpet at the top deck', pts: 20, by: null, author: 'App' },
+        { id: 5, title: 'Another cruise line’s ship in port', pts: 10, by: 'Matthew', author: 'App' },
+        { id: 6, title: 'An iguana in Grand Cayman', pts: 20, by: null, author: 'App' },
+        { id: 7, title: 'Sunset selfie from the Rooftop Garden', pts: 25, by: null, author: 'App' },
+        { id: 8, title: 'The bartender who knows your order', pts: 20, by: null, author: 'Toni' },
+      ],
+      pack: [['Passports', true], ['SeaPass / boarding docs', true], ['Casino player cards', false], ['Disney park tickets', true], ['Magnetic hooks', false], ['Lanyards', false], ['Reef-safe sunscreen', false], ['Swimsuits', true], ['Evening outfits', false], ['Seasickness bands', false], ['Non-surge power strip', false]].map((x, i) => ({ id: i + 1, text: x[0], done: x[1] })),
+      budget: 2500,
+      spends: [
+        { id: 1, what: 'Disney hotel, 2 nights', when: 'Oct 28', amt: 540 },
+        { id: 2, what: 'Port hotel', when: 'Oct 30', amt: 189 },
+        { id: 3, what: 'Port parking, 7 days', when: 'Oct 31', amt: 125 },
+        { id: 4, what: 'Couples massage', when: 'Nov 2', amt: 310 },
+      ],
+      notes: [
+        { id: 1, text: 'Watch sunset from the Rooftop Garden on a sea day', by: 'Toni', done: false },
+        { id: 2, text: 'Try every martini on the menu (over the week)', by: 'Matthew', done: false },
+        { id: 3, text: 'Photo at the Southernmost Point buoy', by: 'Toni', done: false },
+      ],
+      food: [
+        { id: 1, name: 'Espresso martini', where: 'Martini Bar', r: 5 },
+        { id: 2, name: 'Filet mignon', where: 'Fine Cut Steakhouse', r: 4 },
+        { id: 3, name: 'Key lime pie', where: 'Key West', r: 0 },
+      ],
+      spots: [
+        { id: 1, deck: 4, name: 'Casino', note: 'Toni’s lucky row by the bar' },
+        { id: 2, deck: 4, name: 'Martini Bar', note: 'Pre-dinner, before the crowd' },
+        { id: 3, deck: 14, name: 'Rooftop Garden', note: 'Sail-away and sunsets' },
+      ],
+      photos: [], trivia: {}, goal: 2500, tier: 'Blue Chip',
+    };
+  }
+  constructor(p) {
+    super(p);
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(this.KEY) || '{}'); } catch (e) {}
+    this.state = Object.assign(this.seed(), saved, {
+      tab: 'home', planView: 'days', selDay: 'd1', resFilter: 'all', game: 'slots', tripTab: 'pack',
+      preview: null, sheet: null, fp: {}, fs: {}, clue: '', newPlayer: '', newPack: '', newNote: '', sWhat: '', sAmt: '', fName: '', fWhere: '', spDeck: '', spName: '',
+      filter: 'natural', stamp: true, cam: 'idle', tq: 0, tWho: 'Matthew', now: Date.now(),
+    });
+    this.video = null; this.stream = null;
+  }
+  componentDidMount() { this.tick = setInterval(() => this.setState({ now: Date.now() }), 30000); }
+  componentWillUnmount() { clearInterval(this.tick); this.stopCam(); }
+  componentDidUpdate(pp, ps) {
+    const s = this.state, keys = ['players', 'plans', 'sessions', 'hunt', 'pack', 'budget', 'spends', 'notes', 'food', 'spots', 'photos', 'trivia', 'goal', 'tier'];
+    if (keys.some(k => s[k] !== ps[k])) { try { const o = {}; keys.forEach(k => o[k] = s[k]); localStorage.setItem(this.KEY, JSON.stringify(o)); } catch (e) {} }
+    if (s.tab !== ps.tab) { if (this.scroller) this.scroller.scrollTop = 0; if (s.tab === 'camera') this.startCam(); else this.stopCam(); }
+  }
+  async startCam() {
+    if (this.stream) return;
+    if (!navigator.mediaDevices?.getUserMedia) { this.setState({ cam: 'none' }); return; }
+    this.setState({ cam: 'asking' });
+    try { this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false }); if (this.video) this.video.srcObject = this.stream; this.setState({ cam: 'on' }); }
+    catch (e) { this.setState({ cam: 'denied' }); }
+  }
+  stopCam() { if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; } if (this.state.cam === 'on') this.setState({ cam: 'idle' }); }
+  FILTERS = { natural: ['Natural', 'none'], news: ['Newsprint', 'grayscale(1) contrast(1.35)'], golden: ['Golden hour', 'sepia(.35) saturate(1.4) contrast(1.05) brightness(1.04)'], carib: ['Caribbean', 'saturate(1.7) hue-rotate(-10deg) brightness(1.05)'], noir: ['Noir', 'grayscale(1) contrast(1.6) brightness(.9)'] };
+  stampInfo() { const d = this.homeDayObj(); return d ? { top: d.date + ' · Celebrity Apex', port: d.name } : { top: 'Oct 26 · Celebrity Apex', port: 'Countdown' }; }
+  homeDayObj() { return this.state.preview ? this.DAYS.find(d => d.id === this.state.preview) : null; }
+  render2canvas(src, w, h, mirror) {
+    const W = 600, H = 800, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d'), sc = Math.max(W / w, H / h), dw = w * sc, dh = h * sc;
+    x.filter = this.FILTERS[this.state.filter][1];
+    x.save(); if (mirror) { x.translate(W, 0); x.scale(-1, 1); } x.drawImage(src, (W - dw) / 2, (H - dh) / 2, dw, dh); x.restore();
+    x.filter = 'none';
+    if (this.state.filter === 'news') { x.fillStyle = 'rgba(0,0,0,.18)'; for (let yy = 0; yy < H; yy += 6) for (let xx = (yy / 6) % 2 * 3; xx < W; xx += 6) { x.beginPath(); x.arc(xx, yy, 1.4, 0, 7); x.fill(); } }
+    if (this.state.stamp) { const s = this.stampInfo(); x.fillStyle = '#fff'; x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 6; x.font = '600 16px "Source Serif 4", serif'; x.fillText(s.top.toUpperCase(), 24, H - 64); x.font = '600 40px "Source Serif 4", serif'; x.fillText(s.port, 24, H - 24); }
+    const url = c.toDataURL('image/jpeg', 0.72);
+    this.setState(st => ({ photos: [{ id: Date.now(), src: url }, ...st.photos].slice(0, 12) }));
+  }
+  renderVals() {
+    const s = this.state, set = o => () => this.setState(o), players = s.players;
+    const colorOf = n => { const i = players.indexOf(n); return i === 0 ? 'var(--color-accent)' : i === 1 ? 'var(--color-accent-2)' : 'var(--color-neutral-800)'; };
+    const dayById = id => this.DAYS.find(d => d.id === id) || this.DAYS[0];
+    const kindOf = p => this.KINDS[p.kind] || this.KINDS.ship;
+    const fmt$ = n => (n < 0 ? '−$' : '+$') + Math.abs(Math.round(n)).toLocaleString();
+    const sortT = (a, b) => { const t = x => { const m = /(\d+):(\d+)\s*(AM|PM)/i.exec(x || ''); if (!m) return 9999; let h = +m[1] % 12; if (/pm/i.test(m[3])) h += 12; return h * 60 + +m[2]; }; return t(a.time) - t(b.time); };
+    const plansFor = id => s.plans.filter(p => p.day === id).sort(sortT).map(p => ({ ...p, kindLabel: kindOf(p)[0], tagClass: kindOf(p)[1], confLine: p.conf ? ' · ' + p.conf : '' }));
+
+    const target = new Date('2026-10-31T16:00:00').getTime(), diff = Math.max(0, target - s.now);
+    const dd = Math.floor(diff / 864e5), hh = Math.floor(diff % 864e5 / 36e5), mm = Math.floor(diff % 36e5 / 6e4);
+    const hd = this.homeDayObj();
+    const homePlans = hd ? plansFor(hd.id) : plansFor('p1');
+
+    const goal = +s.goal || 0;
+    const slotBoard = players.map(n => {
+      const ss = s.sessions.filter(x => x.who === n), pts = ss.reduce((a, x) => a + (+x.pts || 0), 0), net = ss.reduce((a, x) => a + (+x.net || 0), 0);
+      return { name: n, pts, ptsLabel: pts.toLocaleString(), n: ss.length, jp: ss.filter(x => x.jp).length, meta: ss.length + (ss.length === 1 ? ' session · ' : ' sessions · ') + ss.filter(x => x.jp).length + (ss.filter(x => x.jp).length === 1 ? ' jackpot' : ' jackpots'), netNum: net, net: fmt$(net), netColor: net >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, pts / goal * 100) : 0) + '%', left: goal ? (pts >= goal ? 'Free-cruise goal reached' : (goal - pts).toLocaleString() + ' pts to the free-cruise goal') : 'Set a goal' };
+    }).filter((b, i) => i < 2 || b.n > 0);
+    const best = (key, fmt) => { const sorted = [...slotBoard].filter(b => b.n).sort((a, b) => b[key] - a[key]); if (!sorted.length || sorted[0][key] <= 0) return { holder: 'Up for grabs', value: '', color: 'var(--color-neutral-400)' }; const tie = sorted[1] && sorted[1][key] === sorted[0][key]; return { holder: tie ? 'Tied' : sorted[0].name, value: fmt(sorted[0][key]), color: tie ? 'var(--color-neutral-600)' : 'var(--color-process-yellow)' }; };
+    const crowns = [
+      { title: 'Jackpot crown', ...best('jp', v => v + (v === 1 ? ' jackpot' : ' jackpots')) },
+      { title: 'Money crown', ...best('netNum', v => fmt$(v)) },
+      { title: 'Points crown', ...best('pts', v => v.toLocaleString() + ' pts') },
+    ];
+
+    const huntFound = s.hunt.filter(h => h.by).length;
+    const huntBoard = players.map(n => ({ name: n, color: colorOf(n), pts: s.hunt.filter(h => h.by === n).reduce((a, h) => a + h.pts, 0) }));
+    const huntRows = s.hunt.map(h => ({ ...h, open: !h.by, done: !!h.by, strike: h.by ? 'line-through' : 'none', textColor: h.by ? 'var(--color-neutral-600)' : 'var(--color-text)', meta: (h.by ? 'Found by ' + h.by : 'Not found yet') + (h.author !== 'App' ? ' · clue from ' + h.author : ''),
+      claims: players.filter(n => n !== h.author).map(n => ({ name: n, go: () => this.setState(st => ({ hunt: st.hunt.map(x => x.id === h.id ? { ...x, by: n } : x) })) })),
+      undo: () => this.setState(st => ({ hunt: st.hunt.map(x => x.id === h.id ? { ...x, by: null } : x) })) }));
+
+    const tq = this.TRIVIA[s.tq], ans = s.trivia[s.tq];
+    const tOpts = tq.o.map((label, i) => { let bg = 'var(--color-bg)', fg = 'var(--color-text)'; if (ans) { if (i === tq.a) { bg = 'var(--color-accent-100)'; fg = 'var(--color-accent-800)'; } else if (i === ans.pick) { bg = 'var(--color-accent-2-100)'; fg = 'var(--color-accent-2-800)'; } } return { label, bg, fg, pick: () => { if (ans) return; this.setState(st => ({ trivia: { ...st.trivia, [st.tq]: { who: st.tWho, pick: i } } })); } }; });
+    const tResult = ans ? (ans.pick === tq.a ? ans.who + ' got it. +20' : ans.who + ' missed it. It’s ' + tq.o[tq.a] + '.') : '';
+    const triviaPts = n => Object.entries(s.trivia).filter(([q, a]) => a.who === n && a.pick === this.TRIVIA[q]?.a).length;
+
+    const pDone = s.pack.filter(k => k.done).length;
+    const badges = [
+      { icon: 'ph-duotone ph-coins', title: 'Big win', desc: 'A session up $100 or more', w: s.sessions.find(x => +x.net >= 100)?.who },
+      { icon: 'ph-duotone ph-sparkle', title: 'Jackpot!', desc: 'Hit a jackpot', w: s.sessions.find(x => x.jp)?.who },
+      { icon: 'ph-duotone ph-binoculars', title: 'Sharp eyes', desc: 'Find 3 hunt items', w: players.find(n => s.hunt.filter(h => h.by === n).length >= 3) },
+      { icon: 'ph-duotone ph-brain', title: 'Trivia buff', desc: 'Get 3 trivia questions right', w: players.find(n => triviaPts(n) >= 3) },
+      { icon: 'ph-duotone ph-suitcase-rolling', title: 'Packed & ready', desc: 'Everything on the list packed', w: pDone === s.pack.length && s.pack.length ? 'Both' : null },
+      { icon: 'ph-duotone ph-fork-knife', title: 'Foodie', desc: 'Rate 5 dishes or drinks', w: s.food.filter(f => f.r).length >= 5 ? 'Both' : null },
+      { icon: 'ph-duotone ph-anchor', title: 'Three ports', desc: 'Step ashore in Key West, Cozumel and Grand Cayman', w: null },
+    ].map(b => ({ ...b, who: b.w ? 'Earned by ' + b.w : 'Locked', op: b.w ? 1 : 0.45, color: b.w ? 'var(--color-accent)' : 'var(--color-neutral-600)' }));
+
+    const spentN = s.spends.reduce((a, x) => a + (+x.amt || 0), 0), bud = +s.budget || 1;
+    const chip = (on) => ({ bg: on ? 'var(--color-accent)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)' });
+    const st = this.stampInfo();
+    const camMsg = { idle: 'Starting camera…', asking: 'Allow camera access to take photos.', denied: 'Camera is blocked here. Use Library to add a photo, filtered and stamped.', none: 'No camera available. Use Library to add a photo.' }[s.cam] || '';
+    const addTo = (key, item, reset) => this.setState(stt => ({ [key]: [...stt[key], { id: Date.now(), ...item }], ...reset }));
+    const enter = fn => e => { if (e.key === 'Enter') fn(); };
+    const addClue = () => { const t = s.clue.trim(); if (t) addTo('hunt', { title: t, pts: 15, by: null, author: s.tWho }, { clue: '' }); };
+    const addPlayer = () => { const t = s.newPlayer.trim(); if (t && !players.includes(t)) this.setState(stt => ({ players: [...stt.players, t], newPlayer: '' })); };
+    const addPack = () => { const t = s.newPack.trim(); if (t) addTo('pack', { text: t, done: false }, { newPack: '' }); };
+    const addNote = () => { const t = s.newNote.trim(); if (t) addTo('notes', { text: t, by: players[0], done: false }, { newNote: '' }); };
+    const v = k => e => this.setState({ [k]: e.target.value });
+    const fpv = k => e => { const val = e.target.value; this.setState(stt => ({ fp: { ...stt.fp, [k]: val } })); };
+    const fsv = k => e => { const val = k === 'jp' ? e.target.checked : e.target.value; this.setState(stt => ({ fs: { ...stt.fs, [k]: val } })); };
+    const curDay = (hd && hd.id) || 'd1';
+
+    return {
+      scrollRef: el => { this.scroller = el; },
+      tabs: [['home', 'Home', 'house'], ['plans', 'Plans', 'calendar-dots'], ['play', 'Play', 'crown-simple'], ['camera', 'Camera', 'camera'], ['trip', 'Trip', 'suitcase']].map(([id, label, ic]) => ({ label, icon: 'ph-duotone ph-' + ic, color: s.tab === id ? 'var(--color-accent)' : 'var(--color-neutral-700)', pick: set({ tab: id }) })),
+      isHome: s.tab === 'home', isPlans: s.tab === 'plans', isPlay: s.tab === 'play', isCamera: s.tab === 'camera', isTrip: s.tab === 'trip',
+      preSail: !hd, onboard: !!hd, cdDays: dd, cdUnit: dd === 1 ? 'day' : 'days', cdRest: hh + ' hr ' + mm + ' min',
+      homeDay: hd || {}, previewOnboard: set({ preview: 'd4' }), backToCountdown: set({ preview: null }),
+      planHead: hd ? 'Today' : 'First up · Oct 28', homePlans, noHomePlans: !homePlans.length,
+      goPlans: set({ tab: 'plans' }), goPlay: set({ tab: 'play', game: 'slots' }), goPacking: set({ tab: 'trip', tripTab: 'pack' }),
+      slotBoard, goal: s.goal, goalLabel: goal.toLocaleString() + ' pts', tier: s.tier, setGoal: v('goal'), setTier: v('tier'), crowns,
+      cruises: [
+        { when: 'Oct 31', ship: 'Celebrity Apex', route: 'Port Canaveral · Key West, Cozumel, Grand Cayman · 7 nights' },
+        { when: 'Feb 21', ship: 'Celebrity Beyond', route: 'Fort Lauderdale · Puerto Plata (Amber Cove), St. Thomas, St. Kitts · 7 nights' },
+        { when: 'Oct 2027', ship: 'Princess · Europe', route: 'Ship and ports to come' },
+      ],
+      planDays: s.planView === 'days', planRes: s.planView === 'res', setPlanDays: set({ planView: 'days' }), setPlanRes: set({ planView: 'res' }),
+      dayChips: this.DAYS.map(d => ({ ...d, ...chip(s.selDay === d.id), pick: set({ selDay: d.id }) })),
+      selDay: dayById(s.selDay), dayPlans: plansFor(s.selDay), noDayPlans: !plansFor(s.selDay).length,
+      resFilters: [['all', 'All'], ['ship', 'On ship'], ['shore', 'Ashore'], ['land', 'Travel']].map(([id, label]) => ({ label, ...chip(s.resFilter === id), pick: set({ resFilter: id }) })),
+      reservations: this.DAYS.flatMap(d => plansFor(d.id).filter(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)).map(p => ({ ...p, when: d.date + ' · ' + p.time }))),
+      openPlan: () => this.setState({ sheet: 'plan', fp: { title: '', day: s.tab === 'plans' ? s.selDay : curDay, time: '', place: '', conf: '', kind: 'ship' } }),
+      gSlots: s.game === 'slots', gHunt: s.game === 'hunt', gTrivia: s.game === 'trivia', gBadges: s.game === 'badges',
+      setSlots: set({ game: 'slots' }), setHunt: set({ game: 'hunt' }), setTrivia: set({ game: 'trivia' }), setBadges: set({ game: 'badges' }),
+      sessionRows: [...s.sessions].reverse().map(x => ({ ...x, when: dayById(x.day).date, ptsLabel: (+x.pts || 0).toLocaleString(), jpLabel: x.jp ? ' · jackpot' : '', netLabel: fmt$(+x.net || 0), color: (+x.net || 0) >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)' })),
+      openSession: () => this.setState({ sheet: 'session', fs: { who: players[0], machine: '', pts: '', net: '', jp: false, day: curDay } }),
+      huntBoard, huntRows, huntFound, huntTotal: s.hunt.length, clue: s.clue, setClue: v('clue'), addClue, clueKey: enter(addClue),
+      tq, tqNum: s.tq + 1, tqTotal: this.TRIVIA.length, tOpts, tResult,
+      tPlayers: players.map(n => ({ name: n, ...chip(s.tWho === n), pick: set({ tWho: n }) })),
+      tPrev: () => this.setState(stt => ({ tq: (stt.tq + this.TRIVIA.length - 1) % this.TRIVIA.length })), tNext: () => this.setState(stt => ({ tq: (stt.tq + 1) % this.TRIVIA.length })),
+      badges, playerTags: players.map(name => ({ name })), newPlayer: s.newPlayer, setNewPlayer: v('newPlayer'), addPlayer, playerKey: enter(addPlayer),
+      videoRef: el => { this.video = el; if (el && this.stream && el.srcObject !== this.stream) el.srcObject = this.stream; },
+      fileRef: el => { this.fileEl = el; },
+      cssFilter: this.FILTERS[s.filter][1], viewClass: s.filter === 'news' ? 'halftone' : '', noCam: s.cam !== 'on', camMsg,
+      stamp: s.stamp, stampTop: st.top, stampPort: st.port, stampBtn: s.stamp ? 'Stamp on' : 'Stamp off', toggleStamp: set({ stamp: !s.stamp }),
+      filterChips: Object.entries(this.FILTERS).map(([id, f]) => ({ label: f[0], ...chip(s.filter === id), pick: set({ filter: id }) })),
+      snap: () => { const vd = this.video; if (s.cam !== 'on' || !vd || !vd.videoWidth) { this.fileEl && this.fileEl.click(); return; } this.render2canvas(vd, vd.videoWidth, vd.videoHeight, true); },
+      pickFile: () => this.fileEl && this.fileEl.click(),
+      onFile: e => { const f = e.target.files && e.target.files[0]; if (!f) return; const img = new Image(); img.onload = () => { this.render2canvas(img, img.width, img.height, false); URL.revokeObjectURL(img.src); }; img.src = URL.createObjectURL(f); e.target.value = ''; },
+      photos: s.photos.map(p => ({ id: p.id, bg: 'center/cover no-repeat url(' + p.src + ')' })), noPhotos: !s.photos.length, hasPhotos: s.photos.length > 0,
+      tripTabs: [['pack', 'Packing'], ['budget', 'Budget'], ['notes', 'Wishlist'], ['food', 'Food & drink'], ['spots', 'Deck spots']].map(([id, label]) => ({ label, ...chip(s.tripTab === id), pick: set({ tripTab: id }) })),
+      tPack: s.tripTab === 'pack', tBudget: s.tripTab === 'budget', tNotes: s.tripTab === 'notes', tFood: s.tripTab === 'food', tSpots: s.tripTab === 'spots',
+      packDone: pDone, packTotal: s.pack.length,
+      packRows: s.pack.map(k => ({ ...k, icon: k.done ? 'ph-duotone ph-check-square' : 'ph-duotone ph-square', color: k.done ? 'var(--color-neutral-600)' : 'var(--color-text)', strike: k.done ? 'line-through' : 'none', toggle: () => this.setState(stt => ({ pack: stt.pack.map(x => x.id === k.id ? { ...x, done: !x.done } : x) })) })),
+      newPack: s.newPack, setNewPack: v('newPack'), addPack, packKey: enter(addPack),
+      spent: '$' + spentN.toLocaleString(), budgetLabel: '$' + bud.toLocaleString(), budgetPct: Math.min(100, spentN / bud * 100) + '%', budgetColor: spentN > bud ? 'var(--color-accent-2)' : 'var(--color-accent)',
+      spendRows: [...s.spends].reverse().map(x => ({ ...x, amt: '$' + (+x.amt).toLocaleString() })),
+      sWhat: s.sWhat, sAmt: s.sAmt, setSWhat: v('sWhat'), setSAmt: v('sAmt'),
+      addSpend: () => { const a = parseFloat(s.sAmt); if (s.sWhat.trim() && a > 0) addTo('spends', { what: s.sWhat.trim(), when: (hd || dayById('p1')).date.split(', ')[1], amt: a }, { sWhat: '', sAmt: '' }); },
+      noteRows: s.notes.map(n => ({ ...n, icon: n.done ? 'ph-duotone ph-heart' : 'ph-duotone ph-heart-half', strike: n.done ? 'line-through' : 'none', by: n.by + (n.done ? ' · done' : ''), toggle: () => this.setState(stt => ({ notes: stt.notes.map(x => x.id === n.id ? { ...x, done: !x.done } : x) })) })),
+      newNote: s.newNote, setNewNote: v('newNote'), addNote, noteKey: enter(addNote),
+      foodRows: s.food.map(f => ({ ...f, stars: [1, 2, 3, 4, 5].map(i => ({ color: i <= f.r ? 'var(--color-accent-2)' : 'var(--color-neutral-400)', go: () => this.setState(stt => ({ food: stt.food.map(x => x.id === f.id ? { ...x, r: x.r === i ? 0 : i } : x) })) })) })),
+      fName: s.fName, fWhere: s.fWhere, setFName: v('fName'), setFWhere: v('fWhere'),
+      addFood: () => { if (s.fName.trim()) addTo('food', { name: s.fName.trim(), where: s.fWhere.trim() || 'Onboard', r: 0 }, { fName: '', fWhere: '' }); },
+      spotRows: [...s.spots].sort((a, b) => a.deck - b.deck).map(x => { const parts = x.name.split(/ [-–—] | · /); return { ...x, name: parts[0], note: x.note || parts[1] || '' }; }),
+      spDeck: s.spDeck, spName: s.spName, setSpDeck: v('spDeck'), setSpName: v('spName'),
+      addSpot: () => { const d = parseInt(s.spDeck, 10); if (d && s.spName.trim()) addTo('spots', { deck: d, name: s.spName.trim(), note: '' }, { spDeck: '', spName: '' }); },
+      sheetOpen: !!s.sheet, sheetPlan: s.sheet === 'plan', sheetSession: s.sheet === 'session', closeSheet: set({ sheet: null }), stop: e => e.stopPropagation(),
+      fp: s.fp, fpTitle: fpv('title'), fpDay: fpv('day'), fpTime: fpv('time'), fpPlace: fpv('place'), fpConf: fpv('conf'),
+      fpShip: s.fp.kind === 'ship', fpShore: s.fp.kind === 'shore', fpLand: s.fp.kind === 'land',
+      fpKindShip: () => this.setState(stt => ({ fp: { ...stt.fp, kind: 'ship' } })), fpKindShore: () => this.setState(stt => ({ fp: { ...stt.fp, kind: 'shore' } })), fpKindLand: () => this.setState(stt => ({ fp: { ...stt.fp, kind: 'land' } })),
+      dayOpts: this.DAYS.map(d => ({ v: d.id, label: d.date + ' · ' + d.short })),
+      planInvalid: !(s.fp.title || '').trim(),
+      savePlan: () => { const f = s.fp; if (!f.title.trim()) return; this.setState(stt => ({ plans: [...stt.plans, { id: Date.now(), day: f.day, time: f.time.trim() || 'Any time', title: f.title.trim(), place: f.place.trim() || '—', kind: f.kind, conf: f.conf.trim() }], sheet: null, selDay: f.day, tab: 'plans', planView: 'days' })); },
+      fs: s.fs, fsWho: fsv('who'), fsMachine: fsv('machine'), fsPts: fsv('pts'), fsNet: fsv('net'), fsJp: fsv('jp'),
+      playerOpts: players.map(p => ({ v: p })),
+      sessionInvalid: !(String(s.fs.pts || '').trim() || String(s.fs.net || '').trim()),
+      saveSession: () => { const f = s.fs; this.setState(stt => ({ sessions: [...stt.sessions, { id: Date.now(), who: f.who, machine: f.machine.trim() || 'Slots', day: f.day, pts: parseInt(f.pts, 10) || 0, net: parseFloat(String(f.net).replace(/[−–]/g, '-').replace(/[^0-9.-]/g, '')) || 0, jp: !!f.jp }], sheet: null })); },
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/broadsheet-a2805618-dec5-4e15-9c58-0dee9ebb64cf/styles.css">
+<script src="_ds/broadsheet-a2805618-dec5-4e15-9c58-0dee9ebb64cf/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+<style>body{margin:0;background:var(--color-neutral-300);font-family:var(--font-body);color:var(--color-text)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}*{box-sizing:border-box}.scr::-webkit-scrollbar{display:none}.scr{scrollbar-width:none}.btn,.seg-opt{white-space:nowrap}
+@keyframes reel{from{transform:translateY(0)}to{transform:translateY(-968px)}}
+@keyframes fall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(860px) rotate(540deg)}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(-.6deg)}}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-32px)}}
+@keyframes sail{from{transform:translateX(-14px)}to{transform:translateX(14px)}}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px">
+<div data-screen-label="Phone" style="position:relative;width:390px;height:844px;flex:none;background:var(--color-bg);border-radius:48px;box-shadow:0 0 0 10px var(--color-neutral-900),var(--shadow-lg);overflow:hidden;display:flex;flex-direction:column">
+
+<div style="height:50px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 8px;font-size:15px;font-weight:600">
+<span>9:41</span>
+<div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:var(--color-neutral-900)"></div>
+<span style="display:flex;gap:6px;font-size:16px"><i class="ph-duotone ph-wifi-high"></i><i class="ph-duotone ph-battery-high"></i></span>
+</div>
+
+<div class="scr" ref="{{ scrollRef }}" style="flex:1;overflow-y:auto;padding:var(--space-2) var(--space-4) 110px">
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Today" style="display:flex;flex-direction:column;gap:var(--space-8)">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="border-top:3px solid var(--color-text);border-bottom:1px solid var(--color-text);height:6px"></div>
+<div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.12em;text-transform:uppercase"><span>{{ dl.vol }}</span><span>{{ dl.date }}</span><span>{{ dl.ed }}</span></div>
+<div style="height:1px;background:var(--color-text)"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-2);margin-top:4px">
+<h1 style="margin:0;font-size:34px;line-height:1;letter-spacing:-.02em">The Daily Voyager</h1>
+<button class="btn btn-secondary btn-icon" onClick="{{ openFleet }}" aria-label="Cruises &amp; history" style="flex:none"><i class="ph-duotone ph-books" style="font-size:20px"></i></button>
+</div>
+<button class="btn btn-ghost" onClick="{{ openFleet }}" style="align-self:flex-start;padding-left:0;font-size:15px">{{ cruiseTitle }}<i class="ph-duotone ph-caret-down"></i></button>
+<div data-om-raster="true" style="margin:4px -20px 0;height:210px;overflow:hidden;position:relative">
+<svg viewBox="0 0 390 210" width="100%" height="210" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="display:block">
+<defs>
+<pattern id="hdots" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.2" fill="#99e0ff"></circle></pattern>
+<g id="hpalm" fill="#201e1d"><path d="M0 0 q-18 -8 -32 4 q16 -2 32 -4Z"></path><path d="M0 0 q18 -10 32 2 q-16 -2 -32 -2Z"></path><path d="M0 0 q-8 -16 -22 -18 q12 6 22 18Z"></path><path d="M0 0 q8 -18 24 -16 q-14 4 -24 16Z"></path><path d="M0 0 q-16 6 -20 20 q8 -12 20 -20Z"></path><path d="M0 0 q16 4 22 18 q-10 -10 -22 -18Z"></path><circle cx="-2" cy="4" r="2.6"></circle><circle cx="3" cy="4" r="2.6"></circle></g>
+</defs>
+<rect width="390" height="210" fill="#f3f2f2"></rect>
+<rect width="390" height="132" fill="url(#hdots)"></rect>
+<circle cx="296" cy="64" r="40" fill="#edbb00" style="mix-blend-mode:multiply"></circle>
+<circle cx="300" cy="67" r="40" fill="none" stroke="#d6006c" stroke-width="1.5" opacity=".55"></circle>
+<path d="M54 40 q6 -6 12 0 q6 -6 12 0" fill="none" stroke="#201e1d" stroke-width="1.6"></path>
+<path d="M90 58 q4 -4 8 0 q4 -4 8 0" fill="none" stroke="#201e1d" stroke-width="1.4"></path>
+<path d="M0 128 Q36 104 76 120 Q118 98 176 122 L176 132 L0 132Z" fill="#62c5ee"></path>
+<path d="M150 130 Q170 120 196 128 L196 132 L150 132Z" fill="#62c5ee"></path>
+<path d="M246 132 Q296 90 390 106 L390 136 L246 136Z" fill="#006786"></path>
+<path d="M334 108 Q340 82 328 58" stroke="#201e1d" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<use href="#hpalm" x="328" y="58"></use>
+<path d="M366 106 Q372 88 364 72" stroke="#201e1d" stroke-width="3.4" fill="none" stroke-linecap="round"></path>
+<use href="#hpalm" x="364" y="72" transform="translate(364 72) scale(.75) translate(-364 -72)"></use>
+<path d="M296 120 Q298 104 290 92" stroke="#201e1d" stroke-width="3" fill="none" stroke-linecap="round"></path>
+<use href="#hpalm" x="290" y="92" transform="translate(290 92) scale(.6) translate(-290 -92)"></use>
+<rect y="130" width="390" height="80" fill="#38a6cf"></rect>
+<g style="animation:drift 5s linear infinite">
+<path d="M-40 146 H440" stroke="#cbeeff" stroke-width="2" stroke-dasharray="14 18"></path>
+<path d="M-24 164 H440" stroke="#e9f8ff" stroke-width="2" stroke-dasharray="20 12"></path>
+<path d="M-40 184 H440" stroke="#cbeeff" stroke-width="2" stroke-dasharray="10 22"></path>
+<path d="M-30 200 H440" stroke="#e9f8ff" stroke-width="2" stroke-dasharray="24 8"></path>
+</g>
+<g style="animation:sail 9s ease-in-out infinite alternate">
+<g style="animation:bob 4s ease-in-out infinite">
+<path d="M60 152 Q30 150 0 160" stroke="#f3f2f2" stroke-width="3" fill="none"></path>
+<path d="M66 158 Q40 160 14 172" stroke="#e9f8ff" stroke-width="2" fill="none"></path>
+<g transform="translate(-2.5 1.8)" fill="#0088b0" opacity=".5" style="mix-blend-mode:multiply"><path d="M58 134 L272 134 L258 156 L74 156 Z M86 120 h164 v14 h-164Z M100 108 h128 v12 h-128Z M116 98 h88 v10 h-88Z M150 98 L156 76 L176 76 L174 98Z"></path></g>
+<path d="M58 134 L272 134 L258 156 L74 156 Z" fill="#f3f2f2" stroke="#201e1d" stroke-width="2"></path>
+<path d="M64 147 L266 147 L258 156 L74 156Z" fill="#201e1d"></path>
+<rect x="86" y="120" width="164" height="14" fill="#f3f2f2" stroke="#201e1d" stroke-width="1.5"></rect>
+<rect x="100" y="108" width="128" height="12" fill="#f3f2f2" stroke="#201e1d" stroke-width="1.5"></rect>
+<rect x="116" y="98" width="88" height="10" fill="#f3f2f2" stroke="#201e1d" stroke-width="1.5"></rect>
+<rect x="206" y="90" width="26" height="8" fill="#f3f2f2" stroke="#201e1d" stroke-width="1.5"></rect>
+<path d="M92 127 H244" stroke="#0088b0" stroke-width="3.5" stroke-dasharray="5 3"></path>
+<path d="M106 114 H222" stroke="#0088b0" stroke-width="3" stroke-dasharray="4 3"></path>
+<path d="M122 103 H198" stroke="#0088b0" stroke-width="2.5" stroke-dasharray="3 3"></path>
+<path d="M80 141 H252" stroke="#201e1d" stroke-width="2.6" stroke-dasharray="0.1 7" stroke-linecap="round"></path>
+<path d="M150 98 L156 76 L176 76 L174 98Z" fill="#d6006c" stroke="#201e1d" stroke-width="1.5"></path>
+<rect x="153" y="81" width="22" height="4" fill="#edbb00"></rect>
+<circle cx="182" cy="66" r="5" fill="#d7d3d3" opacity=".8"></circle><circle cx="192" cy="58" r="7" fill="#eae7e7" opacity=".8"></circle>
+</g>
+</g>
+</svg>
+</div>
+</div>
+
+<sc-if value="{{ preSail }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;align-items:flex-end;gap:var(--space-4)">
+<div class="cmyk-num" style="font-size:150px;font-weight:600;letter-spacing:-.04em"><span class="paper">{{ cdDays }}</span><span class="plate plate-c" aria-hidden="true">{{ cdDays }}</span><span class="plate plate-m" aria-hidden="true">{{ cdDays }}</span><span class="plate plate-y" aria-hidden="true">{{ cdDays }}</span></div>
+<div style="display:flex;flex-direction:column;gap:4px;padding-bottom:10px"><span style="font-size:26px;font-weight:600;line-height:1">{{ cdUnit }}</span><span style="font-size:26px;font-style:italic;line-height:1">to sail</span></div>
+</div>
+<div style="font-size:15px;color:var(--color-neutral-700)">{{ cdRest }} · {{ sailLine }}</div>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center"><button class="btn btn-secondary" onClick="{{ goPacking }}"><i class="ph-duotone ph-suitcase-rolling"></i>Packing {{ packDone }}/{{ packTotal }}</button><sc-if value="{{ hasPreviewPort }}"><button class="btn btn-ghost" onClick="{{ previewPort }}">Preview a port day</button></sc-if></div>
+</div>
+</sc-if>
+<sc-if value="{{ noDate }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<h2 style="margin:0;font-size:30px;line-height:1.1">Sail date to come</h2>
+<div style="font-size:15px;color:var(--color-neutral-700)">Add the date, ship and ports and the countdown starts.</div>
+<button class="btn btn-primary" onClick="{{ editCruise }}" style="align-self:flex-start"><i class="ph-duotone ph-pencil-simple"></i>Add cruise details</button>
+</div>
+</sc-if>
+<sc-if value="{{ onboard }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ hd.kicker }}</div><sc-if value="{{ previewing }}"><button class="btn btn-ghost" onClick="{{ backToCountdown }}" style="font-size:12px">Back to countdown</button></sc-if></div>
+<h1 class="cmyk-head" style="margin:0;font-size:58px;line-height:1;letter-spacing:-.02em"><span class="paper">{{ hd.name }}</span><span class="plate plate-c" aria-hidden="true">{{ hd.name }}</span><span class="plate plate-m" aria-hidden="true">{{ hd.name }}</span><span class="plate plate-y" aria-hidden="true">{{ hd.name }}</span></h1>
+<div style="font-size:15px;color:var(--color-neutral-700)">{{ hd.hours }}</div>
+<sc-if value="{{ hd.aboard }}"><div style="display:flex;align-items:center;gap:10px;margin-top:var(--space-2);color:var(--color-accent-2-700)"><i class="ph-duotone ph-bell-ringing" style="font-size:28px;animation:pulse 1.6s ease-in-out infinite"></i><div style="display:flex;flex-direction:column"><span style="font-size:18px;font-weight:600">All aboard {{ hd.aboard }}</span><span style="font-size:13px">Alerts at 90 and 45 minutes before</span></div></div></sc-if>
+<sc-if value="{{ hd.tip }}"><div style="font-size:15px;line-height:1.5;font-style:italic;color:var(--color-neutral-800);margin-top:var(--space-1)">{{ hd.tip }}</div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasImo }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Where’s {{ shipShort }} now</span><a href="{{ vfLink }}" target="_blank" rel="noopener" style="font-size:13px">Open tracker</a></div>
+<sc-if value="{{ trackOn }}"><iframe src="{{ vfSrc }}" title="Live ship position" style="width:100%;height:260px;border:0;border-radius:var(--radius-lg);background:var(--color-surface)"></iframe></sc-if>
+<sc-if value="{{ trackOff }}" hint-placeholder-val="{{ true }}"><button class="btn btn-secondary" onClick="{{ showTrack }}" style="align-self:flex-start"><i class="ph-duotone ph-navigation-arrow"></i>Show live position</button></sc-if>
+<div style="font-size:12px;color:var(--color-neutral-700)">Live AIS position from VesselFinder · IMO {{ imo }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasStops }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">The route</div>
+<div class="scr" style="overflow-x:auto;margin:0 -20px;padding:0 20px">
+<div style="position:relative;display:flex;width:max-content">
+<div style="position:absolute;top:33px;left:29px;right:29px;border-top:2px dashed var(--color-neutral-400)"></div>
+<sc-for list="{{ stops }}" as="st" hint-placeholder-count="8">
+<button onClick="{{ st.pick }}" style="flex:none;width:58px;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-body)">
+<span style="height:20px;display:flex;align-items:center"><i class="ph-duotone ph-boat" style="font-size:20px;color:var(--color-accent);opacity:{{ st.shipOp }}"></i></span>
+<span style="height:16px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1"><span style="display:block;width:{{ st.size }};height:{{ st.size }};border-radius:50%;background:{{ st.bg }};border:2px solid {{ st.bd }}"></span></span>
+<span style="font-size:10px;text-align:center;line-height:1.2;color:{{ st.fg }}">{{ st.short }}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:24px;flex:1;min-width:0">The standings</h2><button class="btn btn-ghost" onClick="{{ goPlay }}">Play</button></div>
+<sc-for list="{{ standings }}" as="p" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:1fr auto;gap:4px var(--space-3);align-items:end">
+<div style="display:flex;flex-direction:column"><span style="font-size:18px;font-weight:600;display:flex;align-items:center;gap:6px">{{ p.name }}<sc-if value="{{ p.leader }}"><i class="ph-duotone ph-crown-simple" style="color:var(--color-process-yellow);font-size:20px"></i></sc-if></span><span style="font-size:14px;font-style:italic;color:var(--color-neutral-700)">{{ p.rank }}</span></div>
+<div style="font-size:40px;font-weight:600;line-height:1;color:{{ p.color }}">{{ p.xp }}<span style="font-size:13px;font-weight:400;color:var(--color-neutral-700)"> XP</span></div>
+<div style="grid-column:1 / -1;height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ p.pct }};background:{{ p.color }}"></div></div>
+<div style="grid-column:1 / -1;font-size:12px;color:var(--color-neutral-700)">{{ p.toNext }}</div>
+</div>
+</sc-for>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">XP comes from hunt finds, trivia, daily challenges, and slots (1 XP per 10 casino points, plus 25 per jackpot).</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ chalHead }}</h2>
+<sc-for list="{{ chal }}" as="c" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:32px 1fr;gap:var(--space-3);align-items:start">
+<i class="{{ c.icon }}" style="font-size:28px;color:var(--color-accent)"></i>
+<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;gap:var(--space-2)"><span style="font-size:16px;font-weight:600;line-height:1.3">{{ c.text }}</span><span style="flex:none;font-size:13px;color:var(--color-neutral-700)">+{{ c.pts }}</span></div>
+<div style="display:flex;gap:6px"><sc-for list="{{ c.claims }}" as="cl" hint-placeholder-count="2"><button class="btn btn-secondary" onClick="{{ cl.go }}" style="padding:4px 10px;font-size:12px;background:{{ cl.bg }};color:{{ cl.fg }}">{{ cl.label }}</button></sc-for></div></div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:24px;flex:1;min-width:0">{{ planHead }}</h2><button class="btn btn-ghost" onClick="{{ goPlans }}">All plans</button></div>
+<sc-for list="{{ homePlans }}" as="p" hint-placeholder-count="3">
+<button onClick="{{ p.edit }}" style="display:grid;grid-template-columns:72px 1fr;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
+<span style="font-size:13px;color:var(--color-neutral-700)">{{ p.time }}</span>
+<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:17px;font-weight:600;line-height:1.25">{{ p.title }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ p.place }} · {{ p.kindLabel }}</span></span>
+</button>
+</sc-for>
+<sc-if value="{{ noHomePlans }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Nothing planned yet. Tap + to add, or import from your cruise app.</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlans }}">
+<div data-screen-label="Plans" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--space-2)"><h1 style="margin:0;font-size:36px;line-height:1">Plans</h1><div style="display:flex;gap:var(--space-2)"><button class="btn btn-secondary" onClick="{{ openImport }}"><i class="ph-duotone ph-download-simple"></i>Import</button><button class="btn btn-primary" onClick="{{ openPlan }}"><i class="ph-duotone ph-plus"></i>Add</button></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-2)">
+<div class="seg">
+<label class="seg-opt"><input type="radio" name="pv" checked="{{ planDays }}" onChange="{{ setPlanDays }}">Day by day</label>
+<label class="seg-opt"><input type="radio" name="pv" checked="{{ planRes }}" onChange="{{ setPlanRes }}">Reservations</label>
+</div>
+<button class="btn btn-ghost" onClick="{{ openItin }}"><i class="ph-duotone ph-map-trifold"></i>Itinerary</button>
+</div>
+<sc-if value="{{ noDays }}"><div style="display:flex;flex-direction:column;gap:var(--space-3)"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">No itinerary yet for this cruise.</div><button class="btn btn-primary" onClick="{{ editCruise }}" style="align-self:flex-start">Add sail date &amp; ports</button></div></sc-if>
+<sc-if value="{{ showDays }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-6)">
+<div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto;margin:0 -20px;padding:0 20px">
+<sc-for list="{{ dayChips }}" as="d" hint-placeholder-count="8">
+<button onClick="{{ d.pick }}" style="flex:none;width:64px;padding:var(--space-2) 0;display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--color-divider);border-radius:var(--radius-md);cursor:pointer;font-family:var(--font-body);background:{{ d.bg }};color:{{ d.fg }}">
+<span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase">{{ d.top }}</span><span style="font-size:22px;font-weight:600;line-height:1">{{ d.n }}</span><span style="font-size:10px;white-space:nowrap">{{ d.short }}</span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<h2 style="margin:0;font-size:28px">{{ selDay.name }}</h2>
+<div style="font-size:14px;color:var(--color-neutral-700)">{{ selDay.dateLabel }} · {{ selDay.hours }}</div>
+<sc-if value="{{ selDay.aboard }}"><div style="font-size:14px;color:var(--color-accent-2-700)">All aboard {{ selDay.aboard }}</div></sc-if>
+<sc-if value="{{ selDay.tip }}"><div style="font-size:14px;line-height:1.5;font-style:italic;color:var(--color-neutral-800);margin-top:4px">{{ selDay.tip }}</div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ dayPlans }}" as="p" hint-placeholder-count="3">
+<button onClick="{{ p.edit }}" style="display:grid;grid-template-columns:72px 1fr auto;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
+<span style="font-size:13px;color:var(--color-neutral-700)">{{ p.time }}</span>
+<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:17px;font-weight:600;line-height:1.25">{{ p.title }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ p.place }}{{ p.confLine }}</span></span>
+<span class="{{ p.tagClass }}">{{ p.kindLabel }}</span>
+</button>
+</sc-for>
+<sc-if value="{{ noDayPlans }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Nothing yet for this day.</div></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ planRes }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+<sc-for list="{{ resFilters }}" as="f" hint-placeholder-count="4">
+<button class="btn btn-secondary" onClick="{{ f.pick }}" style="padding:6px 12px;font-size:13px;background:{{ f.bg }};color:{{ f.fg }}">{{ f.label }}</button>
+</sc-for>
+</div>
+<sc-for list="{{ reservations }}" as="r" hint-placeholder-count="4">
+<button class="card" onClick="{{ r.edit }}" style="border:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
+<span style="display:flex;justify-content:space-between;align-items:center"><span class="card-kicker">{{ r.when }}</span><span class="{{ r.tagClass }}">{{ r.kindLabel }}</span></span>
+<span class="card-title">{{ r.title }}</span>
+<span class="card-meta"><i class="ph-duotone ph-map-pin"></i>{{ r.place }}</span>
+<span style="font-size:13px">Conf. <span style="letter-spacing:.04em;font-weight:600">{{ r.conf }}</span></span>
+</button>
+</sc-for>
+<sc-if value="{{ noRes }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Plans with a confirmation number show up here.</div></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlay }}">
+<div data-screen-label="Play" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<h1 style="margin:0;font-size:36px;line-height:1">Play</h1>
+<div class="seg" style="align-self:flex-start">
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gSlots }}" onChange="{{ setSlots }}">Slots</label>
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gHunt }}" onChange="{{ setHunt }}">Hunt</label>
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gTrivia }}" onChange="{{ setTrivia }}">Trivia</label>
+<label class="seg-opt"><input type="radio" name="gv" checked="{{ gBadges }}" onChange="{{ setBadges }}">Badges</label>
+</div>
+
+<sc-if value="{{ gSlots }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-8)">
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2)">
+<sc-for list="{{ crowns }}" as="cr" hint-placeholder-count="3">
+<div style="aspect-ratio:1;border-radius:50%;border:2px solid {{ cr.color }};outline:1px dashed {{ cr.color }};outline-offset:-8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;transform:rotate({{ cr.rot }});padding:10px">
+<i class="ph-duotone ph-crown-simple" style="font-size:24px;color:{{ cr.color }}"></i>
+<span style="font-size:14px;font-weight:600;line-height:1.1">{{ cr.holder }}</span>
+<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">{{ cr.title }}</span>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ clubName }} · this cruise</div><div style="font-size:13px;color:var(--color-neutral-700)">Points are kept per cruise line. Lifetime totals and tiers live in Cruises &gt; Casino clubs.</div></div>
+<div style="display:flex;flex-direction:column;gap:var(--space-6)">
+<sc-for list="{{ slotBoard }}" as="b" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:18px;font-weight:600">{{ b.name }} <span style="font-size:13px;font-weight:400;font-style:italic;color:var(--color-neutral-700)">{{ b.tier }}</span></span><span style="font-size:12px;color:var(--color-neutral-700);white-space:nowrap">{{ b.meta }}</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.color }}">{{ b.ptsLabel }}</div><div style="font-size:12px;color:var(--color-neutral-700)">casino points</div></div>
+<div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.netColor }}">{{ b.net }}</div><div style="font-size:12px;color:var(--color-neutral-700)">win / loss</div></div>
+</div>
+<div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ b.pct }};background:{{ b.color }}"></div></div>
+<div style="font-size:12px;color:var(--color-neutral-700)">{{ b.left }}</div>
+</div>
+</sc-for>
+</div>
+<button class="btn btn-primary" onClick="{{ openSession }}" style="align-self:flex-start;padding:14px 22px;font-size:16px"><i class="ph-duotone ph-coins" style="font-size:20px"></i>Log a session</button>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:22px">Sessions</h2>
+<sc-for list="{{ sessionRows }}" as="s" hint-placeholder-count="4">
+<button onClick="{{ s.edit }}" style="display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
+<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:16px;font-weight:600">{{ s.who }} · {{ s.machine }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ s.when }} · {{ s.ptsLabel }} pts{{ s.jpLabel }}</span></span>
+<span style="font-size:18px;font-weight:600;color:{{ s.color }}">{{ s.netLabel }}</span>
+</button>
+</sc-for>
+<sc-if value="{{ noSessions }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">No sessions yet this cruise.</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ gHunt }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-6)">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:15px;color:var(--color-neutral-700)">{{ huntFound }} of {{ huntTotal }} found</span><span style="font-size:15px;font-weight:600;color:var(--color-accent-2-700)">{{ bingoLine }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+<sc-for list="{{ bingo }}" as="t" hint-placeholder-count="9">
+<button onClick="{{ t.pick }}" style="position:relative;aspect-ratio:1;border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:8px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;font-family:var(--font-body);cursor:pointer;background:{{ t.bg }};color:var(--color-text);overflow:hidden">
+<span style="font-size:12px;line-height:1.25;opacity:{{ t.op }}">{{ t.title }}</span>
+<span style="font-size:11px;color:var(--color-neutral-700)">{{ t.pts }} pts</span>
+<sc-if value="{{ t.found }}"><span style="position:absolute;top:50%;left:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;border:3px solid {{ t.color }};color:{{ t.color }};display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;transform:rotate(-14deg);animation:pop .35s ease-out both;mix-blend-mode:multiply">{{ t.initial }}</span></sc-if>
+</button>
+</sc-for>
+</div>
+<div style="font-size:13px;color:var(--color-neutral-700)">Complete a row, column or diagonal for a bingo: +50 XP each.</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1">Bonus clues</h2><button class="btn btn-ghost" onClick="{{ openClue }}"><i class="ph-duotone ph-plus"></i>Write a clue</button></div>
+<sc-for list="{{ bonus }}" as="h" hint-placeholder-count="2">
+<button onClick="{{ h.pick }}" style="display:flex;justify-content:space-between;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600;text-decoration:{{ h.strike }}">{{ h.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ h.meta }}</span></span><span style="flex:none;font-size:13px;color:var(--color-neutral-700)">{{ h.pts }} pts</span></button>
+</sc-for>
+<sc-if value="{{ noBonus }}"><div style="font-size:14px;color:var(--color-neutral-700);font-style:italic">Write clues for each other. They go here.</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ gTrivia }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.12em;text-transform:uppercase"><span style="color:var(--color-accent-700)">Question {{ tqNum }} of {{ tqTotal }} · 20 XP</span><span style="color:var(--color-neutral-700)">{{ tScore }}</span></div>
+<h2 style="margin:0;font-size:28px;line-height:1.2;text-wrap:pretty">{{ tq.q }}</h2>
+<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span style="font-size:13px;color:var(--color-neutral-700)">Answering:</span><sc-for list="{{ tPlayers }}" as="tp" hint-placeholder-count="2"><button class="btn btn-secondary" onClick="{{ tp.pick }}" style="padding:5px 10px;font-size:12px;background:{{ tp.bg }};color:{{ tp.fg }}">{{ tp.name }}</button></sc-for></div>
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<sc-for list="{{ tOpts }}" as="o" hint-placeholder-count="3">
+<button onClick="{{ o.pick }}" style="display:flex;justify-content:space-between;align-items:center;text-align:left;padding:var(--space-3);border:1px solid var(--color-divider);border-radius:var(--radius-md);font:inherit;font-size:17px;cursor:pointer;background:{{ o.bg }};color:{{ o.fg }}">{{ o.label }}<i class="{{ o.icon }}" style="font-size:20px"></i></button>
+</sc-for>
+</div>
+<div style="font-size:15px;font-style:italic;min-height:22px;color:var(--color-neutral-800)">{{ tResult }}</div>
+<div style="display:flex;justify-content:space-between"><button class="btn btn-secondary" onClick="{{ tPrev }}"><i class="ph-duotone ph-arrow-left"></i>Prev</button><button class="btn btn-primary" onClick="{{ tNext }}">Next<i class="ph-duotone ph-arrow-right"></i></button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ gBadges }}">
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-4) var(--space-2)">
+<sc-for list="{{ badges }}" as="bd" hint-placeholder-count="9">
+<div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;opacity:{{ bd.op }}">
+<div style="width:84px;height:84px;border-radius:50%;border:2px solid {{ bd.color }};outline:1px dashed {{ bd.color }};outline-offset:-7px;display:flex;align-items:center;justify-content:center;transform:rotate({{ bd.rot }});background:{{ bd.bg }}"><i class="{{ bd.icon }}" style="font-size:34px;color:{{ bd.color }}"></i></div>
+<span style="font-size:13px;font-weight:600;line-height:1.2">{{ bd.title }}</span>
+<span style="font-size:11px;line-height:1.3;color:var(--color-neutral-700)">{{ bd.who }}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<h2 style="margin:0;font-size:18px">Players</h2>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ playerTags }}" as="pt" hint-placeholder-count="2"><span class="tag tag-neutral">{{ pt.name }}</span></sc-for></div>
+<div style="display:flex;gap:var(--space-2)"><input class="input" placeholder="Add a friend or family member" value="{{ newPlayer }}" onChange="{{ setNewPlayer }}" onKeyDown="{{ playerKey }}"><button class="btn btn-secondary" onClick="{{ addPlayer }}">Add</button></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCamera }}">
+<div data-screen-label="Camera" style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;justify-content:space-between;align-items:flex-end"><h1 style="margin:0;font-size:36px;line-height:1">Camera</h1><span style="font-size:12px;color:var(--color-neutral-700)">{{ srcLabel }}</span></div>
+
+<div ref="{{ stageRef }}" onPointerMove="{{ onDragMove }}" onPointerUp="{{ onDragEnd }}" onPointerLeave="{{ onDragEnd }}" style="position:relative;touch-action:none">
+<sc-if value="{{ isBackdrop }}">
+<div style="position:relative;aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;background:{{ sceneBg }}">
+<sc-if value="{{ hasCutout }}"><div style="position:absolute;inset:0;background:{{ cutoutBg }};filter:{{ cssFilter }}"></div></sc-if>
+<sc-if value="{{ noCutout }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;left:14%;top:26%;width:72%;height:52%;overflow:hidden;border-radius:50% 50% 10px 10px / 34% 34% 10px 10px;border:5px solid var(--color-bg);box-shadow:var(--shadow-md);background:var(--color-neutral-800)">
+<sc-if value="{{ isLive }}"><video ref="{{ videoRef }}" autoPlay="{{ true }}" playsInline="{{ true }}" muted="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:{{ cssFilter }}"></video></sc-if>
+<sc-if value="{{ isDraft }}"><div style="position:absolute;inset:0;background:{{ draftBg }};filter:{{ cssFilter }}"></div></sc-if>
+<sc-if value="{{ isSample }}"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--color-neutral-300);font-size:13px;text-align:center;padding:20px"><span style="display:flex;flex-direction:column;align-items:center;gap:6px"><i class="ph-duotone ph-user-circle" style="font-size:44px"></i>You two go here</span></div></sc-if>
+</div>
+</sc-if>
+<div style="position:absolute;top:5%;left:0;right:0;text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center">
+<span style="font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:var(--color-text)">{{ bdTop }}</span>
+<span style="font-size:{{ bdSize }};font-weight:600;line-height:1;letter-spacing:-.02em;color:var(--color-accent-2);text-shadow:2px 2px 0 var(--color-process-yellow)">{{ bdPort }}</span>
+</div>
+<div style="position:absolute;bottom:2.5%;left:0;right:0;text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text);pointer-events:none">{{ stampTop }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ noBackdrop }}" hint-placeholder-val="{{ true }}">
+<div style="position:relative;aspect-ratio:3/4;border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;background:{{ frameBg }};padding:{{ framePad }};gap:{{ frameGap }}">
+<sc-if value="{{ isFront }}">
+<div style="display:flex;flex-direction:column;gap:3px;color:var(--color-text)">
+<div style="border-top:3px solid var(--color-text);border-bottom:1px solid var(--color-text);height:5px"></div>
+<div style="font-size:26px;font-weight:600;line-height:1.05;letter-spacing:-.02em">The Daily Voyager</div>
+<div style="display:flex;justify-content:space-between;font-size:8px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid var(--color-text);padding-bottom:3px"><span>{{ stampTop }}</span><span>Extra</span></div>
+<div style="font-size:17px;font-weight:600;line-height:1.15;text-wrap:balance">{{ headline }}</div>
+</div>
+</sc-if>
+<div style="position:relative;flex:1;min-height:0;overflow:hidden;background:var(--color-neutral-800);border-radius:{{ photoRadius }}">
+<sc-if value="{{ isLive }}"><video ref="{{ videoRef }}" autoPlay="{{ true }}" playsInline="{{ true }}" muted="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:{{ cssFilter }}"></video></sc-if>
+<sc-if value="{{ isDraft }}"><div style="position:absolute;inset:0;background:{{ draftBg }};filter:{{ cssFilter }}"></div></sc-if>
+<sc-if value="{{ isSample }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;inset:0;filter:{{ cssFilter }};background:radial-gradient(circle at 68% 40%,var(--color-process-yellow) 0 8%,transparent 8.6%),linear-gradient(180deg,var(--color-accent-2-300) 0%,var(--color-process-yellow) 50%,var(--color-accent-500) 51%,var(--color-accent-800) 100%)"><div style="position:absolute;left:14%;bottom:20%;width:30%;height:9%;background:var(--color-neutral-100);clip-path:polygon(0 40%,70% 40%,78% 0,88% 0,92% 40%,100% 40%,90% 100%,6% 100%)"></div></div></sc-if>
+<sc-if value="{{ isNews }}"><div style="position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(0,0,0,.28) 30%,transparent 34%);background-size:4px 4px;mix-blend-mode:multiply"></div></sc-if>
+<sc-if value="{{ isPostcard }}">
+<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;color:#fff;pointer-events:none">
+<span style="font-size:18px;font-style:italic;text-shadow:0 1px 4px rgba(0,0,0,.5)">Greetings from</span>
+<span style="font-size:54px;font-weight:600;line-height:.9;letter-spacing:-.02em;color:var(--color-process-yellow);text-shadow:3px 3px 0 var(--color-accent-2),-1px -1px 0 var(--color-text)">{{ stampPort }}</span>
+</div>
+<div style="position:absolute;top:12px;right:12px;width:58px;height:70px;border:2px dashed #fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:color-mix(in srgb,var(--color-accent) 70%,transparent)"><i class="ph-duotone ph-anchor" style="font-size:22px"></i>{{ shipShort }}</div>
+</sc-if>
+<sc-if value="{{ isStampF }}"><div style="position:absolute;left:14px;bottom:14px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);pointer-events:none"><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase">{{ stampTop }}</div><div style="font-size:26px;font-weight:600;line-height:1">{{ stampPort }}</div></div></sc-if>
+<sc-if value="{{ showCamMsg }}"><div style="position:absolute;top:10px;left:10px;right:10px;font-size:12px;line-height:1.35;color:#fff;background:color-mix(in srgb,var(--color-neutral-900) 70%,transparent);padding:6px 10px;border-radius:var(--radius-md)">{{ camMsg }}</div></sc-if>
+</div>
+<sc-if value="{{ isFront }}"><div style="font-size:9px;font-style:italic;color:var(--color-neutral-700)">Matthew &amp; Toni · {{ shipName }}</div></sc-if>
+<sc-if value="{{ isPolaroid }}"><div style="height:58px;display:flex;align-items:center;font-size:20px;font-style:italic;color:var(--color-text)">{{ headline }}</div></sc-if>
+</div>
+</sc-if>
+<sc-for list="{{ stickers }}" as="sk" hint-placeholder-count="0"><div onPointerDown="{{ sk.down }}" style="position:absolute;left:{{ sk.left }};top:{{ sk.top }};width:{{ sk.w }};aspect-ratio:{{ sk.ar }};transform:translate(-50%,-50%) rotate({{ sk.rot }});background:{{ sk.bg }};cursor:grab;touch-action:none;outline:{{ sk.ring }};outline-offset:4px;border-radius:6px;z-index:3"></div></sc-for>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Hats &amp; props · tap to add, drag to place</span><sc-if value="{{ hasStickers }}"><button class="btn btn-ghost" onClick="{{ stkClear }}" style="font-size:12px">Clear</button></sc-if></div>
+<div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto;margin:0 -20px;padding:0 20px">
+<sc-for list="{{ stickerChips }}" as="k" hint-placeholder-count="6"><button onClick="{{ k.add }}" style="flex:none;width:72px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-body);font-size:11px;color:var(--color-text)"><span style="display:block;width:72px;height:56px;border:1px solid var(--color-divider);border-radius:var(--radius-md);background:{{ k.bg }}"></span>{{ k.label }}</button></sc-for>
+</div>
+<sc-if value="{{ hasSel }}"><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ stkSmaller }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-minus"></i>Smaller</button><button class="btn btn-secondary" onClick="{{ stkBigger }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-plus"></i>Bigger</button><button class="btn btn-secondary" onClick="{{ stkTilt }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-arrow-clockwise"></i>Tilt</button><button class="btn btn-ghost" onClick="{{ stkRemove }}" style="font-size:12px;color:var(--color-accent-2-700)">Remove</button></div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Island backdrop</div>
+<div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto;margin:0 -20px;padding:0 20px">
+<sc-for list="{{ backdropChips }}" as="b" hint-placeholder-count="4"><button class="btn btn-secondary" onClick="{{ b.pick }}" style="flex:none;padding:6px 12px;font-size:13px;background:{{ b.bg }};color:{{ b.fg }}"><i class="ph-duotone ph-island"></i>{{ b.label }}</button></sc-for>
+</div>
+<sc-if value="{{ showSegMsg }}"><div style="font-size:13px;font-style:italic;color:var(--color-neutral-800)">{{ segMsg }}</div></sc-if>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Filter</div>
+<div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto;margin:0 -20px;padding:2px 20px">
+<sc-for list="{{ filterChips }}" as="f" hint-placeholder-count="6">
+<button onClick="{{ f.pick }}" style="flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-body);font-size:11px;color:{{ f.fg }}">
+<span style="position:relative;display:block;width:58px;height:74px;border-radius:var(--radius-md);overflow:hidden;background:var(--color-neutral-800);outline:{{ f.ring }};outline-offset:2px">
+<sc-if value="{{ isLive }}"><video ref="{{ thumbRef }}" autoPlay="{{ true }}" playsInline="{{ true }}" muted="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:{{ f.css }}"></video></sc-if>
+<sc-if value="{{ isDraft }}"><span style="position:absolute;inset:0;background:{{ draftBg }};filter:{{ f.css }}"></span></sc-if>
+<sc-if value="{{ isSample }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;inset:0;filter:{{ f.css }};background:radial-gradient(circle at 68% 40%,var(--color-process-yellow) 0 8%,transparent 8.6%),linear-gradient(180deg,var(--color-accent-2-300) 0%,var(--color-process-yellow) 50%,var(--color-accent-500) 51%,var(--color-accent-800) 100%)"></span></sc-if>
+<sc-if value="{{ f.news }}"><span style="position:absolute;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,.28) 30%,transparent 34%);background-size:3px 3px;mix-blend-mode:multiply"></span></sc-if>
+</span>
+{{ f.label }}
+</button>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Frame</div>
+<div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto">
+<sc-for list="{{ frameChips }}" as="f" hint-placeholder-count="5">
+<button class="btn btn-secondary" onClick="{{ f.pick }}" style="flex:none;padding:6px 12px;font-size:13px;background:{{ f.bg }};color:{{ f.fg }}"><i class="{{ f.icon }}"></i>{{ f.label }}</button>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ showHeadline }}"><div class="field"><label>{{ headlineLabel }}</label><input class="input" value="{{ headline }}" onChange="{{ setHeadline }}"></div></sc-if>
+
+<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:var(--space-2) 0">
+<sc-if value="{{ hasDraft }}"><button class="btn btn-ghost" onClick="{{ retake }}" style="justify-self:start"><i class="ph-duotone ph-arrow-counter-clockwise"></i>Retake</button></sc-if>
+<sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}"><button class="btn btn-ghost" onClick="{{ pickFile }}" style="justify-self:start"><i class="ph-duotone ph-images"></i>Library</button></sc-if>
+<sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}"><button onClick="{{ snap }}" aria-label="Take photo" style="width:74px;height:74px;border-radius:50%;border:4px solid var(--color-text);background:var(--color-accent);cursor:pointer;box-shadow:inset 0 0 0 4px var(--color-bg)" style-active="transform:scale(.94)"></button></sc-if>
+<sc-if value="{{ hasDraft }}"><button class="btn btn-primary" onClick="{{ saveDraft }}" style="padding:14px 18px"><i class="ph-duotone ph-floppy-disk"></i>Save to journal</button></sc-if>
+<span></span>
+</div>
+<input type="file" accept="image/*" ref="{{ fileRef }}" onChange="{{ onFile }}" style="display:none">
+
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="margin:0;font-size:22px">Trip journal</h2><span style="font-size:13px;color:var(--color-neutral-700)">{{ photoCount }}</span></div>
+<sc-if value="{{ noPhotos }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Saved photos land here with their filter and frame.</div></sc-if>
+<sc-if value="{{ hasPhotos }}"><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px">
+<sc-for list="{{ photos }}" as="ph" hint-placeholder-count="0">
+<button onClick="{{ ph.open }}" aria-label="Open photo" style="aspect-ratio:3/4;border:0;padding:0;cursor:pointer;border-radius:var(--radius-sm);background:{{ ph.bg }}"></button>
+</sc-for>
+</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isTrip }}">
+<div data-screen-label="Trip" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<h1 style="margin:0;font-size:36px;line-height:1">Trip</h1>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+<sc-for list="{{ tripTabs }}" as="tt" hint-placeholder-count="6">
+<button class="btn btn-secondary" onClick="{{ tt.pick }}" style="padding:6px 12px;font-size:13px;background:{{ tt.bg }};color:{{ tt.fg }}"><i class="{{ tt.icon }}"></i>{{ tt.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ tPack }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;align-items:baseline;gap:var(--space-2)"><span style="font-size:52px;font-weight:600;line-height:1;color:var(--color-accent)">{{ packPctLabel }}</span><span style="font-size:15px;color:var(--color-neutral-700)">packed · {{ packDone }} of {{ packTotal }}</span></div>
+<div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md);margin-bottom:var(--space-2)"><div style="height:6px;border-radius:var(--radius-md);background:var(--color-accent);width:{{ packPct }}"></div></div>
+<sc-for list="{{ packRows }}" as="k" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:var(--space-2)">
+<button onClick="{{ k.toggle }}" style="flex:1;display:flex;align-items:center;gap:var(--space-3);background:none;border:0;padding:6px 0;font:inherit;font-size:16px;text-align:left;cursor:pointer;color:{{ k.color }}"><i class="{{ k.icon }}" style="font-size:24px;color:var(--color-accent)"></i><span style="text-decoration:{{ k.strike }}">{{ k.text }}</span></button>
+<button class="btn btn-ghost btn-icon" onClick="{{ k.remove }}" aria-label="Remove" style="color:var(--color-neutral-600)"><i class="ph-duotone ph-x"></i></button>
+</div>
+</sc-for>
+<button class="btn btn-secondary" onClick="{{ openPack }}" style="align-self:flex-start;margin-top:var(--space-2)"><i class="ph-duotone ph-plus"></i>Add item</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ tBudget }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div><div style="font-size:13px;color:var(--color-neutral-700)">Trip spending</div><div style="display:flex;align-items:baseline;gap:var(--space-2)"><span style="font-size:52px;font-weight:600;line-height:1">{{ spent }}</span><span style="font-size:15px;color:var(--color-neutral-700)">of {{ budgetLabel }}</span></div></div>
+<div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);background:{{ budgetColor }};width:{{ budgetPct }}"></div></div>
+<div style="display:grid;grid-template-columns:1fr auto;gap:var(--space-2);align-items:end"><div class="field"><label>Budget for this cruise ($)</label><input class="input" inputMode="numeric" value="{{ budgetVal }}" onChange="{{ setBudget }}"></div><button class="btn btn-primary" onClick="{{ openExpense }}"><i class="ph-duotone ph-plus"></i>Expense</button></div>
+<div style="font-size:13px;color:var(--color-neutral-700)">Casino win/loss is tracked separately under Play.</div>
+<sc-for list="{{ spendRows }}" as="sp" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:1fr auto auto;gap:var(--space-2);align-items:center"><div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:16px;font-weight:600">{{ sp.what }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ sp.when }}</div></div><div style="font-size:16px">{{ sp.amt }}</div><button class="btn btn-ghost btn-icon" onClick="{{ sp.remove }}" aria-label="Remove" style="color:var(--color-neutral-600)"><i class="ph-duotone ph-x"></i></button></div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ tNotes }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ noteRows }}" as="n" hint-placeholder-count="4">
+<button onClick="{{ n.toggle }}" style="display:flex;gap:var(--space-3);align-items:flex-start;background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--color-text)"><i class="{{ n.icon }}" style="font-size:22px;color:var(--color-accent-2)"></i><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;line-height:1.4;text-decoration:{{ n.strike }}">{{ n.text }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ n.by }}</span></span></button>
+</sc-for>
+<button class="btn btn-secondary" onClick="{{ openWish }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Add to wishlist</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ tFood }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<button class="btn btn-primary" onClick="{{ openFood }}" style="align-self:flex-start"><i class="ph-duotone ph-camera-plus"></i>Log a dish or drink</button>
+<sc-for list="{{ foodRows }}" as="fd" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:76px 1fr;gap:var(--space-3);align-items:start">
+<button onClick="{{ fd.edit }}" aria-label="Edit" style="width:76px;height:76px;border:0;padding:0;border-radius:var(--radius-md);cursor:pointer;display:flex;align-items:center;justify-content:center;background:{{ fd.bg }};color:var(--color-neutral-600)"><sc-if value="{{ fd.noPhoto }}"><i class="ph-duotone ph-fork-knife" style="font-size:28px"></i></sc-if></button>
+<div style="display:flex;flex-direction:column;gap:3px">
+<button onClick="{{ fd.edit }}" style="background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);font-size:17px;font-weight:600;color:var(--color-text);cursor:pointer">{{ fd.name }}</button>
+<div style="font-size:13px;color:var(--color-neutral-700)">{{ fd.where }}{{ fd.byLine }}</div>
+<div style="display:flex;margin-left:-2px"><sc-for list="{{ fd.stars }}" as="st" hint-placeholder-count="5"><button onClick="{{ st.go }}" aria-label="Rate" style="background:none;border:0;padding:2px;cursor:pointer;font-size:20px;color:{{ st.color }}"><i class="ph-duotone ph-star"></i></button></sc-for></div>
+<sc-if value="{{ fd.note }}"><div style="font-size:13px;font-style:italic;color:var(--color-neutral-800)">{{ fd.note }}</div></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ tCrew }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">Servers, bartenders, stewards and hosts. Rate them, flag extra tips, and mark who to name in the post-cruise survey.</div>
+<button class="btn btn-primary" onClick="{{ openCrew }}" style="align-self:flex-start"><i class="ph-duotone ph-user-plus"></i>Add crew member</button>
+<sc-if value="{{ hasSurvey }}">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-2-700)">For the survey</div>
+<div style="font-size:15px;line-height:1.5">{{ surveyList }}</div>
+</div>
+</sc-if>
+<sc-for list="{{ crewRows }}" as="cw" hint-placeholder-count="3">
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span class="card-kicker">{{ cw.role }}</span><button class="btn btn-ghost" onClick="{{ cw.edit }}" style="font-size:12px;padding:2px 6px">Edit</button></div>
+<div class="card-title" style="font-size:20px">{{ cw.name }}</div>
+<div class="card-meta"><i class="ph-duotone ph-map-pin"></i>{{ cw.where }}</div>
+<div style="display:flex;margin-left:-2px"><sc-for list="{{ cw.stars }}" as="st" hint-placeholder-count="5"><button onClick="{{ st.go }}" aria-label="Rate" style="background:none;border:0;padding:2px;cursor:pointer;font-size:20px;color:{{ st.color }}"><i class="ph-duotone ph-star"></i></button></sc-for></div>
+<sc-if value="{{ cw.note }}"><div style="font-size:14px;font-style:italic;line-height:1.45">{{ cw.note }}</div></sc-if>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<button class="btn btn-secondary" onClick="{{ cw.toggleTip }}" style="padding:4px 10px;font-size:12px;background:{{ cw.tipBg }};color:{{ cw.tipFg }}"><i class="ph-duotone ph-hand-coins"></i>Extra tip</button>
+<button class="btn btn-secondary" onClick="{{ cw.toggleSurvey }}" style="padding:4px 10px;font-size:12px;background:{{ cw.svBg }};color:{{ cw.svFg }}"><i class="ph-duotone ph-clipboard-text"></i>Name in survey</button>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ tSpots }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="font-size:14px;color:var(--color-neutral-700)">Favorite spots on {{ shipName }}, by deck.</div>
+<sc-for list="{{ spotRows }}" as="sp" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:56px 1fr;gap:var(--space-3);align-items:baseline">
+<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-700)">Deck {{ sp.deck }}</div>
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:16px;font-weight:600">{{ sp.name }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ sp.note }}</div></div>
+</div>
+</sc-for>
+<button class="btn btn-secondary" onClick="{{ openSpot }}" style="align-self:flex-start"><i class="ph-duotone ph-push-pin"></i>Pin a spot</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+
+<sc-if value="{{ fabOn }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ openAdd }}" aria-label="Add" style="position:absolute;right:20px;bottom:96px;width:58px;height:58px;border-radius:50%;border:0;background:var(--color-accent);color:var(--color-bg);box-shadow:var(--shadow-md);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5" style-hover="background:var(--color-accent-600)" style-active="background:var(--color-accent-700)"><i class="ph-duotone ph-plus" style="font-size:28px"></i></button>
+</sc-if>
+
+<div style="flex:none;display:grid;grid-template-columns:repeat(5,1fr);padding:var(--space-2) var(--space-2) 26px;background:var(--color-bg);box-shadow:0 -1px 0 var(--color-divider);position:relative;z-index:4">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button onClick="{{ t.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:2px;min-height:48px;justify-content:center;background:none;border:0;cursor:pointer;font-family:var(--font-body);font-size:11px;color:{{ t.color }}"><i class="{{ t.icon }}" style="font-size:26px"></i>{{ t.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ overlayOn }}">
+<div style="position:absolute;inset:0;z-index:8;background:var(--color-bg);display:flex;flex-direction:column;padding-top:50px">
+<div style="flex:none;display:flex;justify-content:space-between;align-items:center;padding:var(--space-2) var(--space-4)"><button class="btn btn-ghost" onClick="{{ closeOverlay }}" style="padding-left:0"><i class="ph-duotone ph-caret-left"></i>Back</button><span style="font-size:13px;color:var(--color-neutral-700)">{{ overlaySub }}</span></div>
+<div class="scr" style="flex:1;overflow-y:auto;padding:var(--space-2) var(--space-4) var(--space-8)">
+
+<sc-if value="{{ ovFleet }}">
+<div data-screen-label="Cruises" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<h1 style="margin:0;font-size:36px;line-height:1">Our cruises</h1>
+<div class="seg" style="align-self:flex-start">
+<label class="seg-opt"><input type="radio" name="fl" checked="{{ fUp }}" onChange="{{ setFUp }}">Upcoming</label>
+<label class="seg-opt"><input type="radio" name="fl" checked="{{ fHist }}" onChange="{{ setFHist }}">History</label>
+<label class="seg-opt"><input type="radio" name="fl" checked="{{ fClubs }}" onChange="{{ setFClubs }}">Casino clubs</label>
+</div>
+<sc-if value="{{ fUp }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ upcomingRows }}" as="c" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:76px 1fr;gap:var(--space-3);align-items:baseline">
+<div style="font-size:13px;color:var(--color-neutral-700)">{{ c.when }}</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600;line-height:1.25">{{ c.ship }}<sc-if value="{{ c.active }}"><span class="tag tag-accent">Showing</span></sc-if></div>
+<div style="font-size:13px;line-height:1.4;color:var(--color-neutral-700)">{{ c.route }}</div>
+<div style="display:flex;gap:var(--space-2);margin-left:-5px"><button class="btn btn-ghost" onClick="{{ c.pick }}" style="font-size:13px">Open</button><button class="btn btn-ghost" onClick="{{ c.edit }}" style="font-size:13px">Edit</button></div>
+</div>
+</div>
+</sc-for>
+<button class="btn btn-primary" onClick="{{ newCruise }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Add a cruise</button>
+</div>
+</sc-if>
+<sc-if value="{{ fHist }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<sc-for list="{{ pastRows }}" as="c" hint-placeholder-count="2">
+<button onClick="{{ c.wrap }}" class="card" style="border:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
+<span style="display:flex;justify-content:space-between;align-items:center"><span class="card-kicker">{{ c.when }}</span><sc-if value="{{ c.sample }}"><span class="tag tag-neutral">Sample</span></sc-if></span>
+<span class="card-title" style="font-size:20px">{{ c.ship }}</span>
+<span style="font-size:13px;color:var(--color-neutral-700)">{{ c.route }}</span>
+<span style="font-size:14px;font-style:italic">{{ c.blurb }}</span>
+<span style="font-size:13px;color:var(--color-accent-700);display:flex;align-items:center;gap:4px">Read the wrap-up<i class="ph-duotone ph-arrow-right"></i></span>
+</button>
+</sc-for>
+<sc-if value="{{ noPast }}"><div style="font-size:15px;color:var(--color-neutral-700);font-style:italic">Finished cruises move here with a wrap-up.</div></sc-if>
+<button class="btn btn-secondary" onClick="{{ wrapActive }}" style="align-self:flex-start"><i class="ph-duotone ph-newspaper"></i>Preview this cruise’s wrap-up</button>
+</div>
+</sc-if>
+<sc-if value="{{ fClubs }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-8)">
+<sc-for list="{{ clubs }}" as="cl" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ cl.line }}</div><input class="input" value="{{ cl.club }}" onChange="{{ cl.setClub }}" aria-label="Club name" style="font-size:20px;font-weight:600;background:transparent;border-color:transparent;padding-left:0"></div>
+<sc-for list="{{ cl.people }}" as="pp" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:1fr 110px;gap:var(--space-3);align-items:center">
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">{{ pp.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ pp.pts }} pts lifetime · {{ pp.net }} · {{ pp.jp }}</span></div>
+<input class="input" placeholder="Tier" value="{{ pp.tier }}" onChange="{{ pp.setTier }}" aria-label="Tier">
+</div>
+</sc-for>
+<div style="font-size:13px;color:var(--color-neutral-700)">{{ cl.cruises }}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ ovWrap }}">
+<div data-screen-label="Wrap-up" style="display:flex;flex-direction:column;gap:var(--space-8)">
+<div style="display:flex;flex-direction:column;gap:6px">
+<div style="border-top:3px solid var(--color-text);border-bottom:1px solid var(--color-text);height:6px"></div>
+<div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.12em;text-transform:uppercase"><span>Final edition</span><span>{{ wr.when }}</span></div>
+<div style="height:1px;background:var(--color-text)"></div>
+<h1 class="cmyk-head" style="margin:6px 0 0;font-size:44px;line-height:1.02;letter-spacing:-.02em"><span class="paper">{{ wr.ship }}</span><span class="plate plate-c" aria-hidden="true">{{ wr.ship }}</span><span class="plate plate-m" aria-hidden="true">{{ wr.ship }}</span><span class="plate plate-y" aria-hidden="true">{{ wr.ship }}</span></h1>
+<div style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">{{ wr.route }}</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-3)">
+<sc-for list="{{ wr.stats }}" as="x" hint-placeholder-count="3"><div><div style="font-size:34px;font-weight:600;line-height:1">{{ x.v }}</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ x.k }}</div></div></sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-3)"><h2 style="margin:0;font-size:22px">The winners</h2>
+<sc-for list="{{ wr.winners }}" as="w" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:28px 1fr auto;gap:var(--space-2);align-items:center"><i class="ph-duotone ph-crown-simple" style="font-size:22px;color:var(--color-process-yellow)"></i><span style="font-size:15px">{{ w.k }}</span><span style="font-size:16px;font-weight:600">{{ w.v }}</span></div></sc-for>
+</div>
+<sc-if value="{{ wr.hasPhotos }}"><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px"><sc-for list="{{ wr.photos }}" as="ph" hint-placeholder-count="0"><div style="aspect-ratio:3/4;border-radius:var(--radius-sm);background:{{ ph.bg }}"></div></sc-for></div></sc-if>
+<div style="display:flex;flex-direction:column;gap:var(--space-3)"><h2 style="margin:0;font-size:22px">What we loved</h2>
+<sc-for list="{{ wr.loved }}" as="f" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;gap:var(--space-3);align-items:baseline"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">{{ f.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ f.where }}</span></span><span style="flex:none;font-size:14px;color:var(--color-accent-2-700)">{{ f.stars }}</span></div></sc-for>
+<sc-if value="{{ wr.noLoved }}"><div style="font-size:14px;font-style:italic;color:var(--color-neutral-700)">Rate food and drinks 4 stars or more and they show up here.</div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-3)"><h2 style="margin:0;font-size:22px">Crew to remember</h2>
+<sc-for list="{{ wr.crew }}" as="cw" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">{{ cw.name }} <span style="font-weight:400;color:var(--color-neutral-700)">· {{ cw.role }}, {{ cw.where }}</span></span><sc-if value="{{ cw.note }}"><span style="font-size:14px;font-style:italic">{{ cw.note }}</span></sc-if></div></sc-for>
+<sc-if value="{{ wr.noCrew }}"><div style="font-size:14px;font-style:italic;color:var(--color-neutral-700)">No crew logged on this cruise.</div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-3)"><h2 style="margin:0;font-size:22px">Wishlist</h2><div style="font-size:15px">{{ wr.wish }}</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ ovItin }}">
+<div data-screen-label="Itinerary" style="display:flex;flex-direction:column;gap:var(--space-6)">
+<div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:32px;line-height:1">Itinerary</h1><div style="font-size:14px;color:var(--color-neutral-700)">{{ shipName }} · edit ports, times and tips. Add hotel or Disney days before or after.</div></div>
+<button class="btn btn-secondary" onClick="{{ addBefore }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Day before sailing</button>
+<sc-for list="{{ itinRows }}" as="r" hint-placeholder-count="8">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ r.dateLabel }} · {{ r.label }}</span><sc-if value="{{ r.canRemove }}"><button class="btn btn-ghost" onClick="{{ r.remove }}" style="font-size:12px;color:var(--color-accent-2-700)">Remove</button></sc-if></div>
+<input class="input" placeholder="Port or place" value="{{ r.name }}" onChange="{{ r.onName }}" style="font-size:16px;font-weight:600">
+<div style="display:grid;grid-template-columns:1fr 110px;gap:var(--space-2)"><input class="input" placeholder="In port 8:00 AM – 5:00 PM" value="{{ r.hours }}" onChange="{{ r.onHours }}"><input class="input" placeholder="All aboard" value="{{ r.aboard }}" onChange="{{ r.onAboard }}"></div>
+<input class="input" placeholder="Tip or note for this day" value="{{ r.tip }}" onChange="{{ r.onTip }}">
+</div>
+</sc-for>
+<button class="btn btn-secondary" onClick="{{ addAfter }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Day after the cruise</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ ovImport }}">
+<div data-screen-label="Import" style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h1 style="margin:0;font-size:32px;line-height:1">Import a schedule</h1>
+<div style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Take screenshots of your planner in the cruise line’s app, or copy the text from a confirmation email, and add them here. Each item is matched to its day on {{ shipName }}.</div>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap"><button class="btn btn-primary" onClick="{{ pickShots }}"><i class="ph-duotone ph-images"></i>Add screenshots</button><span style="font-size:13px;color:var(--color-neutral-700);align-self:center">{{ shotCount }}</span></div>
+<input type="file" accept="image/*" multiple="{{ true }}" ref="{{ shotRef }}" onChange="{{ onShots }}" style="display:none">
+<sc-if value="{{ hasShots }}"><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ shots }}" as="sh" hint-placeholder-count="0"><div style="width:54px;height:96px;border-radius:var(--radius-md);background:{{ sh.bg }}"></div></sc-for></div></sc-if>
+<div class="field"><label>Or paste text</label><textarea class="input" placeholder="Nov 3 · 9:00 AM Snorkel &amp; beach club, Cozumel, conf EX-40912" value="{{ impText }}" onChange="{{ setImpText }}" style="min-height:120px"></textarea></div>
+<button class="btn btn-primary btn-block" onClick="{{ runImport }}" disabled="{{ impDisabled }}"><i class="ph-duotone ph-magic-wand"></i>{{ impBtn }}</button>
+<sc-if value="{{ impMsg }}"><div style="font-size:14px;font-style:italic;color:var(--color-neutral-800)">{{ impMsg }}</div></sc-if>
+<sc-if value="{{ hasFound }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<h2 style="margin:0;font-size:22px">Found {{ foundCount }}</h2>
+<sc-for list="{{ found }}" as="f" hint-placeholder-count="3">
+<button onClick="{{ f.toggle }}" style="display:grid;grid-template-columns:26px 1fr;gap:var(--space-2);align-items:start;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><i class="{{ f.icon }}" style="font-size:22px;color:var(--color-accent)"></i><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">{{ f.title }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ f.meta }}</span></span></button>
+</sc-for>
+<button class="btn btn-primary btn-block" onClick="{{ addFound }}">Add {{ pickedCount }} to plans</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ sheetOpen }}">
+<div onClick="{{ closeSheet }}" style="position:absolute;inset:0;z-index:10;background:color-mix(in srgb,var(--color-neutral-900) 40%,transparent);display:flex;align-items:flex-end">
+<div class="scr" onClick="{{ stop }}" style="width:100%;max-height:88%;overflow-y:auto;background:var(--color-bg);border-radius:20px 20px 0 0;padding:var(--space-6) var(--space-4) 40px;display:flex;flex-direction:column;gap:var(--space-4);box-shadow:var(--shadow-lg);animation:rise .22s ease-out both">
+
+<sc-if value="{{ shAdd }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">Add to {{ shipName }}</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)">
+<sc-for list="{{ addItems }}" as="a" hint-placeholder-count="10">
+<button class="btn btn-secondary" onClick="{{ a.go }}" style="justify-content:flex-start;padding:12px;font-size:14px"><i class="{{ a.icon }}" style="font-size:22px;color:var(--color-accent)"></i>{{ a.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ shPlan }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ planSheetTitle }}</h2>
+<div class="field"><label>What</label><input class="input" placeholder="Couples massage" value="{{ fp.title }}" onChange="{{ fpTitle }}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Day</label><select class="input" value="{{ fp.off }}" onChange="{{ fpDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div class="field"><label>Time</label><input class="input" placeholder="7:30 PM" value="{{ fp.time }}" onChange="{{ fpTime }}"></div>
+</div>
+<div class="field"><label>Where</label><input class="input" placeholder="The Spa, Deck 5" value="{{ fp.place }}" onChange="{{ fpPlace }}"></div>
+<div class="field"><label>Confirmation # (optional)</label><input class="input" placeholder="SPA-2281" value="{{ fp.conf }}" onChange="{{ fpConf }}"></div>
+<div class="seg" style="align-self:flex-start">
+<label class="seg-opt"><input type="radio" name="fk" checked="{{ fpShip }}" onChange="{{ fpKindShip }}"><i class="ph-duotone ph-boat"></i>On ship</label>
+<label class="seg-opt"><input type="radio" name="fk" checked="{{ fpShore }}" onChange="{{ fpKindShore }}"><i class="ph-duotone ph-island"></i>Ashore</label>
+<label class="seg-opt"><input type="radio" name="fk" checked="{{ fpLand }}" onChange="{{ fpKindLand }}"><i class="ph-duotone ph-car"></i>Travel</label>
+</div>
+<button class="btn btn-primary btn-block" onClick="{{ savePlan }}" disabled="{{ planInvalid }}">Save plan</button>
+<sc-if value="{{ planEditing }}"><button class="btn btn-ghost" onClick="{{ deletePlan }}" style="align-self:center;color:var(--color-accent-2-700)">Delete plan</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ shSession }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ sessionSheetTitle }}</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Who</label><select class="input" value="{{ fs.who }}" onChange="{{ fsWho }}"><sc-for list="{{ playerOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.v }}</option></sc-for></select></div>
+<div class="field"><label>Day</label><select class="input" value="{{ fs.off }}" onChange="{{ fsDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+</div>
+<div class="field"><label>Machine</label><input class="input" placeholder="Buffalo Gold" value="{{ fs.machine }}" onChange="{{ fsMachine }}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Casino points earned</label><input class="input" inputMode="numeric" placeholder="320" value="{{ fs.pts }}" onChange="{{ fsPts }}"></div>
+<div class="field"><label>Win / loss ($)</label><input class="input" inputMode="decimal" placeholder="-40 or 125" value="{{ fs.net }}" onChange="{{ fsNet }}"></div>
+</div>
+<label class="radio"><input type="checkbox" checked="{{ fs.jp }}" onChange="{{ fsJp }}" style="position:static;opacity:1;width:18px;height:18px;pointer-events:auto;accent-color:var(--color-accent)">Hit a jackpot this session</label>
+<button class="btn btn-primary btn-block" onClick="{{ saveSession }}" disabled="{{ sessionInvalid }}"><i class="ph-duotone ph-coins"></i>Save &amp; spin</button>
+<sc-if value="{{ sessionEditing }}"><button class="btn btn-ghost" onClick="{{ deleteSession }}" style="align-self:center;color:var(--color-accent-2-700)">Delete session</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ shQuick }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ qTitle }}</h2>
+<sc-for list="{{ qFields }}" as="q" hint-placeholder-count="2">
+<div class="field"><label>{{ q.label }}</label><input class="input" placeholder="{{ q.ph }}" inputMode="{{ q.mode }}" value="{{ q.value }}" onChange="{{ q.on }}" onKeyDown="{{ quickKey }}"></div>
+</sc-for>
+<button class="btn btn-primary btn-block" onClick="{{ saveQuick }}">Save</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ shWho }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Scavenger hunt · {{ whoPts }} pts</div>
+<h2 style="margin:0;font-size:26px;line-height:1.2">{{ whoTitle }}</h2>
+<div style="font-size:14px;color:var(--color-neutral-700)">Who spotted it first?</div>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap"><sc-for list="{{ whoBtns }}" as="w" hint-placeholder-count="2"><button class="btn btn-secondary" onClick="{{ w.go }}" style="padding:12px 18px;font-size:16px;background:{{ w.bg }};color:{{ w.fg }}">{{ w.name }}</button></sc-for></div>
+<div style="display:flex;justify-content:space-between"><button class="btn btn-ghost" onClick="{{ whoProof }}"><i class="ph-duotone ph-camera"></i>Snap proof</button><sc-if value="{{ whoFound }}"><button class="btn btn-ghost" onClick="{{ whoUndo }}" style="color:var(--color-accent-2-700)">Not found yet</button></sc-if></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ shFood }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ foodSheetTitle }}</h2>
+<button onClick="{{ pickFoodPhoto }}" style="height:150px;border:1px dashed var(--color-neutral-500);border-radius:var(--radius-md);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body);font-size:14px;color:var(--color-neutral-700);background:{{ ffBg }}"><sc-if value="{{ ffNoPhoto }}" hint-placeholder-val="{{ true }}"><i class="ph-duotone ph-camera-plus" style="font-size:32px;color:var(--color-accent)"></i></sc-if><sc-if value="{{ ffNoPhoto }}" hint-placeholder-val="{{ true }}"><span>Add a photo</span></sc-if></button>
+<input type="file" accept="image/*" ref="{{ foodFileRef }}" onChange="{{ onFoodFile }}" style="display:none">
+<div class="field"><label>Dish or drink</label><input class="input" placeholder="Espresso martini" value="{{ ff.name }}" onChange="{{ ffName }}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)"><div class="field"><label>Where</label><input class="input" placeholder="Martini Bar" value="{{ ff.where }}" onChange="{{ ffWhere }}"></div><div class="field"><label>Who had it</label><select class="input" value="{{ ff.by }}" onChange="{{ ffBy }}"><sc-for list="{{ byOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.v }}</option></sc-for></select></div></div>
+<div style="display:flex;align-items:center;gap:var(--space-2)"><span style="font-size:13px;color:var(--color-neutral-700)">Rating</span><div style="display:flex"><sc-for list="{{ ffStars }}" as="st" hint-placeholder-count="5"><button onClick="{{ st.go }}" aria-label="Rate" style="background:none;border:0;padding:3px;cursor:pointer;font-size:28px;color:{{ st.color }}"><i class="ph-duotone ph-star"></i></button></sc-for></div></div>
+<div class="field"><label>Note</label><input class="input" placeholder="Ask for it extra cold" value="{{ ff.note }}" onChange="{{ ffNote }}"></div>
+<button class="btn btn-primary btn-block" onClick="{{ saveFood }}" disabled="{{ foodInvalid }}">Save</button>
+<sc-if value="{{ foodEditing }}"><button class="btn btn-ghost" onClick="{{ deleteFood }}" style="align-self:center;color:var(--color-accent-2-700)">Delete</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ shCrew }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ crewSheetTitle }}</h2>
+<div class="field"><label>Name</label><input class="input" placeholder="As on their name tag" value="{{ fc.name }}" onChange="{{ fcName }}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)"><div class="field"><label>Role</label><select class="input" value="{{ fc.role }}" onChange="{{ fcRole }}"><sc-for list="{{ roleOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}">{{ o.v }}</option></sc-for></select></div><div class="field"><label>Where</label><input class="input" placeholder="Martini Bar" value="{{ fc.where }}" onChange="{{ fcWhere }}"></div></div>
+<div style="display:flex;align-items:center;gap:var(--space-2)"><span style="font-size:13px;color:var(--color-neutral-700)">Rating</span><div style="display:flex"><sc-for list="{{ fcStars }}" as="st" hint-placeholder-count="5"><button onClick="{{ st.go }}" aria-label="Rate" style="background:none;border:0;padding:3px;cursor:pointer;font-size:28px;color:{{ st.color }}"><i class="ph-duotone ph-star"></i></button></sc-for></div></div>
+<div class="field"><label>What they did</label><input class="input" placeholder="Remembered our drinks from day one" value="{{ fc.note }}" onChange="{{ fcNote }}"></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<button class="btn btn-secondary" onClick="{{ fcTip }}" style="background:{{ fcTipBg }};color:{{ fcTipFg }}"><i class="ph-duotone ph-hand-coins"></i>Extra tip</button>
+<button class="btn btn-secondary" onClick="{{ fcSurvey }}" style="background:{{ fcSvBg }};color:{{ fcSvFg }}"><i class="ph-duotone ph-clipboard-text"></i>Name in survey</button>
+</div>
+<button class="btn btn-primary btn-block" onClick="{{ saveCrew }}" disabled="{{ crewInvalid }}">Save</button>
+<sc-if value="{{ crewEditing }}"><button class="btn btn-ghost" onClick="{{ deleteCrew }}" style="align-self:center;color:var(--color-accent-2-700)">Delete</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ shCruise }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ cruiseSheetTitle }}</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)"><div class="field"><label>Cruise line</label><input class="input" placeholder="Celebrity" value="{{ fcr.line }}" onChange="{{ fcrLine }}"></div><div class="field"><label>Ship</label><input class="input" placeholder="Celebrity Apex" value="{{ fcr.ship }}" onChange="{{ fcrShip }}"></div></div>
+<div style="display:grid;grid-template-columns:1fr 90px;gap:var(--space-3)"><div class="field"><label>Sail date</label><input class="input" type="date" value="{{ fcr.start }}" onChange="{{ fcrStart }}"></div><div class="field"><label>Nights</label><input class="input" inputMode="numeric" value="{{ fcr.nights }}" onChange="{{ fcrNights }}"></div></div>
+<div class="field"><label>Departure port</label><input class="input" placeholder="Port Canaveral" value="{{ fcr.embark }}" onChange="{{ fcrEmbark }}"></div>
+<div class="field"><label>Ship IMO number (for live tracking)</label><input class="input" inputMode="numeric" placeholder="9838383" value="{{ fcr.imo }}" onChange="{{ fcrImo }}"></div>
+<div class="field"><label>Free-cruise goal (casino points each)</label><input class="input" inputMode="numeric" value="{{ fcr.goal }}" onChange="{{ fcrGoal }}"></div>
+<button class="btn btn-primary btn-block" onClick="{{ saveCruise }}" disabled="{{ cruiseInvalid }}">{{ cruiseSaveLabel }}</button>
+<sc-if value="{{ cruiseEditing }}"><button class="btn btn-ghost" onClick="{{ deleteCruise }}" style="align-self:center;color:var(--color-accent-2-700)">Delete cruise</button></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ shViewer }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div role="img" aria-label="Trip photo" style="width:100%;aspect-ratio:3/4;border-radius:var(--radius-md);background:{{ viewerBg }}"></div>
+<div style="display:flex;justify-content:space-between"><a class="btn btn-primary" href="{{ viewerSrc }}" download="voyage-photo.jpg"><i class="ph-duotone ph-download-simple"></i>Save to phone</a><button class="btn btn-ghost" onClick="{{ deletePhoto }}" style="color:var(--color-accent-2-700)">Delete</button></div>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ reelOn }}">
+<div onClick="{{ closeReel }}" style="position:absolute;inset:0;z-index:12;background:color-mix(in srgb,var(--color-bg) 94%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-6);overflow:hidden;cursor:pointer">
+<sc-for list="{{ confetti }}" as="cf" hint-placeholder-count="0"><span style="position:absolute;top:-16px;left:{{ cf.left }};width:{{ cf.size }};height:{{ cf.size }};border-radius:50%;background:{{ cf.color }};mix-blend-mode:multiply;animation:{{ cf.anim }}"></span></sc-for>
+<div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">{{ reelWho }}</div>
+<div style="display:flex;gap:10px;padding:14px;border:3px solid var(--color-text);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);background:var(--color-bg)">
+<sc-for list="{{ reels }}" as="r" hint-placeholder-count="3">
+<div style="width:78px;height:88px;overflow:hidden;border-radius:var(--radius-md);background:var(--color-neutral-100);box-shadow:inset 0 0 0 1px var(--color-divider)">
+<div style="display:flex;flex-direction:column;animation:{{ r.anim }}"><sc-for list="{{ r.syms }}" as="sy" hint-placeholder-count="12"><div style="height:88px;flex:none;display:flex;align-items:center;justify-content:center"><i class="{{ sy.icon }}" style="font-size:46px;color:{{ sy.color }}"></i></div></sc-for></div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px;animation:pop .4s ease-out 2.1s both">
+<div style="font-size:30px;font-weight:600;line-height:1.1;text-align:center">{{ reelLine }}</div>
+<div style="font-size:18px;color:var(--color-accent-700)">+{{ reelXp }} XP</div>
+<div style="font-size:12px;color:var(--color-neutral-700);margin-top:var(--space-2)">Tap to continue</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  KEY = 'mt-cruise-v3';
+  KINDS = { ship: ['On ship', 'tag tag-accent'], shore: ['Ashore', 'tag tag-accent-2'], land: ['Travel', 'tag tag-neutral'] };
+  RANKS = [[0, 'Deckhand'], [60, 'Bosun'], [150, 'Navigator'], [300, 'First Mate'], [500, 'Captain'], [800, 'Commodore'], [1200, 'Admiral']];
+  ROLES = ['Server', 'Bartender', 'Room steward', 'Sommelier', 'Casino host', 'Guest relations', 'Spa', 'Other'];
+  CHAL = [['ph-martini', 'Order a drink you’ve never had', 15], ['ph-binoculars', 'Find 2 hunt items', 20], ['ph-coins', 'Finish a slots session up', 25], ['ph-camera', 'Take a selfie on the top deck', 10], ['ph-identification-badge', 'Learn a crew member’s name', 10], ['ph-brain', 'Get a trivia question right', 15], ['ph-sun-horizon', 'Catch the sunset', 10], ['ph-music-notes', 'Dance at the deck party', 20], ['ph-fork-knife', 'Rate something you ate', 10], ['ph-clock', 'Back on board an hour early', 15]];
+  TRIVIA = [
+    { q: 'Facing the bow, which side of the ship is port?', o: ['Left', 'Right'], a: 0 },
+    { q: 'Key West is closer to which city?', o: ['Miami', 'Havana'], a: 1 },
+    { q: 'What is the capital of the Cayman Islands?', o: ['George Town', 'Bodden Town', 'West Bay'], a: 0 },
+    { q: 'Cozumel belongs to which Mexican state?', o: ['Yucatán', 'Quintana Roo', 'Campeche'], a: 1 },
+    { q: 'A ship doing 20 knots is going about…', o: ['15 mph', '23 mph', '30 mph'], a: 1 },
+    { q: 'What is the very back of a ship called?', o: ['Bow', 'Stern', 'Keel'], a: 1 },
+    { q: 'St. Thomas is part of which territory?', o: ['British Virgin Islands', 'U.S. Virgin Islands', 'Puerto Rico'], a: 1 },
+    { q: 'What is a ship’s galley?', o: ['The kitchen', 'The art gallery', 'The lifeboat deck'], a: 0 },
+  ];
+  FILTERS = { natural: ['Natural', 'none'], news: ['Newsprint', 'grayscale(1) contrast(1.35)'], press: ['Press', 'url(#sep-all)'], golden: ['Golden hour', 'sepia(.35) saturate(1.4) contrast(1.05) brightness(1.04)'], carib: ['Caribbean', 'saturate(1.7) hue-rotate(-10deg) brightness(1.05)'], noir: ['Noir', 'grayscale(1) contrast(1.6) brightness(.9)'] };
+  FRAMES = [['plain', 'Plain', 'ph-square'], ['stamp', 'Date stamp', 'ph-calendar-check'], ['front', 'Front page', 'ph-newspaper'], ['postcard', 'Postcard', 'ph-envelope-simple'], ['polaroid', 'Instant', 'ph-image-square']];
+  SYM = [['ph-anchor', 'var(--color-accent)'], ['ph-crown-simple', 'var(--color-process-yellow)'], ['ph-star', 'var(--color-accent-2)'], ['ph-coins', 'var(--color-process-yellow)'], ['ph-diamond', 'var(--color-accent)'], ['ph-heart', 'var(--color-accent-2)']];
+  LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+  STK = {
+    captain: ['Captain hat', 1.6, "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 160 100'><path d='M24 60 C18 18 142 18 136 60 Z' fill='#ffffff' stroke='#201e1d' stroke-width='4'/><rect x='26' y='56' width='108' height='16' rx='3' fill='#201e1d'/><path d='M34 64 H126' stroke='#edbb00' stroke-width='3' stroke-dasharray='6 4'/><path d='M22 72 Q80 100 138 72 L134 82 Q80 104 26 82Z' fill='#201e1d'/><circle cx='80' cy='44' r='12' fill='#edbb00' stroke='#201e1d' stroke-width='3'/><path d='M80 37 V52 M73 47 Q80 55 87 47 M75 40 H85' stroke='#201e1d' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"],
+    sunhat: ['Sun hat', 1.6, "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 160 100'><ellipse cx='80' cy='72' rx='76' ry='20' fill='#edbb00' stroke='#201e1d' stroke-width='3'/><path d='M44 72 C42 24 118 24 116 72 Z' fill='#edbb00' stroke='#201e1d' stroke-width='3'/><path d='M44 60 Q80 68 116 60 L116 70 Q80 78 44 70Z' fill='#d6006c'/><g stroke='#201e1d' stroke-opacity='.35' stroke-width='1.5' fill='none'><path d='M20 74 Q80 84 140 74'/><path d='M56 40 Q80 34 104 40'/><path d='M50 52 Q80 46 110 52'/></g><circle cx='104' cy='64' r='8' fill='#ff90b1' stroke='#201e1d' stroke-width='2'/><circle cx='104' cy='64' r='3' fill='#edbb00'/></svg>"],
+    pirate: ['Pirate hat', 1.6, "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200' viewBox='0 0 160 100'><path d='M6 66 Q36 6 80 30 Q124 6 154 66 Q80 90 6 66Z' fill='#201e1d'/><path d='M12 64 Q80 86 148 64' stroke='#edbb00' stroke-width='4' fill='none'/><circle cx='80' cy='44' r='12' fill='#f3f2f2'/><circle cx='75' cy='43' r='3' fill='#201e1d'/><circle cx='85' cy='43' r='3' fill='#201e1d'/><path d='M64 66 L96 56 M64 56 L96 66' stroke='#f3f2f2' stroke-width='5' stroke-linecap='round'/></svg>"],
+    party: ['Party hat', 0.77, "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='260' viewBox='0 0 100 130'><path d='M50 10 L88 118 Q50 132 12 118Z' fill='#d6006c' stroke='#201e1d' stroke-width='3'/><path d='M38 44 L62 52 M28 74 L72 88 M20 100 L80 112' stroke='#edbb00' stroke-width='7'/><circle cx='42' cy='64' r='3.5' fill='#62c5ee'/><circle cx='60' cy='96' r='3.5' fill='#62c5ee'/><circle cx='50' cy='10' r='11' fill='#edbb00' stroke='#201e1d' stroke-width='3'/></svg>"],
+    shades: ['Sunglasses', 2.67, "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='120' viewBox='0 0 160 60'><path d='M2 18 H158' stroke='#201e1d' stroke-width='5'/><rect x='8' y='12' width='62' height='40' rx='16' fill='#201e1d'/><rect x='90' y='12' width='62' height='40' rx='16' fill='#201e1d'/><path d='M70 22 Q80 14 90 22' stroke='#201e1d' stroke-width='6' fill='none'/><path d='M20 24 L34 18 M102 24 L116 18' stroke='#62c5ee' stroke-width='4' stroke-linecap='round'/><path d='M22 34 L44 22 M104 34 L126 22' stroke='#d6006c' stroke-opacity='.7' stroke-width='3' stroke-linecap='round'/></svg>"],
+    lei: ['Flower lei', 1.45, null],
+  };
+  leiSvg() { let s = ''; const cols = ['#d6006c', '#edbb00', '#ff90b1', '#62c5ee']; for (let i = 0; i <= 12; i++) { const a = Math.PI * i / 12, x = 80 + 66 * Math.cos(a), y = 22 + 72 * Math.sin(a); if (i < 12) { const a2 = Math.PI * (i + 0.5) / 12; s += "<ellipse cx='" + (80 + 66 * Math.cos(a2)).toFixed(1) + "' cy='" + (22 + 72 * Math.sin(a2)).toFixed(1) + "' rx='7' ry='3.5' fill='#006786' transform='rotate(" + (a2 * 180 / Math.PI + 90).toFixed(0) + ' ' + (80 + 66 * Math.cos(a2)).toFixed(1) + ' ' + (22 + 72 * Math.sin(a2)).toFixed(1) + ")'/>"; } s += "<circle cx='" + x.toFixed(1) + "' cy='" + y.toFixed(1) + "' r='12' fill='" + cols[i % 4] + "' stroke='#201e1d' stroke-width='2'/><circle cx='" + x.toFixed(1) + "' cy='" + y.toFixed(1) + "' r='4' fill='" + (i % 4 === 1 ? '#d6006c' : '#edbb00') + "'/>"; } return "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='220' viewBox='0 0 160 110'>" + s + '</svg>'; }
+  stkUrl(k) { const svg = k === 'lei' ? this.leiSvg() : this.STK[k][2]; return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); }
+  palm(x, y, h, lean, L) {
+    const tx = x + lean, ty = y - h; let s = "<path d='M" + x + ' ' + y + ' Q' + (x + lean * 1.5) + ' ' + (y - h * 0.55) + ' ' + tx + ' ' + ty + "' stroke='#201e1d' stroke-width='" + (h * 0.045).toFixed(1) + "' fill='none' stroke-linecap='round'/>";
+    [-172, -140, -105, -70, -35, -5, 160].forEach(deg => { const a = deg * Math.PI / 180, ex = tx + L * Math.cos(a), ey = ty + L * Math.sin(a) + L * 0.3 * Math.abs(Math.cos(a)), mx = (tx + ex) / 2, my = (ty + ey) / 2, len = Math.hypot(ex - tx, ey - ty), nx = -(ey - ty) / len, ny = (ex - tx) / len, w = L * 0.2; s += "<path d='M" + tx.toFixed(1) + ' ' + ty.toFixed(1) + ' Q' + (mx + nx * w).toFixed(1) + ' ' + (my + ny * w).toFixed(1) + ' ' + ex.toFixed(1) + ' ' + ey.toFixed(1) + ' Q' + (mx - nx * w * 0.25).toFixed(1) + ' ' + (my - ny * w * 0.25).toFixed(1) + ' ' + tx.toFixed(1) + ' ' + ty.toFixed(1) + "Z' fill='#201e1d'/>"; });
+    return s + "<circle cx='" + (tx - 5) + "' cy='" + (ty + 7) + "' r='" + (L * 0.07).toFixed(1) + "' fill='#201e1d'/><circle cx='" + (tx + 6) + "' cy='" + (ty + 8) + "' r='" + (L * 0.07).toFixed(1) + "' fill='#201e1d'/>";
+  }
+  sceneUrl() {
+    if (this._scene) return this._scene;
+    let w = ''; [[670, 14, 18], [700, 20, 12], [740, 10, 22], [790, 24, 8], [850, 16, 16], [910, 22, 10]].forEach(([y, a, b]) => { w += "<path d='M0 " + y + " H720' stroke='#cbeeff' stroke-width='4' stroke-dasharray='" + a * 2 + ' ' + b * 2 + "'/>"; });
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='720' height='960' viewBox='0 0 720 960'><defs><pattern id='d' width='12' height='12' patternUnits='userSpaceOnUse'><circle cx='6' cy='6' r='2.3' fill='#99e0ff'/></pattern></defs>"
+      + "<rect width='720' height='960' fill='#f3f2f2'/><rect width='720' height='650' fill='url(#d)'/><circle cx='560' cy='300' r='130' fill='#edbb00'/><circle cx='566' cy='306' r='130' fill='none' stroke='#d6006c' stroke-width='3' opacity='.5'/>"
+      + "<path d='M70 210 q12 -12 24 0 q12 -12 24 0 M150 250 q8 -8 16 0 q8 -8 16 0' stroke='#201e1d' stroke-width='3.5' fill='none'/>"
+      + "<path d='M0 640 Q120 560 260 612 Q380 572 520 614 Q620 584 720 604 L720 660 L0 660Z' fill='#62c5ee'/><rect y='650' width='720' height='310' fill='#38a6cf'/>" + w
+      + "<path d='M300 646 L420 646 L412 658 L308 658Z M318 636 h86 v10 h-86Z M354 626 L358 614 L370 614 L368 626Z' fill='#f3f2f2' stroke='#201e1d' stroke-width='2'/>"
+      + "<path d='M0 960 L0 700 Q100 640 210 704 Q270 770 300 960Z' fill='#006786'/><path d='M720 960 L720 720 Q620 680 540 764 Q500 830 470 960Z' fill='#006786'/>"
+      + this.palm(70, 760, 420, 60, 140) + this.palm(170, 820, 300, -40, 110) + this.palm(650, 780, 400, -50, 135) + this.palm(560, 860, 260, 30, 100)
+      + "<path d='M0 960 Q360 892 720 960Z' fill='#edbb00'/></svg>";
+    this._scene = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    return this._scene;
+  }
+  archPath(x, px, py, pw, ph) { const r = ph * 0.34; x.beginPath(); x.moveTo(px, py + r); x.ellipse(px + pw / 2, py + r, pw / 2, r, 0, Math.PI, 0); x.lineTo(px + pw, py + ph - 10); x.quadraticCurveTo(px + pw, py + ph, px + pw - 10, py + ph); x.lineTo(px + 10, py + ph); x.quadraticCurveTo(px, py + ph, px, py + ph - 10); x.closePath(); }
+  async segment() {
+    const src = this.state.draft; if (!src) return;
+    this.setState({ seg: 'working', cutFor: src, cutout: null });
+    try {
+      if (!this.segmenter) {
+        const m = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs');
+        const fs = await m.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+        this.segmenter = await m.ImageSegmenter.createFromOptions(fs, { baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite' }, runningMode: 'IMAGE', outputConfidenceMasks: true, outputCategoryMask: false });
+      }
+      const img = await this.loadImg(src), res = this.segmenter.segment(img), mk = res.confidenceMasks[0], mw = mk.width, mh = mk.height, data = mk.getAsFloat32Array();
+      const mc = document.createElement('canvas'); mc.width = mw; mc.height = mh; const mx = mc.getContext('2d'), id = mx.createImageData(mw, mh);
+      for (let i = 0; i < data.length; i++) id.data[i * 4 + 3] = Math.max(0, Math.min(255, (data[i] - 0.3) / 0.4 * 255));
+      mx.putImageData(id, 0, 0); if (mk.close) mk.close();
+      const oc = document.createElement('canvas'); oc.width = img.width; oc.height = img.height; const ox = oc.getContext('2d');
+      ox.drawImage(img, 0, 0); ox.globalCompositeOperation = 'destination-in'; ox.drawImage(mc, 0, 0, img.width, img.height);
+      const out = oc.toDataURL('image/png');
+      if (this.state.draft === src) this.setState({ cutout: out, seg: 'done' });
+    } catch (e) { if (this.state.draft === src) this.setState({ seg: 'fail' }); }
+  }
+  dragStart(e, sk) { e.preventDefault(); e.stopPropagation(); try { e.currentTarget.setPointerCapture(e.pointerId); } catch (er) {} this.drag = { id: sk.id, sx: e.clientX, sy: e.clientY, ox: sk.x, oy: sk.y }; this.setState({ selSticker: sk.id }); }
+
+  defaultHunt() { return [['A towel animal on the bed', 10], ['Someone in a captain’s hat', 15], ['A rooster in port', 15], ['Matching couple outfits', 20], ['Another cruise line’s ship', 10], ['An iguana', 20], ['Sunset selfie, top deck', 25], ['A conga line', 20], ['Someone hitting a jackpot', 25]].map((x, i) => ({ id: i + 1, title: x[0], pts: x[1], by: null, author: 'App' })); }
+  defaultPack() { return ['Passports', 'Boarding documents', 'Casino player cards', 'Magnetic hooks', 'Lanyards', 'Reef-safe sunscreen', 'Swimsuits', 'Evening outfits', 'Seasickness bands', 'Non-surge power strip'].map((t, i) => ({ id: i + 1, text: t, done: false })); }
+  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {} }; }
+  seed() {
+    const D = (off, name, hours, aboard = '', tip = '') => ({ off, name, hours, aboard, tip });
+    const P = (id, off, time, title, place, kind, conf = '') => ({ id, off, time, title, place, kind, conf });
+    const apex = Object.assign(this.emptyData(), {
+      plans: [P(1, -3, '8:00 AM', 'Drive to Orlando', 'Home → Disney', 'land'), P(2, -3, '10:00 AM', 'Magic Kingdom', 'Walt Disney World', 'land', 'WDW-58812'), P(3, -3, '4:00 PM', 'Hotel check-in', 'Disney Springs area', 'land', 'HTL-30417'), P(4, -2, '9:00 AM', 'EPCOT', 'Walt Disney World', 'land', 'WDW-58813'), P(5, -1, '11:00 AM', 'Drive to the coast', 'Orlando → Cocoa Beach', 'land'), P(6, -1, '3:00 PM', 'Port hotel check-in', 'Cocoa Beach', 'land', 'HTL-30588'), P(7, 0, '10:30 AM', 'Port parking', 'Cruise terminal lot', 'land', 'PRK-11902'), P(8, 0, '11:30 AM', 'Boarding window', 'Cruise terminal', 'ship', 'BRD-1130'), P(9, 0, '4:00 PM', 'Sail-away drinks', 'Rooftop Garden', 'ship'), P(10, 1, '9:00 AM', 'Duval Street & Southernmost Point', 'Key West', 'shore'), P(11, 2, '10:00 AM', 'Couples massage', 'The Spa', 'ship', 'SPA-2281'), P(12, 2, '2:00 PM', 'Slots tournament', 'Casino', 'ship'), P(13, 2, '8:00 PM', 'Steakhouse dinner', 'Fine Cut Steakhouse', 'ship', 'DIN-8823'), P(14, 3, '9:00 AM', 'Snorkel & beach club', 'Cozumel', 'shore', 'EX-40912'), P(15, 4, '8:00 AM', 'Stingray City', 'Grand Cayman', 'shore', 'EX-41187'), P(16, 5, '9:30 PM', 'Evening show', 'The Theatre', 'ship', 'SHW-0394'), P(17, 6, '7:00 PM', 'Le Petit Chef', 'Specialty dining', 'ship', 'DIN-9002'), P(18, 7, '7:30 AM', 'Disembark & get the car', 'Terminal lot', 'land')],
+      sessions: [{ id: 1, who: 'Toni', machine: 'Buffalo Gold', off: 0, pts: 410, net: 72, jp: false }, { id: 2, who: 'Matthew', machine: 'Lightning Link', off: 0, pts: 520, net: -60, jp: false }, { id: 3, who: 'Matthew', machine: 'Wheel of Fortune', off: 2, pts: 300, net: 125, jp: true }, { id: 4, who: 'Toni', machine: 'Dragon Link', off: 2, pts: 380, net: 38, jp: false }],
+      spends: [{ id: 1, what: 'Disney hotel, 2 nights', when: 'Oct 28', amt: 540 }, { id: 2, what: 'Port hotel', when: 'Oct 30', amt: 189 }, { id: 3, what: 'Port parking, 7 days', when: 'Oct 31', amt: 125 }],
+      budget: 2500,
+      notes: [{ id: 1, text: 'Watch sunset from the Rooftop Garden on a sea day', by: 'Toni', done: false }, { id: 2, text: 'Try every martini on the menu (over the week)', by: 'Matthew', done: false }],
+      food: [{ id: 1, name: 'Espresso martini', where: 'Martini Bar', r: 5, by: 'Toni', note: '', photo: '' }, { id: 2, name: 'Filet mignon', where: 'Fine Cut Steakhouse', r: 4, by: 'Matthew', note: 'Medium rare, peppercorn sauce', photo: '' }],
+      crew: [{ id: 1, name: 'Ana', role: 'Bartender', where: 'Martini Bar', r: 5, note: 'Remembered our order every night', tip: true, survey: true }, { id: 2, name: 'Rizal', role: 'Room steward', where: 'Deck 9, our hallway', r: 4, note: 'Towel animals every evening', tip: false, survey: false }],
+      spots: [{ id: 1, deck: 4, name: 'Casino', note: 'Toni’s lucky row by the bar' }, { id: 2, deck: 14, name: 'Rooftop Garden', note: 'Sail-away and sunsets' }],
+    });
+    apex.hunt[2].by = 'Toni'; apex.hunt[4].by = 'Matthew';
+    const edge = Object.assign(this.emptyData(), {
+      sessions: [{ id: 1, who: 'Matthew', machine: 'Buffalo', off: 1, pts: 640, net: 210, jp: true }, { id: 2, who: 'Toni', machine: 'Lightning Link', off: 2, pts: 880, net: -45, jp: false }],
+      food: [{ id: 1, name: 'Lobster tail', where: 'Main dining room', r: 5, by: 'Toni', note: '', photo: '' }],
+      crew: [{ id: 1, name: 'Marco', role: 'Server', where: 'Main dining room', r: 5, note: 'Saved our table by the window', tip: true, survey: true }],
+      notes: [{ id: 1, text: 'Dinner at Eden', by: 'Toni', done: true }],
+    });
+    return {
+      players: ['Matthew', 'Toni'], active: 'apex',
+      cruises: [
+        { id: 'apex', line: 'Celebrity', ship: 'Celebrity Apex', start: '2026-10-31', nights: 7, embark: 'Port Canaveral', goal: 2500, imo: '9838383',
+          days: [D(-3, 'Walt Disney World', 'Pre-cruise · Magic Kingdom'), D(-2, 'Walt Disney World', 'Pre-cruise · EPCOT'), D(-1, 'Cocoa Beach', 'Pre-cruise · hotel near the port', '', 'About an hour from Disney to Port Canaveral. Park-and-cruise hotels can save on port parking.'), D(0, 'Port Canaveral', 'Embark late morning · sail 4:00 PM', '3:30 PM'), D(1, 'Key West', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Duval Street and Mallory Square are a short walk from the pier. Look out for the roosters.'), D(2, 'At sea', 'Full day at sea'), D(3, 'Cozumel', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Several piers. Check which one you are docked at before taking a taxi back.'), D(4, 'Grand Cayman', 'In port 7:00 AM – 3:00 PM', '2:30 PM', 'Tender port. Lines for the boats back get long in the last hour.'), D(5, 'At sea', 'Full day at sea'), D(6, 'At sea', 'Full day at sea'), D(7, 'Port Canaveral', 'Arrive early morning · disembark')] },
+        { id: 'beyond', line: 'Celebrity', ship: 'Celebrity Beyond', start: '2027-02-21', nights: 7, embark: 'Fort Lauderdale', goal: 2500, imo: '9838395',
+          days: [D(0, 'Fort Lauderdale', 'Sail 4:00 PM', '3:30 PM'), D(1, 'At sea', 'Full day at sea'), D(2, 'Puerto Plata', 'Amber Cove · 7:00 AM – 2:00 PM', '1:30 PM'), D(3, 'St. Thomas', 'In port 10:30 AM – 6:00 PM', '5:30 PM'), D(4, 'St. Kitts', 'Basseterre · 8:00 AM – 6:00 PM', '5:30 PM'), D(5, 'At sea', 'Full day at sea'), D(6, 'At sea', 'Full day at sea'), D(7, 'Fort Lauderdale', 'Arrive early morning · disembark')] },
+        { id: 'princess', line: 'Princess', ship: 'Princess · Europe', start: '', nights: 0, embark: '', goal: 2000, imo: '', days: [] },
+        { id: 'edge', line: 'Celebrity', ship: 'Celebrity Edge', start: '2026-03-08', nights: 5, embark: 'Fort Lauderdale', goal: 2000, imo: '9812705', sample: true,
+          days: [D(0, 'Fort Lauderdale', 'Sail 4:00 PM'), D(1, 'At sea', 'Full day at sea'), D(2, 'Nassau', 'In port 8:00 AM – 5:00 PM'), D(3, 'Key West', 'In port 8:00 AM – 4:00 PM'), D(4, 'At sea', 'Full day at sea'), D(5, 'Fort Lauderdale', 'Disembark')] },
+      ],
+      db: { apex, beyond: this.emptyData(), princess: this.emptyData(), edge },
+      brands: { Celebrity: { club: 'Blue Chip Club', tiers: { Matthew: '', Toni: '' } }, Princess: { club: 'Casino Rewards', tiers: { Matthew: '', Toni: '' } } },
+    };
+  }
+  constructor(p) {
+    super(p);
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(this.KEY) || '{}') || {}; } catch (e) { saved = {}; }
+    this.state = Object.assign(this.seed(), saved, {
+      tab: 'today', planView: 'days', selOff: 0, resFilter: 'all', game: 'slots', tripTab: 'pack', fleetView: 'up',
+      preview: null, sheet: null, overlay: null, wrapId: null, fp: {}, fs: {}, ff: {}, fc: {}, fcr: {}, qType: null, qf: {}, whoId: null, viewerId: null,
+      newPlayer: '', filter: 'natural', frame: 'stamp', headline: '', draft: null, cam: 'idle', tq: 0, tWho: 'Matthew', reel: null, track: false,
+      impText: '', shots: [], impBusy: false, impMsg: '', found: [], now: Date.now(),
+      backdrop: null, stickers: [], selSticker: null, cutout: null, cutFor: null, seg: 'idle',
+    });
+    this.stream = null; this.video = null; this.thumbs = new Set();
+    this.videoRef = el => { this.video = el; if (el && this.stream && el.srcObject !== this.stream) el.srcObject = this.stream; };
+    this.thumbRef = el => { if (el) { this.thumbs.add(el); if (this.stream && el.srcObject !== this.stream) el.srcObject = this.stream; } };
+  }
+  componentDidMount() { this._prev = this.state; this.tick = setInterval(() => this.setState({ now: Date.now() }), 30000); }
+  componentWillUnmount() { clearInterval(this.tick); this.stopCam(); }
+  componentDidUpdate() {
+    const s = this.state, ps = this._prev || {}; this._prev = s;
+    const keys = ['players', 'active', 'cruises', 'db', 'brands'];
+    if (keys.some(k => s[k] !== ps[k])) { const o = {}; keys.forEach(k => o[k] = s[k]); try { localStorage.setItem(this.KEY, JSON.stringify(o)); } catch (e) { console.warn('Storage full'); } }
+    if ((s.tab !== ps.tab || s.overlay !== ps.overlay) && this.scroller) this.scroller.scrollTop = 0;
+    if (s.tab !== ps.tab) { if (s.tab === 'camera') this.startCam(); else this.stopCam(); }
+    if (s.backdrop && s.draft && s.cutFor !== s.draft) this.segment();
+  }
+  async startCam() {
+    if (this.stream) return;
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { this.setState({ cam: 'none' }); return; }
+    this.setState({ cam: 'asking' });
+    try {
+      const st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      if (this.state.tab !== 'camera') { st.getTracks().forEach(t => t.stop()); return; }
+      this.stream = st;
+      this.setState({ cam: 'on' }, () => { [this.video, ...this.thumbs].forEach(v => { if (v && v.isConnected) v.srcObject = this.stream; }); });
+    } catch (e) { this.setState({ cam: 'denied' }); }
+  }
+  stopCam() { if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; } this.thumbs = new Set(); if (this.state.cam === 'on' || this.state.cam === 'asking') this.setState({ cam: 'idle' }); }
+
+  cur() { const s = this.state; const c = s.cruises.find(x => x.id === s.active) || s.cruises[0]; return { c, d: (c && s.db[c.id]) || this.emptyData() }; }
+  upd(fn) { this.setState(st => { const d = st.db[st.active] || this.emptyData(); return { db: { ...st.db, [st.active]: { ...d, ...fn(d, st) } } }; }); }
+  updCruise(fn) { this.setState(st => ({ cruises: st.cruises.map(c => c.id === st.active ? { ...c, ...fn(c) } : c) })); }
+  dateOf(c, off) { if (!c || !c.start) return null; const d = new Date(c.start + 'T12:00:00'); if (isNaN(d)) return null; d.setDate(d.getDate() + off); return d; }
+  fmtD(d) { return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }); }
+  fmtS(d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+  short(n) { n = n || ''; if (/^at sea$/i.test(n)) return 'Sea'; return n.length > 9 ? n.split(/[ ,·]/)[0].slice(0, 9) : n; }
+  isPast(c) { if (!c.start) return false; const end = this.dateOf(c, (+c.nights || 0) + 1); return end && end.getTime() < this.state.now; }
+  statsOf(dd, n) {
+    const ss = dd.sessions.filter(x => x.who === n), pts = ss.reduce((a, x) => a + (+x.pts || 0), 0), net = ss.reduce((a, x) => a + (+x.net || 0), 0), jp = ss.filter(x => x.jp).length;
+    const hunt = dd.hunt.filter(h => h.by === n).reduce((a, h) => a + (+h.pts || 0), 0);
+    const triv = Object.entries(dd.trivia || {}).filter(([q, a]) => a.who === n && this.TRIVIA[q] && a.pick === this.TRIVIA[q].a).length;
+    const chal = Object.entries(dd.challenges || {}).filter(([k, w]) => w === n).reduce((a, [k]) => { const [off, i] = k.split(':').map(Number); const c = this.chalFor(off)[i]; return a + (c ? c[2] : 0); }, 0);
+    const grid = dd.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
+    return { pts, net, jp, n: ss.length, hunt, triv, chal, bingos, xp: Math.floor(pts / 10) + jp * 25 + hunt + triv * 20 + chal + bingos * 50 };
+  }
+  chalFor(off) { const n = this.CHAL.length, base = (((off + 10) * 7) % n + n) % n; return [0, 1, 2].map(i => this.CHAL[(base + i * 3) % n]); }
+  rankOf(xp) { let i = 0; this.RANKS.forEach((r, j) => { if (xp >= r[0]) i = j; }); return { name: this.RANKS[i][1], cur: this.RANKS[i][0], next: this.RANKS[i + 1] }; }
+  readImg(file, max) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => { const img = new Image(); img.onload = () => { const sc = Math.min(1, max / Math.max(img.width, img.height)), cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc); cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); res(cv.toDataURL('image/jpeg', 0.8)); }; img.onerror = rej; img.src = r.result; }; r.onerror = rej; r.readAsDataURL(file); }); }
+  loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+  stampInfo() {
+    const { c } = this.cur(), on = this.onOff(), day = on != null ? (c.days || []).find(x => x.off === on) : null, dt = on != null ? this.dateOf(c, on) : new Date(this.state.now);
+    return { top: (dt ? this.fmtD(dt) : '') + ' · ' + c.ship, port: day ? day.name : 'Countdown' };
+  }
+  onOff() {
+    const s = this.state, { c } = this.cur();
+    if (s.preview != null) return s.preview;
+    if (!c.start) return null;
+    const t = new Date(new Date(s.now).toDateString()).getTime(), st = new Date(c.start + 'T00:00:00').getTime(), off = Math.floor((t - st) / 864e5);
+    return off >= 0 ? Math.min(off, +c.nights || 0) : null;
+  }
+  headlineText() { const s = this.state; if (s.headline) return s.headline; const st = this.stampInfo(); return s.frame === 'polaroid' ? st.port + ', ' + st.top.split(' · ')[0] : s.players.slice(0, 2).join(' & ') + ' take ' + st.port; }
+  async bake() {
+    const s = this.state; if (!s.draft) return;
+    const img = await this.loadImg(s.draft), W = 720, H = 960, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const x = cv.getContext('2d'), css = (k, f) => (getComputedStyle(document.documentElement).getPropertyValue(k) || '').trim() || f;
+    const paper = css('--color-neutral-100', '#f8f4f4'), ink = css('--color-text', '#201e1d'), yellow = css('--color-process-yellow', '#edbb00'), mag = css('--color-accent-2', '#d6006c'), cyan = css('--color-accent', '#0088b0');
+    const serif = '"Source Serif 4", Georgia, serif', st = this.stampInfo(), head = this.headlineText(), { c } = this.cur();
+    const photo = (px, py, pw, ph, arch, im = img, noDots) => {
+      x.save(); if (arch) this.archPath(x, px, py, pw, ph); else { x.beginPath(); x.rect(px, py, pw, ph); } x.clip();
+      try { x.filter = this.FILTERS[s.filter][1]; } catch (e) {}
+      const sc = Math.max(pw / im.width, ph / im.height), dw = im.width * sc, dh = im.height * sc; x.drawImage(im, px + (pw - dw) / 2, py + (ph - dh) / 2, dw, dh);
+      x.filter = 'none';
+      if (s.filter === 'news' && !noDots) { x.fillStyle = 'rgba(0,0,0,.2)'; for (let yy = py; yy < py + ph; yy += 6) for (let xx = px + ((yy / 6) % 2) * 3; xx < px + pw; xx += 6) { x.beginPath(); x.arc(xx, yy, 1.5, 0, 7); x.fill(); } }
+      x.restore();
+    };
+    const wrap = (t, px, py, mw, lh, max) => { const w = t.split(' '); let line = '', n = 0; for (let i = 0; i < w.length; i++) { const test = line ? line + ' ' + w[i] : w[i]; if (x.measureText(test).width > mw && line) { x.fillText(line, px, py + n * lh); line = w[i]; n++; if (n >= max) return; } else line = test; } x.fillText(line, px, py + n * lh); };
+    if (s.backdrop) {
+      const scene = await this.loadImg(this.sceneUrl()); x.drawImage(scene, 0, 0, W, H);
+      if (s.cutout && s.cutFor === s.draft) { const ci = await this.loadImg(s.cutout); photo(0, 0, W, H, false, ci, true); }
+      else { photo(101, 250, 518, 499, true); x.save(); this.archPath(x, 101, 250, 518, 499); x.lineWidth = 10; x.strokeStyle = paper; x.stroke(); x.restore(); }
+      const aboard = s.backdrop === 'aboard', port = aboard ? c.ship.replace(/^(Celebrity|Princess)\s*/, '') : s.backdrop;
+      x.textAlign = 'center'; x.fillStyle = ink; x.font = '29px ' + serif; try { x.letterSpacing = '9px'; } catch (e) {} x.fillText(aboard ? 'WELCOME ABOARD' : 'WELCOME TO', W / 2 + 4, 78); try { x.letterSpacing = '0px'; } catch (e) {}
+      let fz = port.length > 10 ? 84 : 107; x.font = '600 ' + fz + 'px ' + serif; while (x.measureText(port).width > W - 60 && fz > 40) { fz -= 4; x.font = '600 ' + fz + 'px ' + serif; }
+      x.fillStyle = yellow; x.fillText(port, W / 2 + 4, 82 + fz * 0.95 + 4); x.fillStyle = mag; x.fillText(port, W / 2, 82 + fz * 0.95);
+      x.fillStyle = ink; x.font = '22px ' + serif; x.fillText(st.top.toUpperCase(), W / 2, H - 26); x.textAlign = 'left';
+    } else if (s.frame === 'front') {
+      x.fillStyle = paper; x.fillRect(0, 0, W, H); x.fillStyle = ink; x.fillRect(28, 28, W - 56, 6); x.fillRect(28, 38, W - 56, 2);
+      x.font = '600 58px ' + serif; x.fillText('The Daily Voyager', 28, 102);
+      x.font = '16px ' + serif; x.fillText(st.top.toUpperCase(), 28, 132); x.textAlign = 'right'; x.fillText('EXTRA', W - 28, 132); x.textAlign = 'left'; x.fillRect(28, 142, W - 56, 2);
+      x.font = '600 38px ' + serif; wrap(head, 28, 192, W - 56, 44, 2);
+      photo(28, 250, W - 56, H - 320);
+      x.fillStyle = ink; x.font = 'italic 18px ' + serif; x.fillText(s.players.slice(0, 2).join(' & ') + ' · ' + c.ship, 28, H - 36);
+    } else if (s.frame === 'postcard') {
+      x.fillStyle = paper; x.fillRect(0, 0, W, H); photo(20, 20, W - 40, H - 40);
+      x.shadowColor = 'rgba(0,0,0,.5)'; x.shadowBlur = 8; x.fillStyle = '#fff'; x.font = 'italic 38px ' + serif; x.fillText('Greetings from', 50, H - 180); x.shadowBlur = 0;
+      let fs = 124; x.font = '600 ' + fs + 'px ' + serif; while (x.measureText(st.port).width > W - 100 && fs > 50) { fs -= 6; x.font = '600 ' + fs + 'px ' + serif; }
+      x.fillStyle = mag; x.fillText(st.port, 54, H - 56); x.fillStyle = yellow; x.fillText(st.port, 46, H - 64); x.lineWidth = 2; x.strokeStyle = ink; x.strokeText(st.port, 46, H - 64);
+      x.fillStyle = cyan; x.globalAlpha = 0.75; x.fillRect(W - 160, 44, 116, 140); x.globalAlpha = 1; x.setLineDash([8, 6]); x.strokeStyle = '#fff'; x.lineWidth = 3; x.strokeRect(W - 160, 44, 116, 140); x.setLineDash([]);
+      x.fillStyle = '#fff'; x.font = '600 18px ' + serif; x.textAlign = 'center'; x.fillText(c.ship.replace(/^(Celebrity|Princess)\s*/, '').toUpperCase().slice(0, 10), W - 102, 170); x.textAlign = 'left';
+    } else if (s.frame === 'polaroid') {
+      x.fillStyle = paper; x.fillRect(0, 0, W, H); photo(28, 28, W - 56, H - 178); x.fillStyle = ink; x.font = 'italic 40px ' + serif; wrap(head, 36, H - 70, W - 72, 44, 1);
+    } else {
+      photo(0, 0, W, H);
+      if (s.frame === 'stamp') { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 8; x.fillStyle = '#fff'; x.font = '18px ' + serif; x.fillText(st.top.toUpperCase(), 30, H - 76); x.font = '600 52px ' + serif; x.fillText(st.port, 28, H - 28); }
+    }
+    for (const sk of s.stickers) { const def = this.STK[sk.kind]; if (!def) continue; try { const si = await this.loadImg(this.stkUrl(sk.kind)), sw = sk.w / 100 * W, sh = sw / def[1]; x.save(); x.translate(sk.x / 100 * W, sk.y / 100 * H); x.rotate(sk.rot * Math.PI / 180); x.drawImage(si, -sw / 2, -sh / 2, sw, sh); x.restore(); } catch (e) {} }
+    const out = cv.toDataURL('image/jpeg', 0.78), on = this.onOff();
+    this.upd(dd => ({ photos: [{ id: Date.now(), src: out, off: on }, ...dd.photos].slice(0, 24) }));
+    this.setState({ draft: null, headline: '' });
+  }
+  async runImport() {
+    const s = this.state, { c } = this.cur(), days = [...(c.days || [])].sort((a, b) => a.off - b.off);
+    this.setState({ impBusy: true, impMsg: 'Reading your schedule…', found: [] });
+    const dayList = days.map(d => { const dt = this.dateOf(c, d.off); return (dt ? dt.toISOString().slice(0, 10) : 'day ' + (d.off + 1)) + ' = ' + d.name; }).join('\n');
+    const prompt = 'Extract every scheduled item (dining, shows, spa, excursions, hotels, flights, transfers, parking) from this cruise schedule for ' + c.ship + '. Cruise days:\n' + dayList + '\nReturn ONLY a JSON array of objects with keys: date (YYYY-MM-DD from the list above), time (like "7:30 PM" or ""), title, place, kind ("ship", "shore" or "land" for hotels/flights/parking/transfers), conf (confirmation or reservation number or ""). Text:\n' + (s.impText || '(see screenshots)');
+    const toOff = it => { if (it.date) { const hit = days.find(d => { const dt = this.dateOf(c, d.off); return dt && dt.toISOString().slice(0, 10) === it.date; }); if (hit) return hit.off; } return s.selOff || 0; };
+    let items = null;
+    try {
+      if (!window.claude || !window.claude.complete) throw new Error('no claude');
+      const content = [...s.shots.map(sh => ({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: sh.src.split(',')[1] } })), { type: 'text', text: prompt }];
+      const out = await window.claude.complete({ messages: [{ role: 'user', content }], max_tokens: 4000 });
+      const a = out.indexOf('['), b = out.lastIndexOf(']');
+      items = JSON.parse(out.slice(a, b + 1));
+    } catch (e) { items = null; }
+    if (!items) {
+      const M = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 }; let curDate = '';
+      items = [];
+      (s.impText || '').split(/\n+/).forEach(line => {
+        const dm = /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})\b/i.exec(line);
+        if (dm) { const yr = c.start ? c.start.slice(0, 4) : String(new Date().getFullYear()); curDate = yr + '-' + String(M[dm[1].toLowerCase()] + 1).padStart(2, '0') + '-' + String(dm[2]).padStart(2, '0'); }
+        const tm = /\b(\d{1,2}(:\d{2})?\s?(am|pm))\b/i.exec(line);
+        if (!tm) return;
+        const conf = (/\b([A-Z]{2,4}-?\d{3,})\b/.exec(line) || [])[1] || '';
+        let rest = line.replace(tm[0], '').replace(dm ? dm[0] : '', '').replace(conf, '').replace(/conf(irmation)?\.?\s*#?:?/i, '').replace(/^[\s·,:\-–]+|[\s·,:\-–]+$/g, '');
+        const parts = rest.split(/\s*[,·|]\s*/);
+        const t = parts[0] || 'Plan', place = parts.slice(1).join(', ');
+        const kind = /hotel|flight|airport|parking|transfer|drive/i.test(line) ? 'land' : /excursion|tour|beach|snorkel|ashore|port/i.test(line) ? 'shore' : 'ship';
+        items.push({ date: curDate, time: tm[1].toUpperCase().replace(/(\d)(AM|PM)/, '$1 $2'), title: t, place, kind, conf });
+      });
+      if (s.shots.length && !items.length) { this.setState({ impBusy: false, impMsg: 'Couldn’t read the screenshots here. Try pasting the text instead.' }); return; }
+    }
+    const found = items.filter(it => it && it.title).map((it, i) => ({ id: Date.now() + i, off: toOff(it), time: it.time || 'Any time', title: String(it.title), place: it.place || '', kind: this.KINDS[it.kind] ? it.kind : 'ship', conf: it.conf || '', pick: true }));
+    this.setState({ impBusy: false, found, impMsg: found.length ? 'Uncheck anything you don’t want, then add.' : 'No times found. Try including times like 7:30 PM.' });
+  }
+  spinFor(net, jp) {
+    const fin = jp ? [1, 1, 1] : net >= 100 ? [3, 3, 3] : net > 0 ? [3, 3, 2] : [0, 5, 4];
+    return fin.map((f, i) => ({ anim: 'reel ' + (1.1 + i * 0.45).toFixed(2) + 's cubic-bezier(.12,.8,.3,1) both', syms: Array.from({ length: 12 }, (_, k) => { const sy = this.SYM[k === 11 ? f : Math.floor(Math.random() * this.SYM.length)]; return { icon: 'ph-duotone ' + sy[0], color: sy[1] }; }) }));
+  }
+  renderVals() {
+    const s = this.state, { c, d } = this.cur(), players = s.players, set = o => () => this.setState(o);
+    const colorOf = n => { const i = players.indexOf(n); return i === 0 ? 'var(--color-accent)' : i === 1 ? 'var(--color-accent-2)' : 'var(--color-neutral-800)'; };
+    const chip = on => ({ bg: on ? 'var(--color-accent)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)' });
+    const fmt$ = n => (n < 0 ? '−$' : '+$') + Math.abs(Math.round(n)).toLocaleString();
+    const v = k => e => this.setState({ [k]: e.target.value });
+    const enter = fn => e => { if (e.key === 'Enter') fn(); };
+    const stars = (r, go) => [1, 2, 3, 4, 5].map(i => ({ color: i <= r ? 'var(--color-accent-2)' : 'var(--color-neutral-400)', go: () => go(r === i ? 0 : i) }));
+    const days = [...(c.days || [])].sort((a, b) => a.off - b.off), dayBy = off => days.find(x => x.off === off);
+    const nights = +c.nights || 0;
+    const dateLabel = off => { const dt = this.dateOf(c, off); return dt ? this.fmtD(dt) : (off < 0 ? 'Pre-cruise' : 'Day ' + (off + 1)); };
+    const labelOf = off => off < 0 ? 'Pre-cruise' : off > nights ? 'Post-cruise' : off === nights ? 'Disembark' : 'Day ' + (off + 1) + ' of ' + (nights + 1);
+    const tmin = x => { const m = /(\d+)(?::(\d+))?\s*(AM|PM)/i.exec(x || ''); if (!m) return 9999; let h = +m[1] % 12; if (/pm/i.test(m[3])) h += 12; return h * 60 + (+m[2] || 0); };
+    const editPlan = p => () => this.setState({ sheet: 'plan', fp: { ...p } });
+    const plansFor = off => d.plans.filter(p => p.off === off).sort((a, b) => tmin(a.time) - tmin(b.time)).map(p => { const k = this.KINDS[p.kind] || this.KINDS.ship; return { ...p, kindLabel: k[0], tagClass: k[1], confLine: p.conf ? ' · ' + p.conf : '', edit: editPlan(p) }; });
+
+    const on = this.onOff(), onboard = on != null, preSail = !!c.start && !onboard, noDate = !c.start;
+    const target = c.start ? new Date(c.start + 'T16:00:00').getTime() : 0, diff = Math.max(0, target - s.now);
+    const cdDays = Math.floor(diff / 864e5), hh = Math.floor(diff % 864e5 / 36e5), mm = Math.floor(diff % 36e5 / 6e4);
+    const hdDay = onboard ? dayBy(on) || { name: 'At sea', hours: '' } : null;
+    const firstPort = days.find(x => x.off > 0 && x.aboard);
+    const stops = days.filter(x => x.off >= 0 && x.off <= nights).map(x => { const cur = x.off === (onboard ? on : 0), port = !/^at sea$/i.test(x.name), past = onboard && x.off < on; return { short: this.short(x.name), shipOp: cur ? (onboard ? 1 : 0.45) : 0, size: cur ? '16px' : port ? '12px' : '8px', bg: cur ? 'var(--color-accent)' : port || past ? 'var(--color-text)' : 'var(--color-bg)', bd: cur ? 'var(--color-accent)' : port ? 'var(--color-text)' : 'var(--color-neutral-500)', fg: cur ? 'var(--color-accent-700)' : 'var(--color-text)', pick: () => this.setState({ tab: 'plans', planView: 'days', selOff: x.off }) }; });
+
+    const st = Object.fromEntries(players.map(n => [n, this.statsOf(d, n)]));
+    const maxXp = Math.max(0, ...players.map(n => st[n].xp)), leaders = players.filter(n => st[n].xp === maxXp && maxXp > 0);
+    const standings = players.map(n => { const r = this.rankOf(st[n].xp); return { name: n, xp: st[n].xp, color: colorOf(n), rank: r.name, leader: leaders.length === 1 && leaders[0] === n, pct: (r.next ? Math.min(100, (st[n].xp - r.cur) / (r.next[0] - r.cur) * 100) : 100) + '%', toNext: r.next ? (r.next[0] - st[n].xp) + ' XP to ' + r.next[1] : 'Top rank reached' }; });
+    const cOff = onboard ? on : -100;
+    const chal = this.chalFor(cOff).map((cc, i) => { const key = cOff + ':' + i, who = d.challenges[key]; return { icon: 'ph-duotone ' + cc[0], text: cc[1], pts: cc[2], claims: players.slice(0, 4).map(n => ({ label: n, ...chip(who === n), go: () => this.upd(dd => ({ challenges: { ...dd.challenges, [key]: dd.challenges[key] === n ? undefined : n } })) })) }; });
+    const firstPlanOff = d.plans.length ? Math.min(...d.plans.map(p => p.off)) : 0;
+    const homePlans = plansFor(onboard ? on : firstPlanOff).slice(0, 5);
+
+    const brand = s.brands[c.line] || { club: (c.line || 'Casino') + ' club', tiers: {} };
+    const goal = +c.goal || 0;
+    const slotBoard = players.map(n => { const x = st[n]; return { name: n, tier: brand.tiers[n] || '', ptsLabel: x.pts.toLocaleString(), n: x.n, meta: x.n + (x.n === 1 ? ' session · ' : ' sessions · ') + x.jp + (x.jp === 1 ? ' jackpot' : ' jackpots'), net: fmt$(x.net), netColor: x.net >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, x.pts / goal * 100) : 0) + '%', left: goal ? (x.pts >= goal ? 'Free-cruise goal reached' : (goal - x.pts).toLocaleString() + ' pts to the ' + goal.toLocaleString() + '-pt free-cruise goal') : 'Set a goal in cruise details' }; }).filter((b, i) => i < 2 || b.n > 0);
+    const best = (key, fmt) => { const sorted = players.map(n => ({ n, v: st[n][key] })).filter(x => st[x.n].n).sort((a, b) => b.v - a.v); if (!sorted.length || sorted[0].v <= 0) return { holder: 'Open', color: 'var(--color-neutral-500)' }; const tie = sorted[1] && sorted[1].v === sorted[0].v; return { holder: tie ? 'Tied' : sorted[0].n, color: tie ? 'var(--color-neutral-600)' : 'var(--color-process-yellow)' }; };
+    const crowns = [{ title: 'Jackpots', rot: '-5deg', ...best('jp') }, { title: 'Money', rot: '3deg', ...best('net') }, { title: 'Points', rot: '-2deg', ...best('pts') }];
+
+    const grid = d.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
+    const openWho = h => () => this.setState({ sheet: 'who', whoId: h.id });
+    const bingo = grid.map(h => ({ title: h.title, pts: h.pts, found: !!h.by, initial: (h.by || '?')[0], color: colorOf(h.by), bg: h.by ? 'var(--color-neutral-100)' : 'var(--color-bg)', op: h.by ? 0.45 : 1, pick: openWho(h) }));
+    const bonus = d.hunt.slice(9).map(h => ({ title: h.title, pts: h.pts, strike: h.by ? 'line-through' : 'none', meta: (h.by ? 'Found by ' + h.by : 'Open') + (h.author !== 'App' ? ' · clue from ' + h.author : ''), pick: openWho(h) }));
+    const wh = d.hunt.find(h => h.id === s.whoId);
+
+    const tq = this.TRIVIA[s.tq], ans = d.trivia[s.tq];
+    const tOpts = tq.o.map((label, i) => { let bg = 'var(--color-bg)', fg = 'var(--color-text)', icon = ''; if (ans) { if (i === tq.a) { bg = 'var(--color-accent-100)'; fg = 'var(--color-accent-800)'; icon = 'ph-duotone ph-check-circle'; } else if (i === ans.pick) { bg = 'var(--color-accent-2-100)'; fg = 'var(--color-accent-2-800)'; icon = 'ph-duotone ph-x-circle'; } } return { label, bg, fg, icon, pick: () => { if (ans) return; this.upd(dd => ({ trivia: { ...dd.trivia, [s.tq]: { who: s.tWho, pick: i } } })); } }; });
+
+    const pDone = d.pack.filter(k => k.done).length, pPct = d.pack.length ? Math.round(pDone / d.pack.length * 100) : 0;
+    const ports3 = onboard ? days.filter(x => x.off > 0 && x.off < on && x.aboard).length >= 3 : false;
+    const badgeDefs = [
+      ['ph-coins', 'Big win', s => d.sessions.find(x => +x.net >= 100)?.who], ['ph-sparkle', 'Jackpot!', () => d.sessions.find(x => x.jp)?.who], ['ph-binoculars', 'Sharp eyes', () => players.find(n => d.hunt.filter(h => h.by === n).length >= 3)],
+      ['ph-grid-nine', 'Bingo!', () => bingos ? 'Both' : null], ['ph-brain', 'Trivia buff', () => players.find(n => st[n].triv >= 3)], ['ph-suitcase-rolling', 'Packed', () => d.pack.length && pDone === d.pack.length ? 'Both' : null],
+      ['ph-fork-knife', 'Food critic', () => d.food.filter(f => f.r).length >= 5 ? 'Both' : null], ['ph-hand-heart', 'Crew favorite', () => d.crew.length >= 3 ? 'Both' : null], ['ph-anchor', 'Three ports', () => ports3 ? 'Both' : null],
+    ];
+    const badges = badgeDefs.map((b, i) => { const w = b[2](); return { icon: 'ph-duotone ' + b[0], title: b[1], who: w ? 'Earned · ' + w : 'Locked', op: w ? 1 : 0.5, color: w ? 'var(--color-accent)' : 'var(--color-neutral-500)', bg: w ? 'var(--color-accent-100)' : 'transparent', rot: ['-6deg', '4deg', '-2deg'][i % 3] }; });
+
+    const spentN = d.spends.reduce((a, x) => a + (+x.amt || 0), 0), bud = +d.budget || 0;
+    const srcMode = s.draft ? 'draft' : s.cam === 'on' ? 'live' : 'sample';
+    const stI = this.stampInfo();
+    const camMsg = { idle: 'Starting camera…', asking: 'Allow camera access to use the live view.' }[s.cam] || 'No camera in this preview, so here’s a sample scene to try filters and frames on. Tap the shutter or Library to use your own photo.';
+    const fr = s.frame, frameBg = { front: 'var(--color-neutral-100)', postcard: 'var(--color-neutral-100)', polaroid: 'var(--color-neutral-100)' }[fr] || 'var(--color-neutral-800)';
+
+    const remove = (key, id) => () => this.upd(dd => ({ [key]: dd[key].filter(x => x.id !== id) }));
+    const routeOf = cr => { const ports = [...new Set((cr.days || []).filter(x => x.off > 0 && x.off < cr.nights && !/^at sea$/i.test(x.name)).map(x => x.name))]; return [cr.embark, ports.join(', '), cr.nights ? cr.nights + ' nights' : ''].filter(Boolean).join(' · ') || 'Ship and ports to come'; };
+    const whenOf = cr => { const dt = this.dateOf(cr, 0); return dt ? dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Date TBD'; };
+    const openCruiseEdit = cr => () => this.setState({ sheet: 'cruise', fcr: { ...cr, nights: String(cr.nights || ''), goal: String(cr.goal || ''), imo: cr.imo || '' } });
+    const lines = [...new Set(s.cruises.map(x => x.line).filter(Boolean))];
+    const clubs = lines.map(line => { const b = s.brands[line] || { club: line + ' casino club', tiers: {} }, crs = s.cruises.filter(x => x.line === line);
+      return { line, club: b.club, setClub: e => { const val = e.target.value; this.setState(stt => ({ brands: { ...stt.brands, [line]: { ...(stt.brands[line] || { tiers: {} }), club: val } } })); },
+        people: players.map(n => { const tot = crs.reduce((a, cr) => { const x = this.statsOf(s.db[cr.id] || this.emptyData(), n); return { pts: a.pts + x.pts, net: a.net + x.net, jp: a.jp + x.jp }; }, { pts: 0, net: 0, jp: 0 }); return { name: n, pts: tot.pts.toLocaleString(), net: fmt$(tot.net), jp: tot.jp + (tot.jp === 1 ? ' jackpot' : ' jackpots'), tier: (b.tiers || {})[n] || '', setTier: e => { const val = e.target.value; this.setState(stt => { const bb = stt.brands[line] || { club: line + ' casino club', tiers: {} }; return { brands: { ...stt.brands, [line]: { ...bb, tiers: { ...(bb.tiers || {}), [n]: val } } } }; }); } }; }),
+        cruises: crs.map(cr => cr.ship.replace(/^(Celebrity|Princess)\s*/, '') + ' (' + whenOf(cr) + ')').join(' · ') }; });
+    const wc = s.cruises.find(x => x.id === s.wrapId) || c, wd = s.db[wc.id] || this.emptyData();
+    const wst = Object.fromEntries(players.map(n => [n, this.statsOf(wd, n)]));
+    const top = key => { const sorted = players.filter(n => wst[n].n || key === 'xp').sort((a, b) => wst[b][key] - wst[a][key]); return sorted.length && wst[sorted[0]][key] > 0 ? sorted[0] : '—'; };
+    const wr = { ship: wc.ship, when: whenOf(wc), route: routeOf(wc),
+      stats: [{ k: 'ports', v: (wc.days || []).filter(x => x.off > 0 && x.off < wc.nights && !/^at sea$/i.test(x.name)).length }, { k: 'photos', v: wd.photos.length }, { k: 'casino pts', v: players.reduce((a, n) => a + wst[n].pts, 0).toLocaleString() }],
+      winners: [{ k: 'XP champion', v: top('xp') }, { k: 'Money crown', v: top('net') }, { k: 'Jackpot crown', v: top('jp') }],
+      photos: wd.photos.slice(0, 6).map(p => ({ bg: 'center/cover no-repeat url(' + p.src + ')' })), hasPhotos: wd.photos.length > 0,
+      loved: wd.food.filter(f => f.r >= 4).map(f => ({ name: f.name, where: f.where, stars: '★'.repeat(f.r) })), noLoved: !wd.food.some(f => f.r >= 4),
+      crew: wd.crew.filter(x => x.survey || x.r >= 4).map(x => ({ name: x.name, role: x.role, where: x.where, note: x.note })), noCrew: !wd.crew.length,
+      wish: wd.notes.length ? 'Did ' + wd.notes.filter(n => n.done).length + ' of ' + wd.notes.length + ': ' + wd.notes.map(n => n.text).join('; ') : 'No wishlist on this cruise.' };
+
+    const QCFG = { expense: ['Add an expense', [['what', 'What', 'Spa treatment'], ['amt', 'Amount ($)', '120', 'decimal']]], clue: ['Write a hunt clue', [['title', 'Find…', 'Someone in a pineapple hat'], ['pts', 'Points', '15', 'numeric'], ['author', 'From', players[0]]]], pack: ['Add to packing', [['text', 'Item', 'Sunglasses']]], wish: ['Add to wishlist', [['text', 'Idea', 'Breakfast on the balcony'], ['by', 'From', players[0]]]], spot: ['Pin a deck spot', [['deck', 'Deck', '5', 'numeric'], ['name', 'Spot', 'Martini Bar'], ['note', 'Why', 'Best seats at 6 PM']]] };
+    const q = QCFG[s.qType] || ['', []];
+    const openQuick = t => () => this.setState({ sheet: 'quick', qType: t, qf: {} });
+    const saveQuick = () => { const f = s.qf, t = s.qType, id = Date.now(), dt = this.dateOf(c, onboard ? on : 0), when = this.fmtS(dt || new Date(s.now));
+      if (t === 'expense') { const a = parseFloat(f.amt); if (!(f.what || '').trim() || !(a > 0)) return; this.upd(dd => ({ spends: [...dd.spends, { id, what: f.what.trim(), when, amt: a }] })); }
+      if (t === 'clue') { if (!(f.title || '').trim()) return; this.upd(dd => ({ hunt: [...dd.hunt, { id, title: f.title.trim(), pts: parseInt(f.pts, 10) || 15, by: null, author: (f.author || '').trim() || players[0] }] })); }
+      if (t === 'pack') { if (!(f.text || '').trim()) return; this.upd(dd => ({ pack: [...dd.pack, { id, text: f.text.trim(), done: false }] })); }
+      if (t === 'wish') { if (!(f.text || '').trim()) return; this.upd(dd => ({ notes: [...dd.notes, { id, text: f.text.trim(), by: (f.by || '').trim() || players[0], done: false }] })); }
+      if (t === 'spot') { const dk = parseInt(f.deck, 10); if (!dk || !(f.name || '').trim()) return; this.upd(dd => ({ spots: [...dd.spots, { id, deck: dk, name: f.name.trim(), note: (f.note || '').trim() }] })); }
+      this.setState({ sheet: null }); };
+    const curOff = onboard ? on : 0;
+    const openPlan = () => this.setState({ sheet: 'plan', fp: { title: '', off: s.tab === 'plans' ? s.selOff : curOff, time: '', place: '', conf: '', kind: 'ship' } });
+    const openSession = () => this.setState({ sheet: 'session', fs: { who: players[0], machine: '', pts: '', net: '', jp: false, off: curOff } });
+    const openFood = () => this.setState({ sheet: 'food', ff: { name: '', where: '', by: players[0], r: 0, note: '', photo: '' } });
+    const openCrew = () => this.setState({ sheet: 'crew', fc: { name: '', role: 'Server', where: '', r: 0, note: '', tip: false, survey: false } });
+    const newCruise = () => this.setState({ sheet: 'cruise', fcr: { line: '', ship: '', start: '', nights: '7', embark: '', goal: '2500', imo: '' } });
+    const addItems = [['ph-calendar-plus', 'Plan', openPlan], ['ph-coins', 'Slots session', openSession], ['ph-camera-plus', 'Food & drink', openFood], ['ph-user-plus', 'Crew member', openCrew], ['ph-receipt', 'Expense', openQuick('expense')], ['ph-binoculars', 'Hunt clue', openQuick('clue')], ['ph-suitcase', 'Packing item', openQuick('pack')], ['ph-heart', 'Wishlist idea', openQuick('wish')], ['ph-push-pin', 'Deck spot', openQuick('spot')], ['ph-camera', 'Photo', () => this.setState({ sheet: null, tab: 'camera' })], ['ph-download-simple', 'Import schedule', () => this.setState({ sheet: null, overlay: 'import' })], ['ph-boat', 'New cruise', newCruise]].map(a => ({ icon: 'ph-duotone ' + a[0], label: a[1], go: a[2] }));
+    const dayOpts = days.length ? days.map(x => ({ v: String(x.off), label: dateLabel(x.off) + ' · ' + this.short(x.name) })) : [{ v: '0', label: 'Day 1' }];
+    const fpv = k => e => { const val = k === 'off' ? parseInt(e.target.value, 10) : e.target.value; this.setState(stt => ({ fp: { ...stt.fp, [k]: val } })); };
+    const fsv = k => e => { const val = k === 'jp' ? e.target.checked : k === 'off' ? parseInt(e.target.value, 10) : e.target.value; this.setState(stt => ({ fs: { ...stt.fs, [k]: val } })); };
+    const ffv = k => e => { const val = e.target.value; this.setState(stt => ({ ff: { ...stt.ff, [k]: val } })); };
+    const fcv = k => e => { const val = e.target.value; this.setState(stt => ({ fc: { ...stt.fc, [k]: val } })); };
+    const fcrv = k => e => { const val = e.target.value; this.setState(stt => ({ fcr: { ...stt.fcr, [k]: val } })); };
+    const setDay = (off, k) => e => { const val = e.target.value; this.updCruise(cr => ({ days: cr.days.map(x => x.off === off ? { ...x, [k]: val } : x) })); };
+    const viewer = d.photos.find(p => p.id === s.viewerId);
+    const pickedCount = s.found.filter(f => f.pick).length;
+
+    return {
+      scrollRef: el => { this.scroller = el; },
+      tabs: [['today', 'Today', 'newspaper'], ['plans', 'Plans', 'calendar-dots'], ['play', 'Play', 'crown-simple'], ['camera', 'Camera', 'camera'], ['trip', 'Trip', 'suitcase']].map(([id, label, ic]) => ({ label, icon: 'ph-duotone ph-' + ic, color: s.tab === id ? 'var(--color-accent)' : 'var(--color-neutral-700)', pick: () => this.setState({ tab: id, overlay: null }) })),
+      isToday: s.tab === 'today', isPlans: s.tab === 'plans', isPlay: s.tab === 'play', isCamera: s.tab === 'camera', isTrip: s.tab === 'trip',
+      fabOn: s.tab !== 'camera' && !s.overlay, openAdd: set({ sheet: 'add' }),
+      dl: { vol: 'Vol. ' + (s.cruises.indexOf(c) + 1), date: new Date(s.now).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }), ed: onboard ? labelOf(on) : preSail ? cdDays + ' days out' : 'Planning' },
+      cruiseTitle: c.ship + (c.start ? ' · ' + this.fmtS(this.dateOf(c, 0)) : ''), openFleet: set({ overlay: 'fleet' }),
+      preSail, noDate, onboard, previewing: s.preview != null, editCruise: openCruiseEdit(c),
+      cdDays, cdUnit: cdDays === 1 ? 'day' : 'days', cdRest: hh + ' hr ' + mm + ' min', sailLine: dateLabel(0) + ' from ' + (c.embark || (dayBy(0) || {}).name || 'port'),
+      hasPreviewPort: !!firstPort, previewPort: () => this.setState({ preview: firstPort ? firstPort.off : 0 }), backToCountdown: set({ preview: null }),
+      hd: hdDay ? { kicker: dateLabel(on) + ' · ' + labelOf(on), name: hdDay.name, hours: hdDay.hours, aboard: hdDay.aboard, tip: hdDay.tip } : {},
+      hasStops: stops.length > 0, stops, hasImo: !!c.imo, imo: c.imo || '', shipShort: c.ship.replace(/^(Celebrity|Princess)\s*/, '') || c.ship,
+      vfSrc: 'https://www.vesselfinder.com/aismap?imo=' + (c.imo || '') + '&names=true&track=true&zoom=6', vfLink: 'https://www.vesselfinder.com/vessels/details/' + (c.imo || ''),
+      trackOn: s.track, trackOff: !s.track, showTrack: set({ track: true }),
+      standings, chal, chalHead: onboard ? 'Today’s challenges' : 'Warm-up challenges',
+      planHead: onboard ? 'Today’s plans' : 'First up · ' + dateLabel(firstPlanOff), homePlans, noHomePlans: !homePlans.length,
+      goPlans: set({ tab: 'plans' }), goPlay: set({ tab: 'play', game: 'slots' }), goPacking: set({ tab: 'trip', tripTab: 'pack' }), packDone: pDone, packTotal: d.pack.length,
+      openPlan, openImport: set({ overlay: 'import' }), openItin: set({ overlay: 'itin' }),
+      planDays: s.planView === 'days', planRes: s.planView === 'res', setPlanDays: set({ planView: 'days' }), setPlanRes: set({ planView: 'res' }),
+      noDays: s.planView === 'days' && !days.length, showDays: s.planView === 'days' && days.length > 0,
+      dayChips: days.map(x => { const dt = this.dateOf(c, x.off); return { top: x.off < 0 ? (dt ? dt.toLocaleDateString('en-US', { month: 'short' }) : 'Pre') : 'Day', n: x.off < 0 ? (dt ? dt.getDate() : '·') : x.off + 1, short: this.short(x.name), ...chip(s.selOff === x.off), pick: set({ selOff: x.off }) }; }),
+      selDay: (() => { const x = dayBy(s.selOff) || days[0] || { off: 0, name: '', hours: '' }; return { ...x, dateLabel: dateLabel(x.off) }; })(),
+      dayPlans: plansFor(s.selOff), noDayPlans: !plansFor(s.selOff).length,
+      resFilters: [['all', 'All'], ['ship', 'On ship'], ['shore', 'Ashore'], ['land', 'Travel']].map(([id, label]) => ({ label, ...chip(s.resFilter === id), pick: set({ resFilter: id }) })),
+      reservations: days.flatMap(x => plansFor(x.off).filter(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)).map(p => ({ ...p, when: dateLabel(x.off) + ' · ' + p.time }))),
+      noRes: !d.plans.some(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)),
+      gSlots: s.game === 'slots', gHunt: s.game === 'hunt', gTrivia: s.game === 'trivia', gBadges: s.game === 'badges',
+      setSlots: set({ game: 'slots' }), setHunt: set({ game: 'hunt' }), setTrivia: set({ game: 'trivia' }), setBadges: set({ game: 'badges' }),
+      crowns, slotBoard, clubName: brand.club, openSession,
+      sessionRows: [...d.sessions].reverse().map(x => ({ ...x, when: dateLabel(x.off), ptsLabel: (+x.pts || 0).toLocaleString(), jpLabel: x.jp ? ' · jackpot' : '', netLabel: fmt$(+x.net || 0), color: (+x.net || 0) >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: () => this.setState({ sheet: 'session', fs: { ...x, pts: String(x.pts), net: String(x.net) } }) })),
+      noSessions: !d.sessions.length,
+      bingo, bonus, noBonus: !bonus.length, huntFound: d.hunt.filter(h => h.by).length, huntTotal: d.hunt.length, bingoLine: bingos ? bingos + (bingos === 1 ? ' bingo' : ' bingos') : '', openClue: openQuick('clue'),
+      tq, tqNum: s.tq + 1, tqTotal: this.TRIVIA.length, tOpts, tScore: players.slice(0, 2).map(n => n + ' ' + st[n].triv * 20).join(' · '),
+      tResult: ans ? (ans.pick === tq.a ? ans.who + ' got it. +20 XP' : ans.who + ' missed it. It’s ' + tq.o[tq.a] + '.') : '',
+      tPlayers: players.map(n => ({ name: n, ...chip(s.tWho === n), pick: set({ tWho: n }) })),
+      tPrev: () => this.setState(x => ({ tq: (x.tq + this.TRIVIA.length - 1) % this.TRIVIA.length })), tNext: () => this.setState(x => ({ tq: (x.tq + 1) % this.TRIVIA.length })),
+      badges, playerTags: players.map(name => ({ name })), newPlayer: s.newPlayer, setNewPlayer: v('newPlayer'),
+      addPlayer: () => { const t = s.newPlayer.trim(); if (t && !players.includes(t)) this.setState(x => ({ players: [...x.players, t], newPlayer: '' })); },
+      playerKey: enter(() => { const t = s.newPlayer.trim(); if (t && !players.includes(t)) this.setState(x => ({ players: [...x.players, t], newPlayer: '' })); }),
+      srcLabel: { live: 'Live camera', draft: 'Your photo', sample: 'Sample scene' }[srcMode], isLive: srcMode === 'live', isDraft: srcMode === 'draft', isSample: srcMode === 'sample',
+      videoRef: this.videoRef, thumbRef: this.thumbRef, fileRef: el => { this.fileEl = el; },
+      cssFilter: this.FILTERS[s.filter][1], isNews: s.filter === 'news', draftBg: s.draft ? 'center/cover no-repeat url(' + s.draft + ')' : 'none',
+      frameBg, framePad: { front: '14px', postcard: '10px', polaroid: '14px 14px 0' }[fr] || '0', frameGap: fr === 'front' ? '8px' : '0', photoRadius: fr === 'postcard' ? '2px' : '0',
+      isFront: fr === 'front', isPostcard: fr === 'postcard', isPolaroid: fr === 'polaroid', isStampF: fr === 'stamp',
+      stampTop: stI.top, stampPort: stI.port, headline: this.headlineText(), setHeadline: v('headline'), showHeadline: fr === 'front' || fr === 'polaroid', headlineLabel: fr === 'front' ? 'Headline' : 'Caption', shipName: c.ship,
+      showCamMsg: srcMode === 'sample', camMsg,
+      filterChips: Object.entries(this.FILTERS).map(([id, f]) => ({ label: f[0], css: f[1], news: id === 'news', ring: s.filter === id ? '2px solid var(--color-accent)' : 'none', fg: s.filter === id ? 'var(--color-accent-700)' : 'var(--color-text)', pick: set({ filter: id }) })),
+      frameChips: this.FRAMES.map(([id, label, ic]) => ({ label, icon: 'ph-duotone ' + ic, ...chip(fr === id), pick: () => this.setState({ frame: id, headline: '', backdrop: null }) })),
+      hasDraft: !!s.draft, noDraft: !s.draft, retake: set({ draft: null, cutout: null, cutFor: null, seg: 'idle' }),
+      stageRef: el => { this.stage = el; },
+      onDragMove: e => { const dg = this.drag; if (!dg || !this.stage) return; const r = this.stage.getBoundingClientRect(), nx = Math.max(0, Math.min(100, dg.ox + (e.clientX - dg.sx) / r.width * 100)), ny = Math.max(0, Math.min(100, dg.oy + (e.clientY - dg.sy) / r.height * 100)); this.setState(x => ({ stickers: x.stickers.map(k => k.id === dg.id ? { ...k, x: nx, y: ny } : k) })); },
+      onDragEnd: () => { this.drag = null; },
+      stickers: s.stickers.map(sk => ({ left: sk.x + '%', top: sk.y + '%', w: sk.w + '%', ar: String(this.STK[sk.kind][1]), rot: sk.rot + 'deg', bg: 'center/contain no-repeat url("' + this.stkUrl(sk.kind) + '")', ring: s.selSticker === sk.id ? '2px dashed var(--color-accent)' : 'none', down: e => this.dragStart(e, sk) })),
+      stickerChips: Object.keys(this.STK).map(k => ({ label: this.STK[k][0], bg: 'var(--color-neutral-100) center/62% no-repeat url("' + this.stkUrl(k) + '")', add: () => { const id = Date.now(), pos = { captain: [50, 20, 50], sunhat: [50, 20, 56], pirate: [50, 20, 50], party: [50, 18, 24], shades: [50, 42, 42], lei: [50, 74, 60] }[k]; this.setState(x => ({ stickers: [...x.stickers, { id, kind: k, x: pos[0], y: pos[1], w: pos[2], rot: 0 }], selSticker: id })); } })),
+      hasStickers: s.stickers.length > 0, hasSel: s.stickers.some(k => k.id === s.selSticker),
+      stkBigger: () => this.setState(x => ({ stickers: x.stickers.map(k => k.id === x.selSticker ? { ...k, w: Math.min(120, k.w * 1.15) } : k) })),
+      stkSmaller: () => this.setState(x => ({ stickers: x.stickers.map(k => k.id === x.selSticker ? { ...k, w: Math.max(8, k.w / 1.15) } : k) })),
+      stkTilt: () => this.setState(x => ({ stickers: x.stickers.map(k => k.id === x.selSticker ? { ...k, rot: (k.rot + 12) % 360 } : k) })),
+      stkRemove: () => this.setState(x => ({ stickers: x.stickers.filter(k => k.id !== x.selSticker), selSticker: null })),
+      stkClear: set({ stickers: [], selSticker: null }),
+      backdropChips: [[null, 'None'], ['aboard', 'Welcome aboard'], ...[...new Set(days.filter(x => x.off >= 0 && !/^at sea$/i.test(x.name)).map(x => x.name))].map(p => [p, 'Welcome to ' + p])].map(([id, label]) => ({ label, ...chip(s.backdrop === id), pick: () => this.setState({ backdrop: id }) })),
+      isBackdrop: !!s.backdrop, noBackdrop: !s.backdrop, sceneBg: 'center/cover no-repeat url("' + this.sceneUrl() + '")',
+      bdTop: s.backdrop === 'aboard' ? 'Welcome aboard' : 'Welcome to', bdPort: s.backdrop === 'aboard' ? (c.ship.replace(/^(Celebrity|Princess)\s*/, '') || c.ship) : (s.backdrop || ''), bdSize: (s.backdrop || '').length > 10 ? '40px' : '52px',
+      hasCutout: !!(s.backdrop && s.draft && s.cutout && s.cutFor === s.draft), noCutout: !(s.backdrop && s.draft && s.cutout && s.cutFor === s.draft), cutoutBg: s.cutout ? 'center/cover no-repeat url(' + s.cutout + ')' : 'none',
+      showSegMsg: !!s.backdrop, segMsg: !s.draft ? 'Snap or pick a photo and we’ll cut you out and put you in front of the island.' : s.seg === 'working' ? 'Cutting you out of the background…' : s.seg === 'fail' ? 'Couldn’t cut out the background here, so your photo sits in the window.' : 'You’re on the island. Add a hat, then save.', saveDraft: () => this.bake(), pickFile: () => this.fileEl && this.fileEl.click(),
+      snap: () => { const vd = this.video; if (srcMode !== 'live' || !vd || !vd.videoWidth) { this.fileEl && this.fileEl.click(); return; } const cv = document.createElement('canvas'); cv.width = vd.videoWidth; cv.height = vd.videoHeight; const x = cv.getContext('2d'); x.translate(cv.width, 0); x.scale(-1, 1); x.drawImage(vd, 0, 0); this.setState({ draft: cv.toDataURL('image/jpeg', 0.88) }); },
+      onFile: async e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return; try { const src = await this.readImg(f, 1400); this.setState({ draft: src }); } catch (err) {} },
+      photos: d.photos.map(p => ({ bg: 'center/cover no-repeat url(' + p.src + ')', open: () => this.setState({ sheet: 'viewer', viewerId: p.id }) })), noPhotos: !d.photos.length, hasPhotos: d.photos.length > 0, photoCount: d.photos.length + (d.photos.length === 1 ? ' photo' : ' photos'),
+      tripTabs: [['pack', 'Packing', 'suitcase-rolling'], ['budget', 'Budget', 'wallet'], ['notes', 'Wishlist', 'heart'], ['food', 'Food & drink', 'fork-knife'], ['crew', 'Crew', 'users-three'], ['spots', 'Deck spots', 'push-pin']].map(([id, label, ic]) => ({ label, icon: 'ph-duotone ph-' + ic, ...chip(s.tripTab === id), pick: set({ tripTab: id }) })),
+      tPack: s.tripTab === 'pack', tBudget: s.tripTab === 'budget', tNotes: s.tripTab === 'notes', tFood: s.tripTab === 'food', tCrew: s.tripTab === 'crew', tSpots: s.tripTab === 'spots',
+      packPct: pPct + '%', packPctLabel: pPct + '%',
+      packRows: d.pack.map(k => ({ ...k, icon: k.done ? 'ph-duotone ph-check-square' : 'ph-duotone ph-square', color: k.done ? 'var(--color-neutral-600)' : 'var(--color-text)', strike: k.done ? 'line-through' : 'none', toggle: () => this.upd(dd => ({ pack: dd.pack.map(x => x.id === k.id ? { ...x, done: !x.done } : x) })), remove: remove('pack', k.id) })),
+      openPack: openQuick('pack'), openExpense: openQuick('expense'), openWish: openQuick('wish'), openSpot: openQuick('spot'), openFood, openCrew,
+      spent: '$' + spentN.toLocaleString(), budgetLabel: '$' + bud.toLocaleString(), budgetPct: (bud ? Math.min(100, spentN / bud * 100) : 0) + '%', budgetColor: spentN > bud ? 'var(--color-accent-2)' : 'var(--color-accent)', budgetVal: String(d.budget ?? ''), setBudget: e => { const val = e.target.value.replace(/[^0-9.]/g, ''); this.upd(() => ({ budget: val })); },
+      spendRows: [...d.spends].reverse().map(x => ({ ...x, amt: '$' + (+x.amt).toLocaleString(), remove: remove('spends', x.id) })),
+      noteRows: d.notes.map(n => ({ ...n, icon: n.done ? 'ph-duotone ph-heart' : 'ph-duotone ph-heart-half', strike: n.done ? 'line-through' : 'none', by: n.by + (n.done ? ' · done' : ''), toggle: () => this.upd(dd => ({ notes: dd.notes.map(x => x.id === n.id ? { ...x, done: !x.done } : x) })) })),
+      foodRows: d.food.map(f => ({ ...f, bg: f.photo ? 'center/cover no-repeat url(' + f.photo + ')' : 'var(--color-surface)', noPhoto: !f.photo, byLine: f.by ? ' · ' + f.by : '', edit: () => this.setState({ sheet: 'food', ff: { ...f } }), stars: stars(f.r, r => this.upd(dd => ({ food: dd.food.map(x => x.id === f.id ? { ...x, r } : x) }))) })),
+      crewRows: d.crew.map(x => ({ ...x, tipBg: x.tip ? 'var(--color-accent)' : 'transparent', tipFg: x.tip ? 'var(--color-bg)' : 'var(--color-text)', svBg: x.survey ? 'var(--color-accent)' : 'transparent', svFg: x.survey ? 'var(--color-bg)' : 'var(--color-text)',
+        toggleTip: () => this.upd(dd => ({ crew: dd.crew.map(y => y.id === x.id ? { ...y, tip: !y.tip } : y) })), toggleSurvey: () => this.upd(dd => ({ crew: dd.crew.map(y => y.id === x.id ? { ...y, survey: !y.survey } : y) })),
+        stars: stars(x.r, r => this.upd(dd => ({ crew: dd.crew.map(y => y.id === x.id ? { ...y, r } : y) }))), edit: () => this.setState({ sheet: 'crew', fc: { ...x } }) })),
+      hasSurvey: d.crew.some(x => x.survey), surveyList: d.crew.filter(x => x.survey).map(x => x.name + ' (' + x.role + (x.where ? ', ' + x.where : '') + ')').join('; '),
+      spotRows: [...d.spots].sort((a, b) => a.deck - b.deck),
+      overlayOn: !!s.overlay, closeOverlay: set({ overlay: null }), overlaySub: { fleet: 'Cruises', wrap: 'Wrap-up', itin: c.ship, import: c.ship }[s.overlay] || '',
+      ovFleet: s.overlay === 'fleet', ovWrap: s.overlay === 'wrap', ovItin: s.overlay === 'itin', ovImport: s.overlay === 'import',
+      fUp: s.fleetView === 'up', fHist: s.fleetView === 'hist', fClubs: s.fleetView === 'clubs', setFUp: set({ fleetView: 'up' }), setFHist: set({ fleetView: 'hist' }), setFClubs: set({ fleetView: 'clubs' }),
+      upcomingRows: s.cruises.filter(x => !this.isPast(x)).map(x => ({ ship: x.ship, when: whenOf(x), route: routeOf(x), active: x.id === s.active, pick: () => this.setState({ active: x.id, overlay: null, tab: 'today', preview: null, selOff: 0, track: false }), edit: openCruiseEdit(x) })),
+      pastRows: s.cruises.filter(x => this.isPast(x)).map(x => { const dd = s.db[x.id] || this.emptyData(), loved = dd.food.filter(f => f.r >= 4).length, crew = dd.crew.filter(y => y.survey || y.r >= 4).length; return { ship: x.ship, when: whenOf(x), route: routeOf(x), sample: !!x.sample, blurb: loved + ' favorites · ' + crew + ' crew to remember · ' + dd.photos.length + ' photos', wrap: () => this.setState({ overlay: 'wrap', wrapId: x.id }) }; }),
+      noPast: !s.cruises.some(x => this.isPast(x)), wrapActive: () => this.setState({ overlay: 'wrap', wrapId: c.id }), newCruise, clubs, wr,
+      itinRows: days.map(x => ({ ...x, dateLabel: dateLabel(x.off), label: labelOf(x.off), onName: setDay(x.off, 'name'), onHours: setDay(x.off, 'hours'), onAboard: setDay(x.off, 'aboard'), onTip: setDay(x.off, 'tip'), canRemove: x.off < 0 || x.off > nights, remove: () => this.updCruise(cr => ({ days: cr.days.filter(y => y.off !== x.off) })) })),
+      addBefore: () => this.updCruise(cr => { const offs = (cr.days || []).map(x => x.off), o = Math.min(0, ...offs) - 1; return { days: [...(cr.days || []), { off: o, name: 'Pre-cruise', hours: 'Hotel or travel day', aboard: '', tip: '' }] }; }),
+      addAfter: () => this.updCruise(cr => { const offs = (cr.days || []).map(x => x.off), o = Math.max(+cr.nights || 0, ...offs) + 1; return { days: [...(cr.days || []), { off: o, name: 'Post-cruise', hours: 'Hotel or travel day', aboard: '', tip: '' }] }; }),
+      pickShots: () => this.shotEl && this.shotEl.click(), shotRef: el => { this.shotEl = el; },
+      onShots: async e => { const files = [...(e.target.files || [])]; e.target.value = ''; const out = []; for (const f of files.slice(0, 6)) { try { out.push({ src: await this.readImg(f, 1400) }); } catch (err) {} } this.setState(x => ({ shots: [...x.shots, ...out].slice(0, 6) })); },
+      shots: s.shots.map(sh => ({ bg: 'center/cover no-repeat url(' + sh.src + ')' })), hasShots: s.shots.length > 0, shotCount: s.shots.length ? s.shots.length + ' added' : '',
+      impText: s.impText, setImpText: v('impText'), runImport: () => this.runImport(), impDisabled: s.impBusy || (!s.impText.trim() && !s.shots.length), impBtn: s.impBusy ? 'Reading…' : 'Read schedule', impMsg: s.impMsg,
+      found: s.found.map(f => ({ title: f.title, meta: dateLabel(f.off) + ' · ' + f.time + (f.place ? ' · ' + f.place : '') + (f.conf ? ' · ' + f.conf : ''), icon: f.pick ? 'ph-duotone ph-check-square' : 'ph-duotone ph-square', toggle: () => this.setState(x => ({ found: x.found.map(y => y.id === f.id ? { ...y, pick: !y.pick } : y) })) })),
+      hasFound: s.found.length > 0, foundCount: s.found.length, pickedCount,
+      addFound: () => { const add = s.found.filter(f => f.pick).map(({ pick, ...p }) => p); this.upd(dd => ({ plans: [...dd.plans, ...add] })); this.setState({ found: [], impText: '', shots: [], impMsg: '', overlay: null, tab: 'plans', planView: 'days' }); },
+      sheetOpen: !!s.sheet, closeSheet: set({ sheet: null }), stop: e => e.stopPropagation(),
+      shAdd: s.sheet === 'add', shPlan: s.sheet === 'plan', shSession: s.sheet === 'session', shQuick: s.sheet === 'quick', shWho: s.sheet === 'who', shFood: s.sheet === 'food', shCrew: s.sheet === 'crew', shCruise: s.sheet === 'cruise', shViewer: s.sheet === 'viewer' && !!viewer,
+      addItems, shipName: c.ship,
+      fp: { ...s.fp, off: String(s.fp.off ?? 0) }, planSheetTitle: s.fp.id ? 'Edit plan' : 'Add a plan', planEditing: !!s.fp.id, dayOpts,
+      fpTitle: fpv('title'), fpDay: fpv('off'), fpTime: fpv('time'), fpPlace: fpv('place'), fpConf: fpv('conf'),
+      fpShip: s.fp.kind === 'ship', fpShore: s.fp.kind === 'shore', fpLand: s.fp.kind === 'land',
+      fpKindShip: () => this.setState(x => ({ fp: { ...x.fp, kind: 'ship' } })), fpKindShore: () => this.setState(x => ({ fp: { ...x.fp, kind: 'shore' } })), fpKindLand: () => this.setState(x => ({ fp: { ...x.fp, kind: 'land' } })),
+      planInvalid: !(s.fp.title || '').trim(),
+      savePlan: () => { const f = s.fp; if (!(f.title || '').trim()) return; const p = { id: f.id || Date.now(), off: +f.off || 0, time: (f.time || '').trim() || 'Any time', title: f.title.trim(), place: (f.place || '').trim(), kind: f.kind || 'ship', conf: (f.conf || '').trim() }; this.upd(dd => ({ plans: f.id ? dd.plans.map(x => x.id === f.id ? p : x) : [...dd.plans, p] })); this.setState({ sheet: null, selOff: p.off }); },
+      deletePlan: () => { this.upd(dd => ({ plans: dd.plans.filter(x => x.id !== s.fp.id) })); this.setState({ sheet: null }); },
+      fs: { ...s.fs, off: String(s.fs.off ?? 0) }, sessionSheetTitle: s.fs.id ? 'Edit session' : 'Log a slots session', sessionEditing: !!s.fs.id, playerOpts: players.map(p => ({ v: p })),
+      fsWho: fsv('who'), fsDay: fsv('off'), fsMachine: fsv('machine'), fsPts: fsv('pts'), fsNet: fsv('net'), fsJp: fsv('jp'),
+      sessionInvalid: !(String(s.fs.pts || '').trim() || String(s.fs.net || '').trim()),
+      saveSession: () => { const f = s.fs, net = parseFloat(String(f.net || '').replace(/[−–]/g, '-').replace(/[^0-9.-]/g, '')) || 0, pts = parseInt(f.pts, 10) || 0;
+        const x = { id: f.id || Date.now(), who: f.who || players[0], machine: (f.machine || '').trim() || 'Slots', off: +f.off || 0, pts, net, jp: !!f.jp };
+        this.upd(dd => ({ sessions: f.id ? dd.sessions.map(y => y.id === f.id ? x : y) : [...dd.sessions, x] }));
+        const big = x.jp || net >= 100, conf = big ? Array.from({ length: 36 }, () => ({ left: (Math.random() * 100).toFixed(1) + '%', size: (7 + Math.random() * 8).toFixed(0) + 'px', color: ['var(--color-accent)', 'var(--color-accent-2)', 'var(--color-process-yellow)'][Math.floor(Math.random() * 3)], anim: 'fall ' + (1.6 + Math.random() * 1.4).toFixed(2) + 's ease-in ' + (2 + Math.random() * 0.8).toFixed(2) + 's both' })) : [];
+        this.setState({ sheet: null, reel: f.id ? null : { who: x.who + ' · ' + x.machine, line: x.jp ? 'Jackpot!' : net > 0 ? 'Up ' + fmt$(net).slice(1) : net < 0 ? 'Down ' + fmt$(net).slice(1) : 'Broke even', xp: Math.floor(pts / 10) + (x.jp ? 25 : 0), reels: this.spinFor(net, x.jp), confetti: conf } }); },
+      deleteSession: () => { this.upd(dd => ({ sessions: dd.sessions.filter(x => x.id !== s.fs.id) })); this.setState({ sheet: null }); },
+      reelOn: !!s.reel, closeReel: set({ reel: null }), reels: s.reel ? s.reel.reels : [], confetti: s.reel ? s.reel.confetti : [], reelWho: s.reel ? s.reel.who : '', reelLine: s.reel ? s.reel.line : '', reelXp: s.reel ? s.reel.xp : 0,
+      qTitle: q[0], qFields: q[1].map(([k, label, ph, mode]) => ({ label, ph, mode: mode || 'text', value: s.qf[k] || '', on: e => { const val = e.target.value; this.setState(x => ({ qf: { ...x.qf, [k]: val } })); } })), saveQuick, quickKey: enter(saveQuick),
+      whoTitle: wh ? wh.title : '', whoPts: wh ? wh.pts : 0, whoFound: !!(wh && wh.by),
+      whoBtns: players.map(n => ({ name: n, ...chip(wh && wh.by === n), go: () => { this.upd(dd => ({ hunt: dd.hunt.map(h => h.id === s.whoId ? { ...h, by: n } : h) })); this.setState({ sheet: null }); } })),
+      whoUndo: () => { this.upd(dd => ({ hunt: dd.hunt.map(h => h.id === s.whoId ? { ...h, by: null } : h) })); this.setState({ sheet: null }); }, whoProof: set({ sheet: null, tab: 'camera' }),
+      ff: s.ff, foodSheetTitle: s.ff.id ? 'Edit dish or drink' : 'Log a dish or drink', foodEditing: !!s.ff.id, ffName: ffv('name'), ffWhere: ffv('where'), ffBy: ffv('by'), ffNote: ffv('note'),
+      byOpts: [...players, 'Both'].map(p => ({ v: p })), ffStars: stars(s.ff.r || 0, r => this.setState(x => ({ ff: { ...x.ff, r } }))),
+      ffBg: s.ff.photo ? 'center/cover no-repeat url(' + s.ff.photo + ')' : 'var(--color-surface)', ffNoPhoto: !s.ff.photo,
+      pickFoodPhoto: () => this.foodEl && this.foodEl.click(), foodFileRef: el => { this.foodEl = el; },
+      onFoodFile: async e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return; try { const src = await this.readImg(f, 480); this.setState(x => ({ ff: { ...x.ff, photo: src } })); } catch (err) {} },
+      foodInvalid: !(s.ff.name || '').trim(),
+      saveFood: () => { const f = s.ff; if (!(f.name || '').trim()) return; const item = { id: f.id || Date.now(), name: f.name.trim(), where: (f.where || '').trim(), by: f.by || '', r: f.r || 0, note: (f.note || '').trim(), photo: f.photo || '' }; this.upd(dd => ({ food: f.id ? dd.food.map(x => x.id === f.id ? item : x) : [item, ...dd.food] })); this.setState({ sheet: null, tab: 'trip', tripTab: 'food' }); },
+      deleteFood: () => { this.upd(dd => ({ food: dd.food.filter(x => x.id !== s.ff.id) })); this.setState({ sheet: null }); },
+      fc: s.fc, crewSheetTitle: s.fc.id ? 'Edit crew member' : 'Add crew member', crewEditing: !!s.fc.id, fcName: fcv('name'), fcRole: fcv('role'), fcWhere: fcv('where'), fcNote: fcv('note'),
+      roleOpts: this.ROLES.map(r => ({ v: r })), fcStars: stars(s.fc.r || 0, r => this.setState(x => ({ fc: { ...x.fc, r } }))),
+      fcTip: () => this.setState(x => ({ fc: { ...x.fc, tip: !x.fc.tip } })), fcSurvey: () => this.setState(x => ({ fc: { ...x.fc, survey: !x.fc.survey } })),
+      fcTipBg: s.fc.tip ? 'var(--color-accent)' : 'transparent', fcTipFg: s.fc.tip ? 'var(--color-bg)' : 'var(--color-text)', fcSvBg: s.fc.survey ? 'var(--color-accent)' : 'transparent', fcSvFg: s.fc.survey ? 'var(--color-bg)' : 'var(--color-text)',
+      crewInvalid: !(s.fc.name || '').trim(),
+      saveCrew: () => { const f = s.fc; if (!(f.name || '').trim()) return; const item = { id: f.id || Date.now(), name: f.name.trim(), role: f.role || 'Other', where: (f.where || '').trim(), r: f.r || 0, note: (f.note || '').trim(), tip: !!f.tip, survey: !!f.survey }; this.upd(dd => ({ crew: f.id ? dd.crew.map(x => x.id === f.id ? item : x) : [item, ...dd.crew] })); this.setState({ sheet: null, tab: 'trip', tripTab: 'crew' }); },
+      deleteCrew: () => { this.upd(dd => ({ crew: dd.crew.filter(x => x.id !== s.fc.id) })); this.setState({ sheet: null }); },
+      fcr: s.fcr, cruiseSheetTitle: s.fcr.id ? 'Edit cruise' : 'Add a cruise', cruiseEditing: !!s.fcr.id, cruiseSaveLabel: s.fcr.id ? 'Save cruise' : 'Create & edit itinerary', cruiseInvalid: !(s.fcr.ship || '').trim(),
+      fcrLine: fcrv('line'), fcrShip: fcrv('ship'), fcrStart: fcrv('start'), fcrNights: fcrv('nights'), fcrEmbark: fcrv('embark'), fcrGoal: fcrv('goal'), fcrImo: fcrv('imo'),
+      saveCruise: () => { const f = s.fcr; if (!(f.ship || '').trim()) return; const n = Math.max(0, parseInt(f.nights, 10) || 0), emb = (f.embark || '').trim();
+        const build = old => { const keep = (old || []).filter(x => x.off < 0 || x.off <= n || x.off > (n + 30)); const out = [...keep]; for (let o = 0; o <= n; o++) if (!out.some(x => x.off === o)) out.push({ off: o, name: o === 0 || o === n ? (emb || 'Port') : 'At sea', hours: o === 0 ? 'Sail 4:00 PM' : o === n ? 'Arrive · disembark' : 'Full day at sea', aboard: o === 0 ? '3:30 PM' : '', tip: '' }); return out; };
+        const base = { line: (f.line || '').trim(), ship: f.ship.trim(), start: f.start || '', nights: n, embark: emb, goal: parseInt(f.goal, 10) || 0, imo: (f.imo || '').replace(/\D/g, '') };
+        if (f.id) { this.setState(x => ({ cruises: x.cruises.map(cr => cr.id === f.id ? { ...cr, ...base, days: build(cr.days) } : cr), sheet: null })); }
+        else { const id = 'c' + Date.now(); this.setState(x => ({ cruises: [...x.cruises, { id, ...base, days: build([]) }], db: { ...x.db, [id]: this.emptyData() }, active: id, sheet: null, overlay: 'itin', preview: null, selOff: 0, brands: base.line && !x.brands[base.line] ? { ...x.brands, [base.line]: { club: base.line + ' casino club', tiers: {} } } : x.brands })); } },
+      deleteCruise: () => { const id = s.fcr.id; this.setState(x => { const cruises = x.cruises.filter(cr => cr.id !== id); const db = { ...x.db }; delete db[id]; return { cruises, db, active: x.active === id ? (cruises[0] || {}).id : x.active, sheet: null }; }); },
+      viewerSrc: viewer ? viewer.src : '', viewerBg: viewer ? 'center/contain no-repeat url(' + viewer.src + ')' : 'none', deletePhoto: () => { this.upd(dd => ({ photos: dd.photos.filter(p => p.id !== s.viewerId) })); this.setState({ sheet: null }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
