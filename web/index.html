@@ -182,16 +182,16 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="grid-column:1 / -1;font-size:12px;color:var(--color-neutral-700)">{{ p.toNext }}</div>
 </div>
 </sc-for>
-<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">XP comes from hunt finds, trivia, daily challenges, and slots (1 XP per 10 casino points, plus 25 per jackpot).</div>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">XP comes from hunt finds, trivia, daily challenges, and slots (1 XP per 10 casino points, plus 25 per jackpot). Tap your name on a challenge when you’ve done it; you can both claim the same one.</div>
 </div>
 
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-<h2 style="margin:0;font-size:24px">{{ chalHead }}</h2>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:24px;flex:1;min-width:0">{{ chalHead }}</h2><button class="btn btn-ghost" onClick="{{ openChal }}"><i class="ph-duotone ph-plus"></i>Add your own</button></div>
 <sc-for list="{{ chal }}" as="c" hint-placeholder-count="3">
 <div style="display:grid;grid-template-columns:32px 1fr;gap:var(--space-3);align-items:start">
 <i class="{{ c.icon }}" style="font-size:28px;color:var(--color-accent)"></i>
 <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;gap:var(--space-2)"><span style="font-size:16px;font-weight:600;line-height:1.3">{{ c.text }}</span><span style="flex:none;font-size:13px;color:var(--color-neutral-700)">+{{ c.pts }}</span></div>
-<div style="display:flex;gap:6px"><sc-for list="{{ c.claims }}" as="cl" hint-placeholder-count="2"><button class="btn btn-secondary" onClick="{{ cl.go }}" style="padding:4px 10px;font-size:12px;background:{{ cl.bg }};color:{{ cl.fg }}">{{ cl.label }}</button></sc-for></div></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><sc-for list="{{ c.claims }}" as="cl" hint-placeholder-count="2"><button class="btn btn-secondary" onClick="{{ cl.go }}" style="padding:4px 10px;font-size:12px;background:{{ cl.bg }};color:{{ cl.fg }}"><sc-if value="{{ cl.on }}"><i class="ph-duotone ph-check"></i></sc-if>{{ cl.label }}</button></sc-for><sc-if value="{{ c.custom }}"><button class="btn btn-ghost" onClick="{{ c.remove }}" style="font-size:12px;color:var(--color-neutral-700);margin-left:auto">Remove</button></sc-if></div></div>
 </div>
 </sc-for>
 </div>
@@ -319,23 +319,24 @@ body{background:var(--color-bg);overscroll-behavior:none}
 
 <sc-if value="{{ gHunt }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-6)">
-<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:15px;color:var(--color-neutral-700)">{{ huntFound }} of {{ huntTotal }} found</span><span style="font-size:15px;font-weight:600;color:var(--color-accent-2-700)">{{ bingoLine }}</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-2)"><span style="font-size:15px;color:var(--color-neutral-700)">{{ huntFound }} of {{ huntTotal }} found <span style="font-weight:600;color:var(--color-accent-2-700)">{{ bingoLine }}</span></span><button class="{{ huntEditCls }}" onClick="{{ toggleHuntEdit }}" style="flex:none;padding:6px 12px;font-size:13px"><i class="ph-duotone ph-pencil-simple"></i>{{ huntEditLabel }}</button></div>
+<sc-if value="{{ huntEdit }}"><div style="font-size:14px;line-height:1.5;color:var(--color-accent-700)">Tap any square to write your own. Its find (if any) is cleared when you change it.</div></sc-if>
 <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
 <sc-for list="{{ bingo }}" as="t" hint-placeholder-count="9">
-<button onClick="{{ t.pick }}" style="position:relative;aspect-ratio:1;border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:8px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;font-family:var(--font-body);cursor:pointer;background:{{ t.bg }};color:var(--color-text);overflow:hidden">
+<button onClick="{{ t.pick }}" style="position:relative;aspect-ratio:1;border:{{ t.border }};border-radius:var(--radius-md);padding:8px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;font-family:var(--font-body);cursor:pointer;background:{{ t.bg }};color:var(--color-text);overflow:hidden">
 <span style="font-size:12px;line-height:1.25;opacity:{{ t.op }}">{{ t.title }}</span>
-<span style="font-size:11px;color:var(--color-neutral-700)">{{ t.pts }} pts</span>
+<span style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--color-neutral-700)"><span>{{ t.pts }} pts</span><sc-if value="{{ huntEdit }}"><i class="ph-duotone ph-pencil-simple" style="font-size:14px;color:var(--color-accent)"></i></sc-if></span>
 <sc-if value="{{ t.found }}"><span style="position:absolute;top:50%;left:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;border:3px solid {{ t.color }};color:{{ t.color }};display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;transform:rotate(-14deg);animation:pop .35s ease-out both;mix-blend-mode:multiply">{{ t.initial }}</span></sc-if>
 </button>
 </sc-for>
 </div>
 <div style="font-size:13px;color:var(--color-neutral-700)">Complete a row, column or diagonal for a bingo: +50 XP each.</div>
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1">Bonus clues</h2><button class="btn btn-ghost" onClick="{{ openClue }}"><i class="ph-duotone ph-plus"></i>Write a clue</button></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1">Extra hunt items</h2><button class="btn btn-ghost" onClick="{{ openClue }}"><i class="ph-duotone ph-plus"></i>Add an item</button></div>
 <sc-for list="{{ bonus }}" as="h" hint-placeholder-count="2">
 <button onClick="{{ h.pick }}" style="display:flex;justify-content:space-between;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600;text-decoration:{{ h.strike }}">{{ h.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ h.meta }}</span></span><span style="flex:none;font-size:13px;color:var(--color-neutral-700)">{{ h.pts }} pts</span></button>
 </sc-for>
-<sc-if value="{{ noBonus }}"><div style="font-size:14px;color:var(--color-neutral-700);font-style:italic">Write clues for each other. They go here.</div></sc-if>
+<sc-if value="{{ noBonus }}"><div style="font-size:14px;color:var(--color-neutral-700);font-style:italic">Things to find beyond the bingo card. Add your own; they count for points but not for bingo.</div></sc-if>
 </div>
 </div>
 </sc-if>
@@ -851,6 +852,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div class="field"><label>{{ q.label }}</label><input class="input" placeholder="{{ q.ph }}" inputMode="{{ q.mode }}" value="{{ q.value }}" onChange="{{ q.on }}" onKeyDown="{{ quickKey }}"></div>
 </sc-for>
 <button class="btn btn-primary btn-block" onClick="{{ saveQuick }}">Save</button>
+<sc-if value="{{ qCanDelete }}"><button class="btn btn-ghost" onClick="{{ qDelete }}" style="align-self:center;color:var(--color-accent-2-700)">Remove from the hunt</button></sc-if>
 </div>
 </sc-if>
 
@@ -1042,7 +1044,7 @@ class Component extends DCLogic {
 
   defaultHunt() { return [['A towel animal on the bed', 10], ['Someone in a captain’s hat', 15], ['A rooster in port', 15], ['Matching couple outfits', 20], ['Another cruise line’s ship', 10], ['An iguana', 20], ['Sunset selfie, top deck', 25], ['A conga line', 20], ['Someone hitting a jackpot', 25]].map((x, i) => ({ id: i + 1, title: x[0], pts: x[1], by: null, author: 'App' })); }
   defaultPack() { return ['Passports', 'Boarding documents', 'Casino player cards', 'Magnetic hooks', 'Lanyards', 'Reef-safe sunscreen', 'Swimsuits', 'Evening outfits', 'Seasickness bands', 'Non-surge power strip'].map((t, i) => ({ id: i + 1, text: t, done: false })); }
-  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {} }; }
+  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [] }; }
   seed() {
     const D = (off, name, hours, aboard = '', tip = '') => ({ off, name, hours, aboard, tip });
     const P = (id, off, time, title, place, kind, conf = '') => ({ id, off, time, title, place, kind, conf });
@@ -1191,10 +1193,13 @@ class Component extends DCLogic {
     const ss = dd.sessions.filter(x => x.who === n), pts = ss.reduce((a, x) => a + (+x.pts || 0), 0), net = ss.reduce((a, x) => a + (+x.net || 0), 0), jp = ss.filter(x => x.jp).length;
     const hunt = dd.hunt.filter(h => h.by === n).reduce((a, h) => a + (+h.pts || 0), 0);
     const triv = Object.entries(dd.trivia || {}).filter(([q, a]) => a.who === n && this.TRIVIA[q] && a.pick === this.TRIVIA[q].a).length;
-    const chal = Object.entries(dd.challenges || {}).filter(([k, w]) => w === n).reduce((a, [k]) => { const [off, i] = k.split(':').map(Number); const c = this.chalFor(off)[i]; return a + (c ? c[2] : 0); }, 0);
+    const chal = Object.entries(dd.challenges || {}).filter(([k, w]) => this.claimers(w).includes(n)).reduce((a, [k]) => a + this.chalPts(dd, k), 0);
     const grid = dd.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
     return { pts, net, jp, n: ss.length, hunt, triv, chal, bingos, xp: Math.floor(pts / 10) + jp * 25 + hunt + triv * 20 + chal + bingos * 50 };
   }
+  claimers(w) { return Array.isArray(w) ? w : w ? [w] : []; }
+  // Keys: "off:i" for the built-in daily three, "x<id>" for ones you wrote.
+  chalPts(dd, k) { if (k[0] === 'x') { const m = (dd.myChal || []).find(c => 'x' + c.id === k); return m ? m.pts : 0; } const [off, i] = k.split(':').map(Number); const c = this.chalFor(off)[i]; return c ? c[2] : 0; }
   chalFor(off) { const n = this.CHAL.length, base = (((off + 10) * 7) % n + n) % n; return [0, 1, 2].map(i => this.CHAL[(base + i * 3) % n]); }
   rankOf(xp) { let i = 0; this.RANKS.forEach((r, j) => { if (xp >= r[0]) i = j; }); return { name: this.RANKS[i][1], cur: this.RANKS[i][0], next: this.RANKS[i + 1] }; }
   readImg(file, max) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => { const img = new Image(); img.onload = () => { const sc = Math.min(1, max / Math.max(img.width, img.height)), cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc); cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); res(cv.toDataURL('image/jpeg', 0.8)); }; img.onerror = rej; img.src = r.result; }; r.onerror = rej; r.readAsDataURL(file); }); }
@@ -1327,7 +1332,9 @@ class Component extends DCLogic {
     const maxXp = Math.max(0, ...players.map(n => st[n].xp)), leaders = players.filter(n => st[n].xp === maxXp && maxXp > 0);
     const standings = players.map(n => { const r = this.rankOf(st[n].xp); return { name: n, xp: st[n].xp, color: colorOf(n), rank: r.name, leader: leaders.length === 1 && leaders[0] === n, pct: (r.next ? Math.min(100, (st[n].xp - r.cur) / (r.next[0] - r.cur) * 100) : 100) + '%', toNext: r.next ? (r.next[0] - st[n].xp) + ' XP to ' + r.next[1] : 'Top rank reached' }; });
     const cOff = onboard ? on : -100;
-    const chal = this.chalFor(cOff).map((cc, i) => { const key = cOff + ':' + i, who = d.challenges[key]; return { icon: 'ph-duotone ' + cc[0], text: cc[1], pts: cc[2], claims: players.slice(0, 4).map(n => ({ label: n, ...chip(who === n), go: () => this.upd(dd => ({ challenges: { ...dd.challenges, [key]: dd.challenges[key] === n ? undefined : n } })) })) }; });
+    const claimRow = key => { const who = this.claimers(d.challenges[key]); return players.slice(0, 4).map(n => ({ label: n, on: who.includes(n), ...chip(who.includes(n)), go: () => this.upd(dd => { const cur = this.claimers(dd.challenges[key]); return { challenges: { ...dd.challenges, [key]: cur.includes(n) ? cur.filter(x => x !== n) : [...cur, n] } }; }) })); };
+    const chal = [...this.chalFor(cOff).map((cc, i) => ({ icon: 'ph-duotone ' + cc[0], text: cc[1], pts: cc[2], custom: false, claims: claimRow(cOff + ':' + i) })),
+      ...(d.myChal || []).filter(m => m.off === cOff).map(m => ({ icon: 'ph-duotone ph-pencil-simple-line', text: m.text, pts: m.pts, custom: true, claims: claimRow('x' + m.id), remove: () => this.upd(dd => { const ch = { ...dd.challenges }; delete ch['x' + m.id]; return { myChal: (dd.myChal || []).filter(y => y.id !== m.id), challenges: ch }; }) }))];
     const firstPlanOff = d.plans.length ? Math.min(...d.plans.map(p => p.off)) : 0;
     const homePlans = plansFor(onboard ? on : firstPlanOff).slice(0, 5);
 
@@ -1338,9 +1345,9 @@ class Component extends DCLogic {
     const crowns = [{ title: 'Jackpots', rot: '-5deg', ...best('jp') }, { title: 'Money', rot: '3deg', ...best('net') }, { title: 'Points', rot: '-2deg', ...best('pts') }];
 
     const grid = d.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
-    const openWho = h => () => this.setState({ sheet: 'who', whoId: h.id });
-    const bingo = grid.map(h => ({ title: h.title, pts: h.pts, found: !!h.by, initial: (h.by || '?')[0], color: colorOf(h.by), bg: h.by ? 'var(--color-neutral-100)' : 'var(--color-bg)', op: h.by ? 0.45 : 1, pick: openWho(h) }));
-    const bonus = d.hunt.slice(9).map(h => ({ title: h.title, pts: h.pts, strike: h.by ? 'line-through' : 'none', meta: (h.by ? 'Found by ' + h.by : 'Open') + (h.author !== 'App' ? ' · clue from ' + h.author : ''), pick: openWho(h) }));
+    const openWho = h => () => s.huntEdit ? this.setState({ sheet: 'quick', qType: 'square', sqId: h.id, qf: { title: h.title, pts: String(h.pts) } }) : this.setState({ sheet: 'who', whoId: h.id });
+    const bingo = grid.map(h => ({ title: h.title, pts: h.pts, found: !!h.by, initial: (h.by || '?')[0], color: colorOf(h.by), bg: h.by ? 'var(--color-neutral-100)' : 'var(--color-bg)', op: h.by ? 0.45 : 1, border: s.huntEdit ? '2px dashed var(--color-accent)' : '1px solid var(--color-divider)', pick: openWho(h) }));
+    const bonus = d.hunt.slice(9).map(h => ({ title: h.title, pts: h.pts, strike: h.by ? 'line-through' : 'none', meta: (h.by ? 'Found by ' + h.by : 'Open') + (h.author !== 'App' ? ' · added by ' + h.author : ''), pick: openWho(h) }));
     const wh = d.hunt.find(h => h.id === s.whoId);
 
     const tq = this.TRIVIA[s.tq], ans = d.trivia[s.tq];
@@ -1381,12 +1388,14 @@ class Component extends DCLogic {
       crew: wd.crew.filter(x => x.survey || x.r >= 4).map(x => ({ name: x.name, role: x.role, where: x.where, note: x.note })), noCrew: !wd.crew.length,
       wish: wd.notes.length ? 'Did ' + wd.notes.filter(n => n.done).length + ' of ' + wd.notes.length + ': ' + wd.notes.map(n => n.text).join('; ') : 'No wishlist on this cruise.' };
 
-    const QCFG = { expense: ['Add an expense', [['what', 'What', 'Spa treatment'], ['amt', 'Amount ($)', '120', 'decimal']]], clue: ['Write a hunt clue', [['title', 'Find…', 'Someone in a pineapple hat'], ['pts', 'Points', '15', 'numeric'], ['author', 'From', players[0]]]], pack: ['Add to packing', [['text', 'Item', 'Sunglasses']]], wish: ['Add to wishlist', [['text', 'Idea', 'Breakfast on the balcony'], ['by', 'From', players[0]]]], spot: ['Pin a deck spot', [['deck', 'Deck', '5', 'numeric'], ['name', 'Spot', 'Martini Bar'], ['note', 'Why', 'Best seats at 6 PM']]] };
+    const QCFG = { expense: ['Add an expense', [['what', 'What', 'Spa treatment'], ['amt', 'Amount ($)', '120', 'decimal']]], clue: ['Add a hunt item', [['title', 'Find…', 'Someone in a pineapple hat'], ['pts', 'Points', '15', 'numeric'], ['author', 'Added by', players[0]]]], square: ['Edit hunt item', [['title', 'Find…', 'Someone in a pineapple hat'], ['pts', 'Points', '15', 'numeric']]], chal: [onboard ? 'Add a challenge for today' : 'Add a warm-up challenge', [['text', 'Challenge', 'Order dessert first'], ['pts', 'Points', '15', 'numeric']]], pack: ['Add to packing', [['text', 'Item', 'Sunglasses']]], wish: ['Add to wishlist', [['text', 'Idea', 'Breakfast on the balcony'], ['by', 'From', players[0]]]], spot: ['Pin a deck spot', [['deck', 'Deck', '5', 'numeric'], ['name', 'Spot', 'Martini Bar'], ['note', 'Why', 'Best seats at 6 PM']]] };
     const q = QCFG[s.qType] || ['', []];
     const openQuick = t => () => this.setState({ sheet: 'quick', qType: t, qf: {} });
     const saveQuick = () => { const f = s.qf, t = s.qType, id = Date.now(), dt = this.dateOf(c, onboard ? on : 0), when = this.fmtS(dt || new Date(s.now));
       if (t === 'expense') { const a = parseFloat(f.amt); if (!(f.what || '').trim() || !(a > 0)) return; this.upd(dd => ({ spends: [...dd.spends, { id, what: f.what.trim(), when, amt: a }] })); }
       if (t === 'clue') { if (!(f.title || '').trim()) return; this.upd(dd => ({ hunt: [...dd.hunt, { id, title: f.title.trim(), pts: parseInt(f.pts, 10) || 15, by: null, author: (f.author || '').trim() || players[0] }] })); }
+      if (t === 'square') { if (!(f.title || '').trim()) return; this.upd(dd => ({ hunt: dd.hunt.map(h => h.id === s.sqId ? { ...h, title: f.title.trim(), pts: parseInt(f.pts, 10) || 15, by: h.title === f.title.trim() ? h.by : null } : h) })); }
+      if (t === 'chal') { if (!(f.text || '').trim()) return; this.upd(dd => ({ myChal: [...(dd.myChal || []), { id, off: cOff, text: f.text.trim(), pts: parseInt(f.pts, 10) || 15 }] })); }
       if (t === 'pack') { if (!(f.text || '').trim()) return; this.upd(dd => ({ pack: [...dd.pack, { id, text: f.text.trim(), done: false }] })); }
       if (t === 'wish') { if (!(f.text || '').trim()) return; this.upd(dd => ({ notes: [...dd.notes, { id, text: f.text.trim(), by: (f.by || '').trim() || players[0], done: false }] })); }
       if (t === 'spot') { const dk = parseInt(f.deck, 10); if (!dk || !(f.name || '').trim()) return; this.upd(dd => ({ spots: [...dd.spots, { id, deck: dk, name: f.name.trim(), note: (f.note || '').trim() }] })); }
@@ -1398,7 +1407,7 @@ class Component extends DCLogic {
     const openCrew = () => this.setState({ sheet: 'crew', fc: { name: '', role: 'Server', where: '', r: 0, note: '', tip: false, survey: false } });
     const newCruise = () => this.setState({ sheet: 'cruise', fcr: { line: '', ship: '', start: '', nights: '7', embark: '', goal: '2500', imo: '' } });
     const partner = players[1] || 'your partner', openSync = () => this.setState({ sheet: null, overlay: 'sync', syncMsg: '' });
-    const addItems = [['ph-calendar-plus', 'Plan', openPlan], ['ph-coins', 'Slots session', openSession], ['ph-camera-plus', 'Food & drink', openFood], ['ph-user-plus', 'Crew member', openCrew], ['ph-receipt', 'Expense', openQuick('expense')], ['ph-binoculars', 'Hunt clue', openQuick('clue')], ['ph-suitcase', 'Packing item', openQuick('pack')], ['ph-heart', 'Wishlist idea', openQuick('wish')], ['ph-push-pin', 'Deck spot', openQuick('spot')], ['ph-camera', 'Photo', () => this.setState({ sheet: null, tab: 'camera' })], ['ph-download-simple', 'Import schedule', () => this.setState({ sheet: null, overlay: 'import' })], ['ph-boat', 'New cruise', newCruise], ['ph-share-network', 'Share with ' + partner, openSync]].map(a => ({ icon: 'ph-duotone ' + a[0], label: a[1], go: a[2] }));
+    const addItems = [['ph-calendar-plus', 'Plan', openPlan], ['ph-coins', 'Slots session', openSession], ['ph-camera-plus', 'Food & drink', openFood], ['ph-user-plus', 'Crew member', openCrew], ['ph-receipt', 'Expense', openQuick('expense')], ['ph-binoculars', 'Hunt item', openQuick('clue')], ['ph-suitcase', 'Packing item', openQuick('pack')], ['ph-heart', 'Wishlist idea', openQuick('wish')], ['ph-push-pin', 'Deck spot', openQuick('spot')], ['ph-camera', 'Photo', () => this.setState({ sheet: null, tab: 'camera' })], ['ph-download-simple', 'Import schedule', () => this.setState({ sheet: null, overlay: 'import' })], ['ph-boat', 'New cruise', newCruise], ['ph-share-network', 'Share with ' + partner, openSync]].map(a => ({ icon: 'ph-duotone ' + a[0], label: a[1], go: a[2] }));
     const dayOpts = days.length ? days.map(x => ({ v: String(x.off), label: dateLabel(x.off) + ' · ' + this.short(x.name) })) : [{ v: '0', label: 'Day 1' }];
     const fpv = k => e => { const val = k === 'off' ? parseInt(e.target.value, 10) : e.target.value; this.setState(stt => ({ fp: { ...stt.fp, [k]: val } })); };
     const fsv = k => e => { const val = k === 'jp' ? e.target.checked : k === 'off' ? parseInt(e.target.value, 10) : e.target.value; this.setState(stt => ({ fs: { ...stt.fs, [k]: val } })); };
@@ -1442,7 +1451,7 @@ class Component extends DCLogic {
       crowns, slotBoard, clubName: brand.club, openSession,
       sessionRows: [...d.sessions].reverse().map(x => ({ ...x, when: dateLabel(x.off), ptsLabel: (+x.pts || 0).toLocaleString(), jpLabel: x.jp ? ' · jackpot' : '', netLabel: fmt$(+x.net || 0), color: (+x.net || 0) >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: () => this.setState({ sheet: 'session', fs: { ...x, pts: String(x.pts), net: String(x.net) } }) })),
       noSessions: !d.sessions.length,
-      bingo, bonus, noBonus: !bonus.length, huntFound: d.hunt.filter(h => h.by).length, huntTotal: d.hunt.length, bingoLine: bingos ? bingos + (bingos === 1 ? ' bingo' : ' bingos') : '', openClue: openQuick('clue'),
+      bingo, bonus, noBonus: !bonus.length, huntFound: d.hunt.filter(h => h.by).length, huntTotal: d.hunt.length, bingoLine: bingos ? bingos + (bingos === 1 ? ' bingo' : ' bingos') : '', openClue: openQuick('clue'), openChal: openQuick('chal'), huntEdit: !!s.huntEdit, toggleHuntEdit: () => this.setState({ huntEdit: !s.huntEdit }), huntEditLabel: s.huntEdit ? 'Done' : 'Edit card', huntEditCls: s.huntEdit ? 'btn btn-primary' : 'btn btn-secondary',
       tq, tqNum: s.tq + 1, tqTotal: this.TRIVIA.length, tOpts, tScore: players.slice(0, 2).map(n => n + ' ' + st[n].triv * 20).join(' · '),
       tResult: ans ? (ans.pick === tq.a ? ans.who + ' got it. +20 XP' : ans.who + ' missed it. It’s ' + tq.o[tq.a] + '.') : '',
       tPlayers: players.map(n => ({ name: n, ...chip(s.tWho === n), pick: set({ tWho: n }) })),
@@ -1538,6 +1547,8 @@ class Component extends DCLogic {
       deleteSession: () => { this.upd(dd => ({ sessions: dd.sessions.filter(x => x.id !== s.fs.id) })); this.setState({ sheet: null }); },
       reelOn: !!s.reel, closeReel: set({ reel: null }), reels: s.reel ? s.reel.reels : [], confetti: s.reel ? s.reel.confetti : [], reelWho: s.reel ? s.reel.who : '', reelLine: s.reel ? s.reel.line : '', reelXp: s.reel ? s.reel.xp : 0,
       qTitle: q[0], qFields: q[1].map(([k, label, ph, mode]) => ({ label, ph, mode: mode || 'text', value: s.qf[k] || '', on: e => { const val = e.target.value; this.setState(x => ({ qf: { ...x.qf, [k]: val } })); } })), saveQuick, quickKey: enter(saveQuick),
+      qCanDelete: s.qType === 'square' && d.hunt.findIndex(h => h.id === s.sqId) >= 9,
+      qDelete: () => { this.upd(dd => ({ hunt: dd.hunt.filter(h => h.id !== s.sqId) })); this.setState({ sheet: null }); },
       whoTitle: wh ? wh.title : '', whoPts: wh ? wh.pts : 0, whoFound: !!(wh && wh.by),
       whoBtns: players.map(n => ({ name: n, ...chip(wh && wh.by === n), go: () => { this.upd(dd => ({ hunt: dd.hunt.map(h => h.id === s.whoId ? { ...h, by: n } : h) })); this.setState({ sheet: null }); } })),
       whoUndo: () => { this.upd(dd => ({ hunt: dd.hunt.map(h => h.id === s.whoId ? { ...h, by: null } : h) })); this.setState({ sheet: null }); }, whoProof: set({ sheet: null, tab: 'camera' }),
