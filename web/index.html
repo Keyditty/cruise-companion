@@ -629,7 +629,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </div>
 </sc-for>
-<button class="btn btn-primary" onClick="{{ newCruise }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Add a cruise</button>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap"><button class="btn btn-primary" onClick="{{ newCruise }}"><i class="ph-duotone ph-plus"></i>Add a cruise</button><button class="btn btn-secondary" onClick="{{ openSync }}"><i class="ph-duotone ph-share-network"></i>Share with {{ partner }}</button></div>
 </div>
 </sc-if>
 <sc-if value="{{ fHist }}">
@@ -707,6 +707,33 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-for>
 <button class="btn btn-secondary" onClick="{{ addAfter }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Day after the cruise</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ ovSync }}">
+<div data-screen-label="Share" style="display:flex;flex-direction:column;gap:var(--space-8)">
+<div style="display:flex;flex-direction:column;gap:var(--space-2)"><h1 style="margin:0;font-size:32px;line-height:1">Share with {{ partner }}</h1><div style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Each phone keeps its own copy. Send each other a data file to swap what you’ve logged: slots sessions, hunt finds, plans, food, crew and photos.</div></div>
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Send</div>
+<button class="btn btn-primary" onClick="{{ exportData }}" style="align-self:flex-start;padding:14px 20px;font-size:16px"><i class="ph-duotone ph-paper-plane-tilt" style="font-size:20px"></i>Send my data</button>
+<div style="font-size:13px;line-height:1.5;color:var(--color-neutral-700)">Opens the share sheet. Pick Messages or AirDrop. Includes {{ exportSummary }}.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Receive</div>
+<div style="font-size:13px;line-height:1.5;color:var(--color-neutral-700)">Got a file in Messages? Tap it, then Share › Save to Files. Then open it here.</div>
+<button class="btn btn-secondary" onClick="{{ pickSync }}" style="align-self:flex-start"><i class="ph-duotone ph-folder-open"></i>Open a data file</button>
+<input type="file" ref="{{ syncRef }}" onChange="{{ onSyncFile }}" style="display:none">
+<sc-if value="{{ hasSyncIn }}">
+<div class="card">
+<span class="card-kicker">{{ syncInWhen }}</span>
+<span class="card-title" style="font-size:18px">{{ syncInSummary }}</span>
+<button class="btn btn-primary btn-block" onClick="{{ syncMerge }}"><i class="ph-duotone ph-arrows-merge"></i>Merge into mine</button>
+<button class="btn btn-ghost" onClick="{{ syncReplace }}" style="align-self:center;color:var(--color-accent-2-700)">Replace mine with this file</button>
+</div>
+</sc-if>
+<sc-if value="{{ syncMsg }}"><div style="font-size:14px;font-style:italic;color:var(--color-neutral-800)">{{ syncMsg }}</div></sc-if>
+</div>
+<div style="font-size:13px;line-height:1.5;color:var(--color-neutral-700)">Merging adds everything new from the file and keeps all of yours. If you both changed the same entry, the file’s version wins, and something deleted on one phone can come back from the other’s file.</div>
 </div>
 </sc-if>
 
@@ -1000,7 +1027,7 @@ class Component extends DCLogic {
     this.state = Object.assign(this.seed(), saved, {
       tab: 'today', planView: 'days', selOff: 0, resFilter: 'all', game: 'slots', tripTab: 'pack', fleetView: 'up',
       preview: null, sheet: null, overlay: null, wrapId: null, fp: {}, fs: {}, ff: {}, fc: {}, fcr: {}, qType: null, qf: {}, whoId: null, viewerId: null,
-      newPlayer: '', filter: 'natural', frame: 'stamp', headline: '', draft: null, cam: 'idle', tq: 0, tWho: 'Matthew', reel: null,
+      newPlayer: '', filter: 'natural', frame: 'stamp', headline: '', draft: null, cam: 'idle', tq: 0, tWho: 'Matthew', reel: null, syncIn: null, syncMsg: '',
       impText: '', shots: [], impBusy: false, impMsg: '', found: [], now: Date.now(),
       backdrop: null, stickers: [], selSticker: null, cutout: null, cutFor: null, seg: 'idle',
     });
@@ -1028,6 +1055,46 @@ class Component extends DCLogic {
       this.stream = st;
       this.setState({ cam: 'on' }, () => { [this.video, ...this.thumbs].forEach(v => { if (v && v.isConnected) v.srcObject = this.stream; }); });
     } catch (e) { this.setState({ cam: 'denied' }); }
+  }
+  snapshot() { const s = this.state, o = { app: 'cruise-companion', v: 1, saved: new Date().toISOString() }; ['players', 'active', 'cruises', 'db', 'brands'].forEach(k => o[k] = s[k]); return o; }
+  async exportData() {
+    const o = this.snapshot(), name = 'voyager-' + o.saved.slice(0, 16).replace(/[T:]/g, '-') + '.json';
+    const file = new File([JSON.stringify(o)], name, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'Cruise Companion data' }); this.setState({ syncMsg: 'Sent. Have them open it under Share.' }); } catch (e) {}
+      return;
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    this.setState({ syncMsg: 'Saved ' + name + '. Send it over.' });
+  }
+  async onSyncFile(e) {
+    const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    let o = null; try { o = JSON.parse(await f.text()); } catch (err) {}
+    if (!o || o.app !== 'cruise-companion' || !Array.isArray(o.cruises) || !o.db) { this.setState({ syncIn: null, syncMsg: 'That isn’t a Cruise Companion data file.' }); return; }
+    this.setState({ syncIn: o, syncMsg: '' });
+  }
+  applySync(replace) {
+    const inc = this.state.syncIn; if (!inc) return;
+    if (replace) { this.setState({ players: inc.players || this.state.players, active: inc.active, cruises: inc.cruises, db: inc.db, brands: inc.brands || {}, syncIn: null, syncMsg: 'Replaced with the file.' }); return; }
+    // Union every list by id; on a clash the file's copy wins.
+    const byId = (a, b) => { const m = new Map((a || []).map(x => [x.id, x])); (b || []).forEach(x => m.set(x.id, x)); return [...m.values()]; };
+    this.setState(st => {
+      const db = { ...st.db };
+      Object.entries(inc.db).forEach(([cid, d]) => {
+        const mine = db[cid] || this.emptyData(), out = { ...mine };
+        Object.entries(d || {}).forEach(([k, v]) => {
+          if (Array.isArray(v)) out[k] = byId(mine[k], v);
+          else if (v && typeof v === 'object') out[k] = { ...(mine[k] || {}), ...v };
+          else if (mine[k] == null || mine[k] === '') out[k] = v;
+        });
+        out.photos = [...(out.photos || [])].sort((x, y) => y.id - x.id);
+        db[cid] = out;
+      });
+      const brands = { ...st.brands };
+      Object.entries(inc.brands || {}).forEach(([k, b]) => { const mb = brands[k] || {}; brands[k] = { ...mb, ...b, tiers: { ...(mb.tiers || {}), ...(b.tiers || {}) } }; });
+      return { players: [...new Set([...st.players, ...(inc.players || [])])], cruises: byId(st.cruises, inc.cruises), db, brands, syncIn: null, syncMsg: 'Merged. Their entries are in.' };
+    });
   }
   stopCam() { if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; } this.thumbs = new Set(); if (this.state.cam === 'on' || this.state.cam === 'asking') this.setState({ cam: 'idle' }); }
 
@@ -1247,7 +1314,8 @@ class Component extends DCLogic {
     const openFood = () => this.setState({ sheet: 'food', ff: { name: '', where: '', by: players[0], r: 0, note: '', photo: '' } });
     const openCrew = () => this.setState({ sheet: 'crew', fc: { name: '', role: 'Server', where: '', r: 0, note: '', tip: false, survey: false } });
     const newCruise = () => this.setState({ sheet: 'cruise', fcr: { line: '', ship: '', start: '', nights: '7', embark: '', goal: '2500', imo: '' } });
-    const addItems = [['ph-calendar-plus', 'Plan', openPlan], ['ph-coins', 'Slots session', openSession], ['ph-camera-plus', 'Food & drink', openFood], ['ph-user-plus', 'Crew member', openCrew], ['ph-receipt', 'Expense', openQuick('expense')], ['ph-binoculars', 'Hunt clue', openQuick('clue')], ['ph-suitcase', 'Packing item', openQuick('pack')], ['ph-heart', 'Wishlist idea', openQuick('wish')], ['ph-push-pin', 'Deck spot', openQuick('spot')], ['ph-camera', 'Photo', () => this.setState({ sheet: null, tab: 'camera' })], ['ph-download-simple', 'Import schedule', () => this.setState({ sheet: null, overlay: 'import' })], ['ph-boat', 'New cruise', newCruise]].map(a => ({ icon: 'ph-duotone ' + a[0], label: a[1], go: a[2] }));
+    const partner = players[1] || 'your partner', openSync = () => this.setState({ sheet: null, overlay: 'sync', syncMsg: '' });
+    const addItems = [['ph-calendar-plus', 'Plan', openPlan], ['ph-coins', 'Slots session', openSession], ['ph-camera-plus', 'Food & drink', openFood], ['ph-user-plus', 'Crew member', openCrew], ['ph-receipt', 'Expense', openQuick('expense')], ['ph-binoculars', 'Hunt clue', openQuick('clue')], ['ph-suitcase', 'Packing item', openQuick('pack')], ['ph-heart', 'Wishlist idea', openQuick('wish')], ['ph-push-pin', 'Deck spot', openQuick('spot')], ['ph-camera', 'Photo', () => this.setState({ sheet: null, tab: 'camera' })], ['ph-download-simple', 'Import schedule', () => this.setState({ sheet: null, overlay: 'import' })], ['ph-boat', 'New cruise', newCruise], ['ph-share-network', 'Share with ' + partner, openSync]].map(a => ({ icon: 'ph-duotone ' + a[0], label: a[1], go: a[2] }));
     const dayOpts = days.length ? days.map(x => ({ v: String(x.off), label: dateLabel(x.off) + ' · ' + this.short(x.name) })) : [{ v: '0', label: 'Day 1' }];
     const fpv = k => e => { const val = k === 'off' ? parseInt(e.target.value, 10) : e.target.value; this.setState(stt => ({ fp: { ...stt.fp, [k]: val } })); };
     const fsv = k => e => { const val = k === 'jp' ? e.target.checked : k === 'off' ? parseInt(e.target.value, 10) : e.target.value; this.setState(stt => ({ fs: { ...stt.fs, [k]: val } })); };
@@ -1339,8 +1407,13 @@ class Component extends DCLogic {
         stars: stars(x.r, r => this.upd(dd => ({ crew: dd.crew.map(y => y.id === x.id ? { ...y, r } : y) }))), edit: () => this.setState({ sheet: 'crew', fc: { ...x } }) })),
       hasSurvey: d.crew.some(x => x.survey), surveyList: d.crew.filter(x => x.survey).map(x => x.name + ' (' + x.role + (x.where ? ', ' + x.where : '') + ')').join('; '),
       spotRows: [...d.spots].sort((a, b) => a.deck - b.deck),
-      overlayOn: !!s.overlay, closeOverlay: set({ overlay: null }), overlaySub: { fleet: 'Cruises', wrap: 'Wrap-up', itin: c.ship, import: c.ship }[s.overlay] || '',
-      ovFleet: s.overlay === 'fleet', ovWrap: s.overlay === 'wrap', ovItin: s.overlay === 'itin', ovImport: s.overlay === 'import',
+      overlayOn: !!s.overlay, closeOverlay: set({ overlay: null }), overlaySub: { fleet: 'Cruises', wrap: 'Wrap-up', itin: c.ship, import: c.ship, sync: 'Share' }[s.overlay] || '',
+      ovFleet: s.overlay === 'fleet', ovWrap: s.overlay === 'wrap', ovItin: s.overlay === 'itin', ovImport: s.overlay === 'import', ovSync: s.overlay === 'sync', partner, openSync,
+      exportData: () => this.exportData(), pickSync: () => this.syncEl && this.syncEl.click(), syncRef: el => { this.syncEl = el; }, onSyncFile: e => this.onSyncFile(e),
+      exportSummary: (() => { const all = Object.values(s.db); const n = k => all.reduce((a, x) => a + ((x && x[k]) || []).length, 0); return s.cruises.length + ' cruises, ' + n('sessions') + ' slots sessions, ' + n('plans') + ' plans and ' + n('photos') + ' photos'; })(),
+      hasSyncIn: !!s.syncIn, syncInWhen: s.syncIn ? 'Saved ' + new Date(s.syncIn.saved).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '',
+      syncInSummary: s.syncIn ? s.syncIn.cruises.length + ' cruises · ' + Object.values(s.syncIn.db).reduce((a, x) => a + ((x && x.sessions) || []).length, 0) + ' slots sessions' : '',
+      syncMerge: () => this.applySync(false), syncReplace: () => this.applySync(true), syncMsg: s.syncMsg,
       fUp: s.fleetView === 'up', fHist: s.fleetView === 'hist', fClubs: s.fleetView === 'clubs', setFUp: set({ fleetView: 'up' }), setFHist: set({ fleetView: 'hist' }), setFClubs: set({ fleetView: 'clubs' }),
       upcomingRows: s.cruises.filter(x => !this.isPast(x)).map(x => ({ ship: x.ship, when: whenOf(x), route: routeOf(x), active: x.id === s.active, pick: () => this.setState({ active: x.id, overlay: null, tab: 'today', preview: null, selOff: 0, track: false }), edit: openCruiseEdit(x) })),
       pastRows: s.cruises.filter(x => this.isPast(x)).map(x => { const dd = s.db[x.id] || this.emptyData(), loved = dd.food.filter(f => f.r >= 4).length, crew = dd.crew.filter(y => y.survey || y.r >= 4).length; return { ship: x.ship, when: whenOf(x), route: routeOf(x), sample: !!x.sample, blurb: loved + ' favorites · ' + crew + ' crew to remember · ' + dd.photos.length + ' photos', wrap: () => this.setState({ overlay: 'wrap', wrapId: x.id }) }; }),
