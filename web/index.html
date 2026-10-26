@@ -200,7 +200,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:24px;flex:1;min-width:0">{{ planHead }}</h2><button class="btn btn-ghost" onClick="{{ goPlans }}">All plans</button></div>
 <sc-for list="{{ homePlans }}" as="p" hint-placeholder-count="3">
 <button onClick="{{ p.edit }}" style="display:grid;grid-template-columns:72px 1fr;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
-<span style="font-size:13px;color:var(--color-neutral-700)">{{ p.time }}</span>
+<span style="display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--color-neutral-700)"><span>{{ p.time }}</span><sc-if value="{{ p.end }}"><span>to {{ p.end }}</span></sc-if></span>
 <span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:17px;font-weight:600;line-height:1.25">{{ p.title }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ p.place }} · {{ p.kindLabel }}</span></span>
 </button>
 </sc-for>
@@ -230,15 +230,15 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </sc-for>
 </div>
 <div style="display:flex;flex-direction:column;gap:4px">
-<h2 style="margin:0;font-size:28px">{{ selDay.name }}</h2>
-<div style="font-size:14px;color:var(--color-neutral-700)">{{ selDay.dateLabel }} · {{ selDay.hours }}</div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:28px;flex:1;min-width:0">{{ selDay.name }}</h2><button class="btn btn-secondary" onClick="{{ editDay }}" style="flex:none;padding:6px 12px;font-size:13px"><i class="ph-duotone ph-pencil-simple"></i>Edit day</button></div>
+<div style="font-size:14px;color:var(--color-neutral-700)">{{ selDay.dateLabel }}{{ selDay.hoursLine }}</div>
 <sc-if value="{{ selDay.aboard }}"><div style="font-size:14px;color:var(--color-accent-2-700)">All aboard {{ selDay.aboard }}</div></sc-if>
 <sc-if value="{{ selDay.tip }}"><div style="font-size:14px;line-height:1.5;font-style:italic;color:var(--color-neutral-800);margin-top:4px">{{ selDay.tip }}</div></sc-if>
 </div>
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <sc-for list="{{ dayPlans }}" as="p" hint-placeholder-count="3">
 <button onClick="{{ p.edit }}" style="display:grid;grid-template-columns:72px 1fr auto;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
-<span style="font-size:13px;color:var(--color-neutral-700)">{{ p.time }}</span>
+<span style="display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--color-neutral-700)"><span>{{ p.time }}</span><sc-if value="{{ p.end }}"><span>to {{ p.end }}</span></sc-if></span>
 <span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:17px;font-weight:600;line-height:1.25">{{ p.title }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ p.place }}{{ p.confLine }}</span></span>
 <span class="{{ p.tagClass }}">{{ p.kindLabel }}</span>
 </button>
@@ -706,8 +706,13 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;flex-direction:column;gap:var(--space-2)">
 <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ r.dateLabel }} · {{ r.label }}</span><sc-if value="{{ r.canRemove }}"><button class="btn btn-ghost" onClick="{{ r.remove }}" style="font-size:12px;color:var(--color-accent-2-700)">Remove</button></sc-if></div>
 <input class="input" placeholder="Port or place" value="{{ r.name }}" onChange="{{ r.onName }}" style="font-size:16px;font-weight:600">
-<div style="display:grid;grid-template-columns:1fr 110px;gap:var(--space-2)"><input class="input" placeholder="In port 8:00 AM – 5:00 PM" value="{{ r.hours }}" onChange="{{ r.onHours }}"><input class="input" placeholder="All aboard" value="{{ r.aboard }}" onChange="{{ r.onAboard }}"></div>
-<input class="input" placeholder="Tip or note for this day" value="{{ r.tip }}" onChange="{{ r.onTip }}">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-2)">
+<div class="field"><label>From</label><select class="input" value="{{ r.from }}" onChange="{{ r.onFrom }}"><sc-for list="{{ r.fromOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div class="field"><label>Until</label><select class="input" value="{{ r.until }}" onChange="{{ r.onUntil }}"><sc-for list="{{ r.untilOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div class="field"><label>All aboard</label><select class="input" value="{{ r.aboard }}" onChange="{{ r.onAboard }}"><sc-for list="{{ r.aboardOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+</div>
+<input class="input" placeholder="Short note: Magic Kingdom, Sea day, Uber to port" value="{{ r.hours }}" onChange="{{ r.onHours }}">
+<input class="input" placeholder="Tip or reminder for this day" value="{{ r.tip }}" onChange="{{ r.onTip }}">
 </div>
 </sc-for>
 <button class="btn btn-secondary" onClick="{{ addAfter }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Day after the cruise</button>
@@ -781,13 +786,34 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-if>
 
+<sc-if value="{{ shDay }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ dayForm.dateLabel }} · {{ dayForm.label }}</div><h2 style="margin:0;font-size:24px">Edit this day</h2></div>
+<sc-for list="{{ dayFormList }}" as="r" hint-placeholder-count="1">
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<input class="input" placeholder="Port or place" value="{{ r.name }}" onChange="{{ r.onName }}" style="font-size:16px;font-weight:600">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-2)">
+<div class="field"><label>From</label><select class="input" value="{{ r.from }}" onChange="{{ r.onFrom }}"><sc-for list="{{ r.fromOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div class="field"><label>Until</label><select class="input" value="{{ r.until }}" onChange="{{ r.onUntil }}"><sc-for list="{{ r.untilOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div class="field"><label>All aboard</label><select class="input" value="{{ r.aboard }}" onChange="{{ r.onAboard }}"><sc-for list="{{ r.aboardOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+</div>
+<input class="input" placeholder="Short note: Magic Kingdom, Sea day, Uber to port" value="{{ r.hours }}" onChange="{{ r.onHours }}">
+<input class="input" placeholder="Tip or reminder for this day" value="{{ r.tip }}" onChange="{{ r.onTip }}">
+</div>
+</sc-for>
+<button class="btn btn-primary btn-block" onClick="{{ closeSheet }}">Done</button>
+<button class="btn btn-ghost" onClick="{{ openItinClose }}" style="align-self:center">See the whole itinerary</button>
+</div>
+</sc-if>
+
 <sc-if value="{{ shPlan }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <h2 style="margin:0;font-size:24px">{{ planSheetTitle }}</h2>
 <div class="field"><label>What</label><input class="input" placeholder="Couples massage" value="{{ fp.title }}" onChange="{{ fpTitle }}"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
 <div class="field"><label>Day</label><select class="input" value="{{ fp.off }}" onChange="{{ fpDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
-<div class="field"><label>Time</label><input class="input" placeholder="7:30 PM" value="{{ fp.time }}" onChange="{{ fpTime }}"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>From</label><select class="input" value="{{ fpFrom }}" onChange="{{ fpTime }}"><sc-for list="{{ fpFromOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div class="field"><label>Until (optional)</label><select class="input" value="{{ fpEnd }}" onChange="{{ fpEndSet }}"><sc-for list="{{ fpEndOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
 </div>
 <div class="field"><label>Where</label><input class="input" placeholder="The Spa, Deck 5" value="{{ fp.place }}" onChange="{{ fpPlace }}"></div>
 <div class="field"><label>Confirmation # (optional)</label><input class="input" placeholder="SPA-2281" value="{{ fp.conf }}" onChange="{{ fpConf }}"></div>
@@ -1012,7 +1038,7 @@ class Component extends DCLogic {
       players: ['Matthew', 'Toni'], active: 'apex',
       cruises: [
         { id: 'apex', line: 'Celebrity', ship: 'Celebrity Apex', start: '2026-10-31', nights: 7, embark: 'Port Canaveral', goal: 2500, imo: '9838383',
-          days: [D(-3, 'Walt Disney World', 'Pre-cruise · Magic Kingdom'), D(-2, 'Walt Disney World', 'Pre-cruise · EPCOT'), D(-1, 'Cocoa Beach', 'Pre-cruise · hotel near the port', '', 'About an hour from Disney to Port Canaveral. Park-and-cruise hotels can save on port parking.'), D(0, 'Port Canaveral', 'Embark late morning · sail 4:00 PM', '3:30 PM'), D(1, 'Key West', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Duval Street and Mallory Square are a short walk from the pier. Look out for the roosters.'), D(2, 'At sea', 'Full day at sea'), D(3, 'Cozumel', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Several piers. Check which one you are docked at before taking a taxi back.'), D(4, 'Grand Cayman', 'In port 7:00 AM – 3:00 PM', '2:30 PM', 'Tender port. Lines for the boats back get long in the last hour.'), D(5, 'At sea', 'Full day at sea'), D(6, 'At sea', 'Full day at sea'), D(7, 'Port Canaveral', 'Arrive early morning · disembark')] },
+          days: [D(-3, 'Walt Disney World', 'Pre-cruise · Magic Kingdom'), D(-2, 'Walt Disney World', 'Pre-cruise · EPCOT'), D(-1, 'Walt Disney World', 'Pre-cruise'), D(0, 'Port Canaveral', 'Embark late morning · sail 4:00 PM', '3:30 PM'), D(1, 'Key West', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Duval Street and Mallory Square are a short walk from the pier. Look out for the roosters.'), D(2, 'At sea', 'Full day at sea'), D(3, 'Cozumel', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Several piers. Check which one you are docked at before taking a taxi back.'), D(4, 'Grand Cayman', 'In port 7:00 AM – 3:00 PM', '2:30 PM', 'Tender port. Lines for the boats back get long in the last hour.'), D(5, 'At sea', 'Full day at sea'), D(6, 'At sea', 'Full day at sea'), D(7, 'Port Canaveral', 'Arrive early morning · disembark')] },
         { id: 'beyond', line: 'Celebrity', ship: 'Celebrity Beyond', start: '2027-02-21', nights: 7, embark: 'Fort Lauderdale', goal: 2500, imo: '9838395',
           days: [D(0, 'Fort Lauderdale', 'Sail 4:00 PM', '3:30 PM'), D(1, 'At sea', 'Full day at sea'), D(2, 'Puerto Plata', 'Amber Cove · 7:00 AM – 2:00 PM', '1:30 PM'), D(3, 'St. Thomas', 'In port 10:30 AM – 6:00 PM', '5:30 PM'), D(4, 'St. Kitts', 'Basseterre · 8:00 AM – 6:00 PM', '5:30 PM'), D(5, 'At sea', 'Full day at sea'), D(6, 'At sea', 'Full day at sea'), D(7, 'Fort Lauderdale', 'Arrive early morning · disembark')] },
         { id: 'princess', line: 'Princess', ship: 'Princess · Europe', start: '', nights: 0, embark: '', goal: 2000, imo: '', days: [] },
@@ -1077,6 +1103,14 @@ class Component extends DCLogic {
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }
+  // 15-minute steps, "h:mm AM". A saved value that isn't on the grid is kept as its own option.
+  timeOpts(cur, blank) {
+    const out = [{ v: '', label: blank }];
+    for (let m = 0; m < 1440; m += 15) { const h = Math.floor(m / 60), t = (h % 12 || 12) + ':' + String(m % 60).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM'); out.push({ v: t, label: t }); }
+    if (cur && !out.some(o => o.v === cur)) out.splice(1, 0, { v: cur, label: cur });
+    return out;
+  }
+  dayLine(x) { const range = x.from ? x.from + (x.until ? ' – ' + x.until : '') : ''; return [x.hours, range].filter(Boolean).join(' · '); }
   resetScores() {
     const c = this.cur().c;
     if (!window.confirm('Reset all scores for ' + c.ship + ' on this phone? Slots sessions, hunt finds, trivia and challenges go back to zero, and the sample cruise is removed.')) return;
@@ -1249,7 +1283,7 @@ class Component extends DCLogic {
     const dateLabel = off => { const dt = this.dateOf(c, off); return dt ? this.fmtD(dt) : (off < 0 ? 'Pre-cruise' : 'Day ' + (off + 1)); };
     const labelOf = off => off < 0 ? 'Pre-cruise' : off > nights ? 'Post-cruise' : off === nights ? 'Disembark' : 'Day ' + (off + 1) + ' of ' + (nights + 1);
     const tmin = x => { const m = /(\d+)(?::(\d+))?\s*(AM|PM)/i.exec(x || ''); if (!m) return 9999; let h = +m[1] % 12; if (/pm/i.test(m[3])) h += 12; return h * 60 + (+m[2] || 0); };
-    const editPlan = p => () => this.setState({ sheet: 'plan', fp: { ...p } });
+    const editPlan = p => () => this.setState({ sheet: 'plan', fp: { ...p, time: p.time === 'Any time' ? '' : p.time } });
     const plansFor = off => d.plans.filter(p => p.off === off).sort((a, b) => tmin(a.time) - tmin(b.time)).map(p => { const k = this.KINDS[p.kind] || this.KINDS.ship; return { ...p, kindLabel: k[0], tagClass: k[1], confLine: p.conf ? ' · ' + p.conf : '', edit: editPlan(p) }; });
 
     const on = this.onOff(), onboard = on != null, preSail = !!c.start && !onboard, noDate = !c.start;
@@ -1341,6 +1375,9 @@ class Component extends DCLogic {
     const ffv = k => e => { const val = e.target.value; this.setState(stt => ({ ff: { ...stt.ff, [k]: val } })); };
     const fcv = k => e => { const val = e.target.value; this.setState(stt => ({ fc: { ...stt.fc, [k]: val } })); };
     const fcrv = k => e => { const val = e.target.value; this.setState(stt => ({ fcr: { ...stt.fcr, [k]: val } })); };
+    const dayRow = x => ({ ...x, from: x.from || '', until: x.until || '', aboard: x.aboard || '', dateLabel: dateLabel(x.off), label: labelOf(x.off),
+      onName: setDay(x.off, 'name'), onHours: setDay(x.off, 'hours'), onFrom: setDay(x.off, 'from'), onUntil: setDay(x.off, 'until'), onAboard: setDay(x.off, 'aboard'), onTip: setDay(x.off, 'tip'),
+      fromOpts: this.timeOpts(x.from, '—'), untilOpts: this.timeOpts(x.until, '—'), aboardOpts: this.timeOpts(x.aboard, 'None') });
     const setDay = (off, k) => e => { const val = e.target.value; this.updCruise(cr => ({ days: cr.days.map(x => x.off === off ? { ...x, [k]: val } : x) })); };
     const viewer = d.photos.find(p => p.id === s.viewerId);
     const pickedCount = s.found.filter(f => f.pick).length;
@@ -1355,7 +1392,7 @@ class Component extends DCLogic {
       preSail, noDate, onboard, previewing: s.preview != null, editCruise: openCruiseEdit(c),
       cdDays, cdUnit: cdDays === 1 ? 'day' : 'days', cdRest: hh + ' hr ' + mm + ' min', sailLine: dateLabel(0) + ' from ' + (c.embark || (dayBy(0) || {}).name || 'port'),
       hasPreviewPort: !!firstPort, previewPort: () => this.setState({ preview: firstPort ? firstPort.off : 0 }), backToCountdown: set({ preview: null }),
-      hd: hdDay ? { kicker: dateLabel(on) + ' · ' + labelOf(on), name: hdDay.name, hours: hdDay.hours, aboard: hdDay.aboard, tip: hdDay.tip } : {},
+      hd: hdDay ? { kicker: dateLabel(on) + ' · ' + labelOf(on), name: hdDay.name, hours: this.dayLine(hdDay), aboard: hdDay.aboard, tip: hdDay.tip } : {},
       hasStops: stops.length > 0, stops, hasImo: !!c.imo, imo: c.imo || '', shipShort: c.ship.replace(/^(Celebrity|Princess)\s*/, '') || c.ship,
       trackLink: 'https://www.marinetraffic.com/en/ais/details/ships/imo:' + (c.imo || ''),
       standings, chal, chalHead: onboard ? 'Today’s challenges' : 'Warm-up challenges',
@@ -1365,7 +1402,7 @@ class Component extends DCLogic {
       planDays: s.planView === 'days', planRes: s.planView === 'res', setPlanDays: set({ planView: 'days' }), setPlanRes: set({ planView: 'res' }),
       noDays: s.planView === 'days' && !days.length, showDays: s.planView === 'days' && days.length > 0,
       dayChips: days.map(x => { const dt = this.dateOf(c, x.off); return { top: x.off < 0 ? (dt ? dt.toLocaleDateString('en-US', { month: 'short' }) : 'Pre') : 'Day', n: x.off < 0 ? (dt ? dt.getDate() : '·') : x.off + 1, short: this.short(x.name), ...chip(s.selOff === x.off), pick: set({ selOff: x.off }) }; }),
-      selDay: (() => { const x = dayBy(s.selOff) || days[0] || { off: 0, name: '', hours: '' }; return { ...x, dateLabel: dateLabel(x.off) }; })(),
+      selDay: (() => { const x = dayBy(s.selOff) || days[0] || { off: 0, name: '', hours: '' }; return { ...x, dateLabel: dateLabel(x.off), hoursLine: this.dayLine(x) ? ' · ' + this.dayLine(x) : '' }; })(),
       dayPlans: plansFor(s.selOff), noDayPlans: !plansFor(s.selOff).length,
       resFilters: [['all', 'All'], ['ship', 'On ship'], ['shore', 'Ashore'], ['land', 'Travel']].map(([id, label]) => ({ label, ...chip(s.resFilter === id), pick: set({ resFilter: id }) })),
       reservations: days.flatMap(x => plansFor(x.off).filter(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)).map(p => ({ ...p, when: dateLabel(x.off) + ' · ' + p.time }))),
@@ -1437,7 +1474,7 @@ class Component extends DCLogic {
       upcomingRows: s.cruises.filter(x => !this.isPast(x)).map(x => ({ ship: x.ship, when: whenOf(x), route: routeOf(x), active: x.id === s.active, pick: () => this.setState({ active: x.id, overlay: null, tab: 'today', preview: null, selOff: 0, track: false }), edit: openCruiseEdit(x) })),
       pastRows: s.cruises.filter(x => this.isPast(x)).map(x => { const dd = s.db[x.id] || this.emptyData(), loved = dd.food.filter(f => f.r >= 4).length, crew = dd.crew.filter(y => y.survey || y.r >= 4).length; return { ship: x.ship, when: whenOf(x), route: routeOf(x), sample: !!x.sample, blurb: loved + ' favorites · ' + crew + ' crew to remember · ' + dd.photos.length + ' photos', wrap: () => this.setState({ overlay: 'wrap', wrapId: x.id }) }; }),
       noPast: !s.cruises.some(x => this.isPast(x)), wrapActive: () => this.setState({ overlay: 'wrap', wrapId: c.id }), newCruise, clubs, wr,
-      itinRows: days.map(x => ({ ...x, dateLabel: dateLabel(x.off), label: labelOf(x.off), onName: setDay(x.off, 'name'), onHours: setDay(x.off, 'hours'), onAboard: setDay(x.off, 'aboard'), onTip: setDay(x.off, 'tip'), canRemove: x.off < 0 || x.off > nights, remove: () => this.updCruise(cr => ({ days: cr.days.filter(y => y.off !== x.off) })) })),
+      itinRows: days.map(x => ({ ...dayRow(x), canRemove: x.off < 0 || x.off > nights, remove: () => this.updCruise(cr => ({ days: cr.days.filter(y => y.off !== x.off) })) })),
       addBefore: () => this.updCruise(cr => { const offs = (cr.days || []).map(x => x.off), o = Math.min(0, ...offs) - 1; return { days: [...(cr.days || []), { off: o, name: 'Pre-cruise', hours: 'Hotel or travel day', aboard: '', tip: '' }] }; }),
       addAfter: () => this.updCruise(cr => { const offs = (cr.days || []).map(x => x.off), o = Math.max(+cr.nights || 0, ...offs) + 1; return { days: [...(cr.days || []), { off: o, name: 'Post-cruise', hours: 'Hotel or travel day', aboard: '', tip: '' }] }; }),
       pickShots: () => this.shotEl && this.shotEl.click(), shotRef: el => { this.shotEl = el; },
@@ -1448,14 +1485,17 @@ class Component extends DCLogic {
       hasFound: s.found.length > 0, foundCount: s.found.length, pickedCount,
       addFound: () => { const add = s.found.filter(f => f.pick).map(({ pick, ...p }) => p); this.upd(dd => ({ plans: [...dd.plans, ...add] })); this.setState({ found: [], impText: '', shots: [], impMsg: '', overlay: null, tab: 'plans', planView: 'days' }); },
       sheetOpen: !!s.sheet, closeSheet: set({ sheet: null }), stop: e => e.stopPropagation(),
-      shAdd: s.sheet === 'add', shPlan: s.sheet === 'plan', shSession: s.sheet === 'session', shQuick: s.sheet === 'quick', shWho: s.sheet === 'who', shFood: s.sheet === 'food', shCrew: s.sheet === 'crew', shCruise: s.sheet === 'cruise', shViewer: s.sheet === 'viewer' && !!viewer,
+      shAdd: s.sheet === 'add', shPlan: s.sheet === 'plan', shDay: s.sheet === 'day' && !!dayBy(s.selOff), shSession: s.sheet === 'session', shQuick: s.sheet === 'quick', shWho: s.sheet === 'who', shFood: s.sheet === 'food', shCrew: s.sheet === 'crew', shCruise: s.sheet === 'cruise', shViewer: s.sheet === 'viewer' && !!viewer,
       addItems, shipName: c.ship,
       fp: { ...s.fp, off: String(s.fp.off ?? 0) }, planSheetTitle: s.fp.id ? 'Edit plan' : 'Add a plan', planEditing: !!s.fp.id, dayOpts,
-      fpTitle: fpv('title'), fpDay: fpv('off'), fpTime: fpv('time'), fpPlace: fpv('place'), fpConf: fpv('conf'),
+      fpTitle: fpv('title'), fpDay: fpv('off'), fpTime: fpv('time'), fpEndSet: fpv('end'), fpFrom: s.fp.time || '', fpEnd: s.fp.end || '',
+      fpFromOpts: this.timeOpts(s.fp.time, 'Any time'), fpEndOpts: this.timeOpts(s.fp.end, '—'),
+      editDay: set({ sheet: 'day' }), openItinClose: set({ sheet: null, overlay: 'itin' }),
+      dayForm: dayBy(s.selOff) ? dayRow(dayBy(s.selOff)) : {}, dayFormList: dayBy(s.selOff) ? [dayRow(dayBy(s.selOff))] : [], fpPlace: fpv('place'), fpConf: fpv('conf'),
       fpShip: s.fp.kind === 'ship', fpShore: s.fp.kind === 'shore', fpLand: s.fp.kind === 'land',
       fpKindShip: () => this.setState(x => ({ fp: { ...x.fp, kind: 'ship' } })), fpKindShore: () => this.setState(x => ({ fp: { ...x.fp, kind: 'shore' } })), fpKindLand: () => this.setState(x => ({ fp: { ...x.fp, kind: 'land' } })),
       planInvalid: !(s.fp.title || '').trim(),
-      savePlan: () => { const f = s.fp; if (!(f.title || '').trim()) return; const p = { id: f.id || Date.now(), off: +f.off || 0, time: (f.time || '').trim() || 'Any time', title: f.title.trim(), place: (f.place || '').trim(), kind: f.kind || 'ship', conf: (f.conf || '').trim() }; this.upd(dd => ({ plans: f.id ? dd.plans.map(x => x.id === f.id ? p : x) : [...dd.plans, p] })); this.setState({ sheet: null, selOff: p.off }); },
+      savePlan: () => { const f = s.fp; if (!(f.title || '').trim()) return; const p = { id: f.id || Date.now(), off: +f.off || 0, time: (f.time || '').trim() || 'Any time', end: f.time ? (f.end || '') : '', title: f.title.trim(), place: (f.place || '').trim(), kind: f.kind || 'ship', conf: (f.conf || '').trim() }; this.upd(dd => ({ plans: f.id ? dd.plans.map(x => x.id === f.id ? p : x) : [...dd.plans, p] })); this.setState({ sheet: null, selOff: p.off }); },
       deletePlan: () => { this.upd(dd => ({ plans: dd.plans.filter(x => x.id !== s.fp.id) })); this.setState({ sheet: null }); },
       fs: { ...s.fs, off: String(s.fs.off ?? 0) }, sessionSheetTitle: s.fs.id ? 'Edit session' : 'Log a slots session', sessionEditing: !!s.fs.id, playerOpts: players.map(p => ({ v: p })),
       fsWho: fsv('who'), fsDay: fsv('off'), fsMachine: fsv('machine'), fsPts: fsv('pts'), fsNet: fsv('net'), fsJp: fsv('jp'),
