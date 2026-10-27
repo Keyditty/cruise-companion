@@ -289,6 +289,24 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-for>
 </div>
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1;min-width:0">Bankroll</h2><button class="btn btn-ghost" onClick="{{ openBankSetup }}" style="font-size:13px"><i class="ph-duotone ph-wallet"></i>Set amounts</button></div>
+<sc-for list="{{ bankRows }}" as="br" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-lg);background:var(--color-surface)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:18px;font-weight:600">{{ br.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ br.ofLine }}</span></div>
+<sc-if value="{{ br.hasTotal }}">
+<div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap"><span style="font-size:36px;font-weight:600;line-height:1;color:{{ br.color }}">{{ br.leftLabel }}</span><span style="font-size:14px;color:var(--color-neutral-700)">left</span><span style="font-size:14px;font-weight:600;color:{{ br.overallColor }}">{{ br.overall }}</span></div>
+<div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ br.pct }};background:{{ br.color }}"></div></div>
+<div style="font-size:13px;color:var(--color-neutral-700)">{{ br.paceLine }}</div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-2);padding-top:var(--space-2);border-top:1px solid var(--color-divider)"><span style="font-size:15px;line-height:1.35">{{ br.tonightLine }}</span><button class="{{ br.actionCls }}" onClick="{{ br.action }}" style="flex:none;padding:8px 14px;font-size:14px"><i class="{{ br.actionIcon }}"></i>{{ br.actionLabel }}</button></div>
+<sc-for list="{{ br.nights }}" as="nt" hint-placeholder-count="0">
+<button onClick="{{ nt.edit }}" style="display:grid;grid-template-columns:1fr auto;gap:var(--space-2);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:14px;font-weight:600">{{ nt.when }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ nt.detail }}</span></span><span style="font-size:15px;font-weight:600;color:{{ nt.color }}">{{ nt.result }}</span></button>
+</sc-for>
+</sc-if>
+<sc-if value="{{ br.noTotal }}"><button class="btn btn-secondary" onClick="{{ openBankSetup }}" style="align-self:flex-start"><i class="ph-duotone ph-wallet"></i>Set {{ br.name }}’s bankroll</button></sc-if>
+</div>
+</sc-for>
+</div>
 <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ clubName }} · this cruise</div><div style="font-size:13px;color:var(--color-neutral-700)">Points are kept per cruise line. Lifetime totals and tiers live in Cruises &gt; Casino clubs.</div></div>
 <div style="display:flex;flex-direction:column;gap:var(--space-6)">
 <sc-for list="{{ slotBoard }}" as="b" hint-placeholder-count="2">
@@ -296,7 +314,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:18px;font-weight:600">{{ b.name }} <span style="font-size:13px;font-weight:400;font-style:italic;color:var(--color-neutral-700)">{{ b.tier }}</span></span><span style="font-size:12px;color:var(--color-neutral-700);white-space:nowrap">{{ b.meta }}</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
 <div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.color }}">{{ b.ptsLabel }}</div><div style="font-size:12px;color:var(--color-neutral-700)">casino points</div></div>
-<div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.netColor }}">{{ b.net }}</div><div style="font-size:12px;color:var(--color-neutral-700)">win / loss</div></div>
+<div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.netColor }}">{{ b.net }}</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ b.netLabel }}</div></div>
 </div>
 <div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ b.pct }};background:{{ b.color }}"></div></div>
 <div style="font-size:12px;color:var(--color-neutral-700)">{{ b.left }}</div>
@@ -786,6 +804,31 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-if>
 
+<sc-if value="{{ shBankSetup }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ shipName }}</div><h2 style="margin:0;font-size:24px">Casino bankroll</h2></div>
+<div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">How much each of you is bringing to the casino for the whole cruise. Separate from the trip budget.</div>
+<sc-for list="{{ bankSetupRows }}" as="r" hint-placeholder-count="2">
+<div class="field"><label>{{ r.name }} ($)</label><input class="input" inputMode="numeric" placeholder="700" value="{{ r.total }}" onChange="{{ r.on }}"></div>
+</sc-for>
+<button class="btn btn-primary btn-block" onClick="{{ saveBankSetup }}">Save</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ shNight }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ fb.who }} · bankroll</div><h2 style="margin:0;font-size:24px">{{ nightTitle }}</h2></div>
+<div class="field"><label>Night</label><select class="input" value="{{ fbOff }}" onChange="{{ fbDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Brought ($)</label><input class="input" inputMode="numeric" placeholder="{{ fbSuggest }}" value="{{ fb.start }}" onChange="{{ fbStart }}"></div>
+<div class="field"><label>Left at end ($)</label><input class="input" inputMode="numeric" placeholder="Still playing" value="{{ fb.end }}" onChange="{{ fbEnd }}"></div>
+</div>
+<div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">{{ nightHint }}</div>
+<button class="btn btn-primary btn-block" onClick="{{ saveNight }}" disabled="{{ nightInvalid }}">Save</button>
+<sc-if value="{{ nightEditing }}"><button class="btn btn-ghost" onClick="{{ deleteNight }}" style="align-self:center;color:var(--color-accent-2-700)">Delete this night</button></sc-if>
+</div>
+</sc-if>
+
 <sc-if value="{{ shCasino }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ clubName }} · {{ shipName }}</div><h2 style="margin:0;font-size:24px">Edit casino points</h2></div>
@@ -1062,7 +1105,7 @@ class Component extends DCLogic {
 
   defaultHunt() { return [['A towel animal on the bed', 10], ['Someone in a captain’s hat', 15], ['A rooster in port', 15], ['Matching couple outfits', 20], ['Another cruise line’s ship', 10], ['An iguana', 20], ['Sunset selfie, top deck', 25], ['A conga line', 20], ['Someone hitting a jackpot', 25]].map((x, i) => ({ id: i + 1, title: x[0], pts: x[1], by: null, author: 'App' })); }
   defaultPack() { return ['Passports', 'Boarding documents', 'Casino player cards', 'Magnetic hooks', 'Lanyards', 'Reef-safe sunscreen', 'Swimsuits', 'Evening outfits', 'Seasickness bands', 'Non-surge power strip'].map((t, i) => ({ id: i + 1, text: t, done: false })); }
-  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {} }; }
+  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {}, bank: {} }; }
   seed() {
     const D = (off, name, hours, aboard = '', tip = '') => ({ off, name, hours, aboard, tip });
     const P = (id, off, time, title, place, kind, conf = '') => ({ id, off, time, title, place, kind, conf });
@@ -1186,6 +1229,13 @@ class Component extends DCLogic {
         const mine = db[cid] || this.emptyData(), out = { ...mine };
         Object.entries(d || {}).forEach(([k, v]) => {
           if (Array.isArray(v)) out[k] = byId(mine[k], v);
+          else if (k === 'bank' && v && typeof v === 'object') {
+            const mb = { ...(mine.bank || {}) };
+            Object.entries(v).forEach(([n, b]) => { const m = mb[n] || {}, map = new Map((m.nights || []).map(x => [x.id, x]));
+              (b.nights || []).forEach(x => { const had = map.get(x.id); if (!had || this.closedNight(x) || !this.closedNight(had)) map.set(x.id, x); });
+              mb[n] = { total: b.total || m.total || 0, nights: [...map.values()] }; });
+            out.bank = mb;
+          }
           else if (v && typeof v === 'object') out[k] = { ...(mine[k] || {}), ...v };
           else if (mine[k] == null || mine[k] === '') out[k] = v;
         });
@@ -1209,12 +1259,14 @@ class Component extends DCLogic {
   isPast(c) { if (!c.start) return false; const end = this.dateOf(c, (+c.nights || 0) + 1); return end && end.getTime() < this.state.now; }
   statsOf(dd, n) {
     const ss = dd.sessions.filter(x => x.who === n), adj = (dd.casinoAdj || {})[n] || {}, pts = ss.reduce((a, x) => a + (+x.pts || 0), 0) + (+adj.pts || 0), net = ss.reduce((a, x) => a + (+x.net || 0), 0) + (+adj.net || 0), jp = ss.filter(x => x.jp).length;
+    const bk = ((dd.bank || {})[n] || {}).nights || [], closed = bk.filter(x => this.closedNight(x)), hasBank = closed.length > 0, bankNet = closed.reduce((a, x) => a + (+x.end - +x.start), 0), money = hasBank ? bankNet : net;
     const hunt = dd.hunt.filter(h => h.by === n).reduce((a, h) => a + (+h.pts || 0), 0);
     const triv = Object.entries(dd.trivia || {}).filter(([q, a]) => a.who === n && this.TRIVIA[q] && a.pick === this.TRIVIA[q].a).length;
     const chal = Object.entries(dd.challenges || {}).filter(([k, w]) => this.claimers(w).includes(n)).reduce((a, [k]) => a + this.chalPts(dd, k), 0);
     const grid = dd.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
-    return { pts, net, jp, n: ss.length, hunt, triv, chal, bingos, xp: Math.floor(pts / 10) + jp * 25 + hunt + triv * 20 + chal + bingos * 50 };
+    return { pts, net, money, hasBank, jp, n: ss.length, hunt, triv, chal, bingos, xp: Math.floor(pts / 10) + jp * 25 + hunt + triv * 20 + chal + bingos * 50 };
   }
+  closedNight(x) { return x.end != null && x.end !== ''; }
   claimers(w) { return Array.isArray(w) ? w : w ? [w] : []; }
   // Keys: "off:i" for the built-in daily three, "x<id>" for ones you wrote.
   chalPts(dd, k) { if (k[0] === 'x') { const m = (dd.myChal || []).find(c => 'x' + c.id === k); return m ? m.pts : 0; } const [off, i] = k.split(':').map(Number); const c = this.chalFor(off)[i]; return c ? c[2] : 0; }
@@ -1358,9 +1410,28 @@ class Component extends DCLogic {
 
     const brand = s.brands[c.line] || { club: (c.line || 'Casino') + ' club', tiers: {} };
     const goal = +c.goal || 0;
-    const slotBoard = players.map(n => { const x = st[n]; return { name: n, tier: brand.tiers[n] || '', ptsLabel: x.pts.toLocaleString(), n: x.n, meta: x.n + (x.n === 1 ? ' session · ' : ' sessions · ') + x.jp + (x.jp === 1 ? ' jackpot' : ' jackpots'), net: fmt$(x.net), netColor: x.net >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, x.pts / goal * 100) : 0) + '%', left: goal ? (x.pts >= goal ? 'Free-cruise goal reached' : (goal - x.pts).toLocaleString() + ' pts to the ' + goal.toLocaleString() + '-pt free-cruise goal') : 'Set a goal in cruise details' }; }).filter((b, i) => i < 2 || b.n > 0);
-    const best = (key, fmt) => { const sorted = players.map(n => ({ n, v: st[n][key] })).filter(x => st[x.n].n).sort((a, b) => b.v - a.v); if (!sorted.length || sorted[0].v <= 0) return { holder: 'Open', color: 'var(--color-neutral-500)' }; const tie = sorted[1] && sorted[1].v === sorted[0].v; return { holder: tie ? 'Tied' : sorted[0].n, color: tie ? 'var(--color-neutral-600)' : 'var(--color-process-yellow)' }; };
-    const crowns = [{ title: 'Jackpots', rot: '-5deg', ...best('jp') }, { title: 'Money', rot: '3deg', ...best('net') }, { title: 'Points', rot: '-2deg', ...best('pts') }];
+    const slotBoard = players.map(n => { const x = st[n]; return { name: n, tier: brand.tiers[n] || '', ptsLabel: x.pts.toLocaleString(), n: x.n, meta: x.n + (x.n === 1 ? ' session · ' : ' sessions · ') + x.jp + (x.jp === 1 ? ' jackpot' : ' jackpots'), net: fmt$(x.money), netLabel: x.hasBank ? 'win / loss · bankroll' : 'win / loss', netColor: x.money >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, x.pts / goal * 100) : 0) + '%', left: goal ? (x.pts >= goal ? 'Free-cruise goal reached' : (goal - x.pts).toLocaleString() + ' pts to the ' + goal.toLocaleString() + '-pt free-cruise goal') : 'Set a goal in cruise details' }; }).filter((b, i) => i < 2 || b.n > 0);
+    const best = (key, fmt) => { const sorted = players.map(n => ({ n, v: st[n][key] })).filter(x => st[x.n].n || st[x.n].hasBank).sort((a, b) => b.v - a.v); if (!sorted.length || sorted[0].v <= 0) return { holder: 'Open', color: 'var(--color-neutral-500)' }; const tie = sorted[1] && sorted[1].v === sorted[0].v; return { holder: tie ? 'Tied' : sorted[0].n, color: tie ? 'var(--color-neutral-600)' : 'var(--color-process-yellow)' }; };
+    const bOff = onboard ? on : 0;
+    const bankRows = players.map(n => {
+      const b = (d.bank || {})[n] || {}, total = +b.total || 0, nts = [...(b.nights || [])].sort((x, y) => x.off - y.off || x.id - y.id);
+      const now = total + nts.filter(x => this.closedNight(x)).reduce((a, x) => a + (+x.end - +x.start), 0), up = now - total;
+      const open = nts.find(x => !this.closedNight(x)), tonight = nts.find(x => x.off === bOff);
+      const first = Math.max(0, bOff), nightsLeft = Math.max(1, Array.from({ length: Math.max(0, nights - first) }, (_, i) => first + i).filter(o => !nts.some(x => x.off === o && this.closedNight(x))).length);
+      const suggest = Math.max(0, Math.floor(now / nightsLeft / 10) * 10), money = v => '$' + Math.round(v).toLocaleString();
+      const edit = x => () => this.setState({ sheet: 'night', fb: { mode: 'edit', who: n, id: x.id, off: x.off, start: String(x.start), end: x.end == null ? '' : String(x.end) } });
+      const act = open ? { label: 'End tonight', icon: 'ph-duotone ph-moon-stars', cls: 'btn btn-primary', go: () => this.setState({ sheet: 'night', fb: { mode: 'end', who: n, id: open.id, off: open.off, start: String(open.start), end: '' } }) }
+        : tonight ? { label: 'Edit tonight', icon: 'ph-duotone ph-pencil-simple', cls: 'btn btn-secondary', go: edit(tonight) }
+        : { label: 'Start tonight', icon: 'ph-duotone ph-coins', cls: 'btn btn-primary', go: () => this.setState({ sheet: 'night', fb: { mode: 'start', who: n, off: bOff, start: suggest ? String(suggest) : '', end: '', suggest } }) };
+      return { name: n, hasTotal: total > 0, noTotal: !total, ofLine: total ? 'of ' + money(total) : 'No bankroll set',
+        leftLabel: money(now), overall: up ? (up > 0 ? 'up ' : 'down ') + money(Math.abs(up)) : '', overallColor: up >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)',
+        pct: (total ? Math.max(0, Math.min(100, now / total * 100)) : 0) + '%', color: now < total * 0.25 ? 'var(--color-accent-2)' : colorOf(n),
+        paceLine: 'On pace: about ' + money(suggest) + ' a night for ' + nightsLeft + (nightsLeft === 1 ? ' night' : ' nights') + ' left',
+        tonightLine: open ? 'In play: brought ' + money(open.start) + (open.off !== bOff ? ' (' + dateLabel(open.off) + ')' : '') : tonight ? 'Tonight: ' + fmt$(+tonight.end - +tonight.start) : 'Not started tonight',
+        action: act.go, actionLabel: act.label, actionIcon: act.icon, actionCls: act.cls,
+        nights: nts.map(x => { const done = this.closedNight(x), r = done ? +x.end - +x.start : 0; return { when: dateLabel(x.off) + ' · ' + this.short((dayBy(x.off) || {}).name || ''), detail: done ? 'Brought ' + money(x.start) + ' · left with ' + money(x.end) : 'Brought ' + money(x.start) + ' · still playing', result: done ? fmt$(r) : '…', color: !done ? 'var(--color-neutral-700)' : r >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: edit(x) }; }) };
+    });
+    const crowns = [{ title: 'Jackpots', rot: '-5deg', ...best('jp') }, { title: 'Money', rot: '3deg', ...best('money') }, { title: 'Points', rot: '-2deg', ...best('pts') }];
 
     const grid = d.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
     const openWho = h => () => s.huntEdit ? this.setState({ sheet: 'quick', qType: 'square', sqId: h.id, qf: { title: h.title, pts: String(h.pts) } }) : this.setState({ sheet: 'who', whoId: h.id });
@@ -1393,7 +1464,7 @@ class Component extends DCLogic {
     const lines = [...new Set(s.cruises.map(x => x.line).filter(Boolean))];
     const clubs = lines.map(line => { const b = s.brands[line] || { club: line + ' casino club', tiers: {} }, crs = s.cruises.filter(x => x.line === line);
       return { line, club: b.club, setClub: e => { const val = e.target.value; this.setState(stt => ({ brands: { ...stt.brands, [line]: { ...(stt.brands[line] || { tiers: {} }), club: val } } })); },
-        people: players.map(n => { const tot = crs.reduce((a, cr) => { const x = this.statsOf(s.db[cr.id] || this.emptyData(), n); return { pts: a.pts + x.pts, net: a.net + x.net, jp: a.jp + x.jp }; }, { pts: 0, net: 0, jp: 0 }); return { name: n, pts: tot.pts.toLocaleString(), net: fmt$(tot.net), jp: tot.jp + (tot.jp === 1 ? ' jackpot' : ' jackpots'), tier: (b.tiers || {})[n] || '', setTier: e => { const val = e.target.value; this.setState(stt => { const bb = stt.brands[line] || { club: line + ' casino club', tiers: {} }; return { brands: { ...stt.brands, [line]: { ...bb, tiers: { ...(bb.tiers || {}), [n]: val } } } }; }); } }; }),
+        people: players.map(n => { const tot = crs.reduce((a, cr) => { const x = this.statsOf(s.db[cr.id] || this.emptyData(), n); return { pts: a.pts + x.pts, net: a.net + x.money, jp: a.jp + x.jp }; }, { pts: 0, net: 0, jp: 0 }); return { name: n, pts: tot.pts.toLocaleString(), net: fmt$(tot.net), jp: tot.jp + (tot.jp === 1 ? ' jackpot' : ' jackpots'), tier: (b.tiers || {})[n] || '', setTier: e => { const val = e.target.value; this.setState(stt => { const bb = stt.brands[line] || { club: line + ' casino club', tiers: {} }; return { brands: { ...stt.brands, [line]: { ...bb, tiers: { ...(bb.tiers || {}), [n]: val } } } }; }); } }; }),
         cruises: crs.map(cr => cr.ship.replace(/^(Celebrity|Princess)\s*/, '') + ' (' + whenOf(cr) + ')').join(' · ') }; });
     const wc = s.cruises.find(x => x.id === s.wrapId) || c, wd = s.db[wc.id] || this.emptyData();
     const wst = Object.fromEntries(players.map(n => [n, this.statsOf(wd, n)]));
@@ -1466,7 +1537,22 @@ class Component extends DCLogic {
       noRes: !d.plans.some(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)),
       gSlots: s.game === 'slots', gHunt: s.game === 'hunt', gTrivia: s.game === 'trivia', gBadges: s.game === 'badges',
       setSlots: set({ game: 'slots' }), setHunt: set({ game: 'hunt' }), setTrivia: set({ game: 'trivia' }), setBadges: set({ game: 'badges' }),
-      crowns, slotBoard, clubName: brand.club, openSession,
+      crowns, slotBoard, clubName: brand.club, openSession, bankRows, shBankSetup: s.sheet === 'bankSetup', shNight: s.sheet === 'night',
+      openBankSetup: () => this.setState({ sheet: 'bankSetup', fbt: Object.fromEntries(players.map(n => [n, String(((d.bank || {})[n] || {}).total || '')])) }),
+      bankSetupRows: players.map(n => ({ name: n, total: (s.fbt || {})[n] || '', on: e => { const val = e.target.value; this.setState(x => ({ fbt: { ...x.fbt, [n]: val } })); } })),
+      saveBankSetup: () => { this.upd(dd => { const bank = { ...(dd.bank || {}) }; players.forEach(n => { const v = parseInt(String((s.fbt || {})[n] || '').replace(/[^0-9]/g, ''), 10) || 0; bank[n] = { ...(bank[n] || { nights: [] }), total: v }; }); return { bank }; }); this.setState({ sheet: null }); },
+      fb: s.fb || {}, fbOff: String((s.fb || {}).off ?? curOff), fbSuggest: (s.fb || {}).suggest ? String(s.fb.suggest) : '300',
+      fbDay: e => { const val = parseInt(e.target.value, 10); this.setState(x => ({ fb: { ...x.fb, off: val } })); },
+      fbStart: e => { const val = e.target.value; this.setState(x => ({ fb: { ...x.fb, start: val } })); },
+      fbEnd: e => { const val = e.target.value; this.setState(x => ({ fb: { ...x.fb, end: val } })); },
+      nightTitle: !s.fb ? '' : s.fb.mode === 'start' ? 'Start tonight' : s.fb.mode === 'end' ? 'End tonight' : 'Edit night',
+      nightHint: !s.fb ? '' : s.fb.mode === 'end' ? 'Count what’s in your hand and enter it under “Left at end”.' : s.fb.suggest ? 'Suggested $' + s.fb.suggest + ' to stay on pace. Leave “Left at end” blank until you’re done for the night.' : 'Leave “Left at end” blank until you’re done for the night.',
+      nightInvalid: !s.fb || !(parseFloat(s.fb.start) > 0), nightEditing: !!(s.fb && s.fb.id),
+      saveNight: () => { const f = s.fb, num = v => parseFloat(String(v).replace(/[^0-9.]/g, '')), start = num(f.start), end = String(f.end ?? '').trim() === '' ? null : num(f.end); if (!(start > 0)) return;
+        const night = { id: f.id || Date.now(), off: +f.off, start, end: end != null && !isNaN(end) ? end : null };
+        this.upd(dd => { const bank = { ...(dd.bank || {}) }, b = bank[f.who] || { total: 0, nights: [] }; bank[f.who] = { ...b, nights: f.id ? b.nights.map(x => x.id === f.id ? night : x) : [...b.nights, night] }; return { bank }; });
+        this.setState({ sheet: null, fb: null }); },
+      deleteNight: () => { const f = s.fb; this.upd(dd => { const bank = { ...(dd.bank || {}) }, b = bank[f.who] || { nights: [] }; bank[f.who] = { ...b, nights: b.nights.filter(x => x.id !== f.id) }; return { bank }; }); this.setState({ sheet: null, fb: null }); },
       openCasino: () => this.setState({ sheet: 'casino', fcas: Object.fromEntries(players.map(n => [n, { pts: String(st[n].pts), net: String(st[n].net) }])) }),
       shCasino: s.sheet === 'casino',
       casRows: players.map(n => { const f = (s.fcas || {})[n] || {}, setF = k => e => { const val = e.target.value; this.setState(x => ({ fcas: { ...x.fcas, [n]: { ...(x.fcas || {})[n], [k]: val } } })); }; return { name: n, pts: f.pts || '', net: f.net || '', onPts: setF('pts'), onNet: setF('net') }; }),

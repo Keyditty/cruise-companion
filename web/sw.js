@@ -1,6 +1,6 @@
 // Offline cache so the app still opens on spotty ship Wi-Fi.
 // Bump VERSION when shipping changes to force a fresh precache.
-const VERSION = 'voyager-v10';
+const VERSION = 'voyager-v11';
 const PRECACHE = [
   './',
   'index.html',
