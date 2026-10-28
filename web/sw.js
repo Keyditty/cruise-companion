@@ -1,6 +1,6 @@
 // Offline cache so the app still opens on spotty ship Wi-Fi.
 // Bump VERSION when shipping changes to force a fresh precache.
-const VERSION = 'voyager-v13';
+const VERSION = 'voyager-v14';
 const PRECACHE = [
   './',
   'index.html',
@@ -12,10 +12,13 @@ const PRECACHE = [
   'vendor/react-dom.production.min.js',
   'vendor/phosphor/style.css',
   'vendor/phosphor/Phosphor-Duotone.woff2',
+  'vendor/fonts/source-serif-4-latin-400-normal.woff2',
+  'vendor/fonts/source-serif-4-latin-400-italic.woff2',
+  'vendor/fonts/source-serif-4-latin-600-normal.woff2',
   'icons/icon-192.png',
   'icons/apple-touch-icon.png',
 ];
-const CACHEABLE_HOSTS = [location.host, 'fonts.googleapis.com', 'fonts.gstatic.com'];
+const CACHEABLE_HOSTS = [location.host];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting()));

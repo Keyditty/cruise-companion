@@ -781,6 +781,15 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </sc-if>
 <sc-if value="{{ syncMsg }}"><div style="font-size:14px;font-style:italic;color:var(--color-neutral-800)">{{ syncMsg }}</div></sc-if>
 </div>
+<div style="display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-lg);background:var(--color-surface)">
+<div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600"><i class="ph-duotone ph-lock-key" style="font-size:22px;color:var(--color-accent)"></i>Private by design</div>
+<div style="display:grid;grid-template-columns:18px 1fr;gap:6px 8px;font-size:14px;line-height:1.45;color:var(--color-neutral-800)">
+<i class="ph-duotone ph-check" style="color:var(--color-accent);margin-top:2px"></i><span>Everything you enter (names, plans, points, weights and photos) is saved <b>only on this phone</b>.</span>
+<i class="ph-duotone ph-check" style="color:var(--color-accent);margin-top:2px"></i><span>No account, no sign-in, no tracking. <b>Nothing is sent to the app’s developer</b> or to anyone else, and nothing is posted online.</span>
+<i class="ph-duotone ph-check" style="color:var(--color-accent);margin-top:2px"></i><span>Your information only leaves this phone when <b>you</b> tap “Send my data” to share a file with someone you choose.</span>
+</div>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">Because nothing is stored online, deleting the app or clearing Safari’s website data erases it. Send yourself a backup file now and then (+ › Share › Send my data).</div>
+</div>
 <div style="font-size:13px;line-height:1.5;color:var(--color-neutral-700)">Merging adds everything new from the file and keeps all of yours. If you both changed the same entry, the file’s version wins, and something deleted on one phone can come back from the other’s file.</div>
 </div>
 </sc-if>
@@ -853,7 +862,16 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <sc-if value="{{ shWelcome }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">The Daily Voyager</div><h2 style="margin:0;font-size:28px">Welcome aboard</h2></div>
-<div style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Who’s cruising? Names are used for scores, the slots contest and who found what. Everything stays on this phone.</div>
+<div style="display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-lg);background:var(--color-surface)">
+<div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600"><i class="ph-duotone ph-lock-key" style="font-size:22px;color:var(--color-accent)"></i>Private by design</div>
+<div style="display:grid;grid-template-columns:18px 1fr;gap:6px 8px;font-size:14px;line-height:1.45;color:var(--color-neutral-800)">
+<i class="ph-duotone ph-check" style="color:var(--color-accent);margin-top:2px"></i><span>Everything you enter (names, plans, points, weights and photos) is saved <b>only on this phone</b>.</span>
+<i class="ph-duotone ph-check" style="color:var(--color-accent);margin-top:2px"></i><span>No account, no sign-in, no tracking. <b>Nothing is sent to the app’s developer</b> or to anyone else, and nothing is posted online.</span>
+<i class="ph-duotone ph-check" style="color:var(--color-accent);margin-top:2px"></i><span>Your information only leaves this phone when <b>you</b> tap “Send my data” to share a file with someone you choose.</span>
+</div>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">Because nothing is stored online, deleting the app or clearing Safari’s website data erases it. Send yourself a backup file now and then (+ › Share › Send my data).</div>
+</div>
+<div style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Who’s cruising? Names are used for scores, the slots contest and who found what.</div>
 <div class="field"><label>Your name</label><input class="input" placeholder="First name" value="{{ fw.a }}" onChange="{{ fwA }}"></div>
 <div class="field"><label>Travel partner (optional)</label><input class="input" placeholder="First name" value="{{ fw.b }}" onChange="{{ fwB }}"></div>
 <button class="btn btn-primary btn-block" onClick="{{ saveWelcome }}" disabled="{{ welcomeInvalid }}">Next: add your cruise</button>
