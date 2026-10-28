@@ -388,7 +388,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 
 <div style="display:flex;flex-direction:column;gap:var(--space-2)">
 <h2 style="margin:0;font-size:18px">Players</h2>
-<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ playerTags }}" as="pt" hint-placeholder-count="2"><span class="tag tag-neutral">{{ pt.name }}</span></sc-for></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ playerTags }}" as="pt" hint-placeholder-count="2"><button class="tag tag-neutral" onClick="{{ pt.edit }}" style="border:0;cursor:pointer;font-family:var(--font-body);display:inline-flex;align-items:center;gap:4px">{{ pt.name }}<i class="ph-duotone ph-pencil-simple"></i></button></sc-for></div>
 <div style="display:flex;gap:var(--space-2)"><input class="input" placeholder="Add a friend or family member" value="{{ newPlayer }}" onChange="{{ setNewPlayer }}" onKeyDown="{{ playerKey }}"><button class="btn btn-secondary" onClick="{{ addPlayer }}">Add</button></div>
 </div>
 <div style="display:flex;flex-direction:column;gap:4px;padding-top:var(--space-2);border-top:1px solid var(--color-divider)">
@@ -444,7 +444,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <sc-if value="{{ isStampF }}"><div style="position:absolute;left:14px;bottom:14px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);pointer-events:none"><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase">{{ stampTop }}</div><div style="font-size:26px;font-weight:600;line-height:1">{{ stampPort }}</div></div></sc-if>
 <sc-if value="{{ showCamMsg }}"><div style="position:absolute;top:10px;left:10px;right:10px;font-size:12px;line-height:1.35;color:#fff;background:color-mix(in srgb,var(--color-neutral-900) 70%,transparent);padding:6px 10px;border-radius:var(--radius-md)">{{ camMsg }}</div></sc-if>
 </div>
-<sc-if value="{{ isFront }}"><div style="font-size:9px;font-style:italic;color:var(--color-neutral-700)">Matthew &amp; Toni · {{ shipName }}</div></sc-if>
+<sc-if value="{{ isFront }}"><div style="font-size:9px;font-style:italic;color:var(--color-neutral-700)">{{ playerNames }} · {{ shipName }}</div></sc-if>
 <sc-if value="{{ isPolaroid }}"><div style="height:58px;display:flex;align-items:center;font-size:20px;font-style:italic;color:var(--color-text)">{{ headline }}</div></sc-if>
 </div>
 </sc-if>
@@ -551,7 +551,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <sc-if value="{{ tNotes }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <sc-for list="{{ noteRows }}" as="n" hint-placeholder-count="4">
-<button onClick="{{ n.toggle }}" style="display:flex;gap:var(--space-3);align-items:flex-start;background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--color-text)"><i class="{{ n.icon }}" style="font-size:22px;color:var(--color-accent-2)"></i><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;line-height:1.4;text-decoration:{{ n.strike }}">{{ n.text }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ n.by }}</span></span></button>
+<div style="display:flex;align-items:flex-start;gap:var(--space-2)"><button onClick="{{ n.toggle }}" style="flex:1;display:flex;gap:var(--space-3);align-items:flex-start;background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--color-text)"><i class="{{ n.icon }}" style="font-size:22px;color:var(--color-accent-2)"></i><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;line-height:1.4;text-decoration:{{ n.strike }}">{{ n.text }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ n.by }}</span></span></button><button class="btn btn-ghost btn-icon" onClick="{{ n.remove }}" aria-label="Remove" style="color:var(--color-neutral-600)"><i class="ph-duotone ph-x"></i></button></div>
 </sc-for>
 <button class="btn btn-secondary" onClick="{{ openWish }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Add to wishlist</button>
 </div>
@@ -604,9 +604,10 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <div style="font-size:14px;color:var(--color-neutral-700)">Favorite spots on {{ shipName }}, by deck.</div>
 <sc-for list="{{ spotRows }}" as="sp" hint-placeholder-count="4">
-<div style="display:grid;grid-template-columns:56px 1fr;gap:var(--space-3);align-items:baseline">
+<div style="display:grid;grid-template-columns:56px 1fr auto;gap:var(--space-3);align-items:baseline">
 <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-700)">Deck {{ sp.deck }}</div>
 <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:16px;font-weight:600">{{ sp.name }}</div><div style="font-size:13px;color:var(--color-neutral-700)">{{ sp.note }}</div></div>
+<button class="btn btn-ghost btn-icon" onClick="{{ sp.remove }}" aria-label="Remove" style="color:var(--color-neutral-600)"><i class="ph-duotone ph-x"></i></button>
 </div>
 </sc-for>
 <button class="btn btn-secondary" onClick="{{ openSpot }}" style="align-self:flex-start"><i class="ph-duotone ph-push-pin"></i>Pin a spot</button>
@@ -718,7 +719,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 
 <sc-if value="{{ ovItin }}">
 <div data-screen-label="Itinerary" style="display:flex;flex-direction:column;gap:var(--space-6)">
-<div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:32px;line-height:1">Itinerary</h1><div style="font-size:14px;color:var(--color-neutral-700)">{{ shipName }} · edit ports, times and tips. Add hotel or Disney days before or after.</div></div>
+<div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:32px;line-height:1">Itinerary</h1><div style="font-size:14px;color:var(--color-neutral-700)">{{ shipName }} · edit ports, times and tips. Add hotel or theme-park days before or after.</div></div>
 <button class="btn btn-secondary" onClick="{{ addBefore }}" style="align-self:flex-start"><i class="ph-duotone ph-plus"></i>Day before sailing</button>
 <sc-for list="{{ itinRows }}" as="r" hint-placeholder-count="8">
 <div style="display:flex;flex-direction:column;gap:var(--space-2)">
@@ -801,6 +802,26 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <button class="btn btn-secondary" onClick="{{ a.go }}" style="justify-content:flex-start;padding:12px;font-size:14px"><i class="{{ a.icon }}" style="font-size:22px;color:var(--color-accent)"></i>{{ a.label }}</button>
 </sc-for>
 </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ shWelcome }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">The Daily Voyager</div><h2 style="margin:0;font-size:28px">Welcome aboard</h2></div>
+<div style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Who’s cruising? Names are used for scores, the slots contest and who found what. Everything stays on this phone.</div>
+<div class="field"><label>Your name</label><input class="input" placeholder="First name" value="{{ fw.a }}" onChange="{{ fwA }}"></div>
+<div class="field"><label>Travel partner (optional)</label><input class="input" placeholder="First name" value="{{ fw.b }}" onChange="{{ fwB }}"></div>
+<button class="btn btn-primary btn-block" onClick="{{ saveWelcome }}" disabled="{{ welcomeInvalid }}">Next: add your cruise</button>
+<div style="font-size:13px;line-height:1.5;color:var(--color-neutral-700)">Got a data file from your travel partner? Enter your name, tap Next, then open the file under + › Share and choose “Replace mine”.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ shPlayer }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">Edit player</h2>
+<div class="field"><label>Name</label><input class="input" value="{{ fpl.name }}" onChange="{{ fplName }}"></div>
+<button class="btn btn-primary btn-block" onClick="{{ savePlayer }}" disabled="{{ playerInvalid }}">Save</button>
+<sc-if value="{{ canRemovePlayer }}"><button class="btn btn-ghost" onClick="{{ removePlayer }}" style="align-self:center;color:var(--color-accent-2-700)">Remove from players</button></sc-if>
 </div>
 </sc-if>
 
@@ -960,10 +981,10 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <sc-if value="{{ shCruise }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <h2 style="margin:0;font-size:24px">{{ cruiseSheetTitle }}</h2>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)"><div class="field"><label>Cruise line</label><input class="input" placeholder="Celebrity" value="{{ fcr.line }}" onChange="{{ fcrLine }}"></div><div class="field"><label>Ship</label><input class="input" placeholder="Celebrity Apex" value="{{ fcr.ship }}" onChange="{{ fcrShip }}"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)"><div class="field"><label>Cruise line</label><input class="input" placeholder="Celebrity" value="{{ fcr.line }}" onChange="{{ fcrLine }}"></div><div class="field"><label>Ship</label><input class="input" placeholder="Ship name" value="{{ fcr.ship }}" onChange="{{ fcrShip }}"></div></div>
 <div style="display:grid;grid-template-columns:1fr 90px;gap:var(--space-3)"><div class="field"><label>Sail date</label><input class="input" type="date" value="{{ fcr.start }}" onChange="{{ fcrStart }}"></div><div class="field"><label>Nights</label><input class="input" inputMode="numeric" value="{{ fcr.nights }}" onChange="{{ fcrNights }}"></div></div>
-<div class="field"><label>Departure port</label><input class="input" placeholder="Port Canaveral" value="{{ fcr.embark }}" onChange="{{ fcrEmbark }}"></div>
-<div class="field"><label>Ship IMO number (for live tracking)</label><input class="input" inputMode="numeric" placeholder="9838383" value="{{ fcr.imo }}" onChange="{{ fcrImo }}"></div>
+<div class="field"><label>Departure port</label><input class="input" placeholder="Miami" value="{{ fcr.embark }}" onChange="{{ fcrEmbark }}"></div>
+<div class="field"><label>Ship IMO number (for live tracking)</label><input class="input" inputMode="numeric" placeholder="7-digit number" value="{{ fcr.imo }}" onChange="{{ fcrImo }}"></div>
 <div class="field"><label>Free-cruise goal (casino points each)</label><input class="input" inputMode="numeric" value="{{ fcr.goal }}" onChange="{{ fcrGoal }}"></div>
 <button class="btn btn-primary btn-block" onClick="{{ saveCruise }}" disabled="{{ cruiseInvalid }}">{{ cruiseSaveLabel }}</button>
 <sc-if value="{{ cruiseEditing }}"><button class="btn btn-ghost" onClick="{{ deleteCruise }}" style="align-self:center;color:var(--color-accent-2-700)">Delete cruise</button></sc-if>
@@ -1106,51 +1127,28 @@ class Component extends DCLogic {
   defaultHunt() { return [['A towel animal on the bed', 10], ['Someone in a captain’s hat', 15], ['A rooster in port', 15], ['Matching couple outfits', 20], ['Another cruise line’s ship', 10], ['An iguana', 20], ['Sunset selfie, top deck', 25], ['A conga line', 20], ['Someone hitting a jackpot', 25]].map((x, i) => ({ id: i + 1, title: x[0], pts: x[1], by: null, author: 'App' })); }
   defaultPack() { return ['Passports', 'Boarding documents', 'Casino player cards', 'Magnetic hooks', 'Lanyards', 'Reef-safe sunscreen', 'Swimsuits', 'Evening outfits', 'Seasickness bands', 'Non-surge power strip'].map((t, i) => ({ id: i + 1, text: t, done: false })); }
   emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {}, bank: {} }; }
+  // Fresh installs start blank; the welcome sheet asks for names and the first cruise.
   seed() {
-    const D = (off, name, hours, aboard = '', tip = '') => ({ off, name, hours, aboard, tip });
-    const P = (id, off, time, title, place, kind, conf = '') => ({ id, off, time, title, place, kind, conf });
-    const apex = Object.assign(this.emptyData(), {
-      plans: [P(1, -3, '8:00 AM', 'Drive to Orlando', 'Home → Disney', 'land'), P(2, -3, '10:00 AM', 'Magic Kingdom', 'Walt Disney World', 'land', 'WDW-58812'), P(3, -3, '4:00 PM', 'Hotel check-in', 'Disney Springs area', 'land', 'HTL-30417'), P(4, -2, '9:00 AM', 'EPCOT', 'Walt Disney World', 'land', 'WDW-58813'), P(5, -1, '11:00 AM', 'Drive to the coast', 'Orlando → Cocoa Beach', 'land'), P(6, -1, '3:00 PM', 'Port hotel check-in', 'Cocoa Beach', 'land', 'HTL-30588'), P(7, 0, '10:30 AM', 'Port parking', 'Cruise terminal lot', 'land', 'PRK-11902'), P(8, 0, '11:30 AM', 'Boarding window', 'Cruise terminal', 'ship', 'BRD-1130'), P(9, 0, '4:00 PM', 'Sail-away drinks', 'Rooftop Garden', 'ship'), P(10, 1, '9:00 AM', 'Duval Street & Southernmost Point', 'Key West', 'shore'), P(11, 2, '10:00 AM', 'Couples massage', 'The Spa', 'ship', 'SPA-2281'), P(12, 2, '2:00 PM', 'Slots tournament', 'Casino', 'ship'), P(13, 2, '8:00 PM', 'Steakhouse dinner', 'Fine Cut Steakhouse', 'ship', 'DIN-8823'), P(14, 3, '9:00 AM', 'Snorkel & beach club', 'Cozumel', 'shore', 'EX-40912'), P(15, 4, '8:00 AM', 'Stingray City', 'Grand Cayman', 'shore', 'EX-41187'), P(16, 5, '9:30 PM', 'Evening show', 'The Theatre', 'ship', 'SHW-0394'), P(17, 6, '7:00 PM', 'Le Petit Chef', 'Specialty dining', 'ship', 'DIN-9002'), P(18, 7, '7:30 AM', 'Disembark & get the car', 'Terminal lot', 'land')],
-      sessions: [],
-      spends: [{ id: 1, what: 'Disney hotel, 2 nights', when: 'Oct 28', amt: 540 }, { id: 2, what: 'Port hotel', when: 'Oct 30', amt: 189 }, { id: 3, what: 'Port parking, 7 days', when: 'Oct 31', amt: 125 }],
-      budget: 2500,
-      notes: [{ id: 1, text: 'Watch sunset from the Rooftop Garden on a sea day', by: 'Toni', done: false }, { id: 2, text: 'Try every martini on the menu (over the week)', by: 'Matthew', done: false }],
-      food: [{ id: 1, name: 'Espresso martini', where: 'Martini Bar', r: 5, by: 'Toni', note: '', photo: '' }, { id: 2, name: 'Filet mignon', where: 'Fine Cut Steakhouse', r: 4, by: 'Matthew', note: 'Medium rare, peppercorn sauce', photo: '' }],
-      crew: [{ id: 1, name: 'Ana', role: 'Bartender', where: 'Martini Bar', r: 5, note: 'Remembered our order every night', tip: true, survey: true }, { id: 2, name: 'Rizal', role: 'Room steward', where: 'Deck 9, our hallway', r: 4, note: 'Towel animals every evening', tip: false, survey: false }],
-      spots: [{ id: 1, deck: 4, name: 'Casino', note: 'Toni’s lucky row by the bar' }, { id: 2, deck: 14, name: 'Rooftop Garden', note: 'Sail-away and sunsets' }],
-    });
-    const edge = Object.assign(this.emptyData(), {
-      sessions: [{ id: 1, who: 'Matthew', machine: 'Buffalo', off: 1, pts: 640, net: 210, jp: true }, { id: 2, who: 'Toni', machine: 'Lightning Link', off: 2, pts: 880, net: -45, jp: false }],
-      food: [{ id: 1, name: 'Lobster tail', where: 'Main dining room', r: 5, by: 'Toni', note: '', photo: '' }],
-      crew: [{ id: 1, name: 'Marco', role: 'Server', where: 'Main dining room', r: 5, note: 'Saved our table by the window', tip: true, survey: true }],
-      notes: [{ id: 1, text: 'Dinner at Eden', by: 'Toni', done: true }],
-    });
     return {
-      players: ['Matthew', 'Toni'], active: 'apex',
-      cruises: [
-        { id: 'apex', line: 'Celebrity', ship: 'Celebrity Apex', start: '2026-10-31', nights: 7, embark: 'Port Canaveral', goal: 2500, imo: '9838383',
-          days: [D(-3, 'Walt Disney World', 'Pre-cruise · Magic Kingdom'), D(-2, 'Walt Disney World', 'Pre-cruise · EPCOT'), D(-1, 'Walt Disney World', 'Pre-cruise'), D(0, 'Port Canaveral', 'Embark late morning · sail 4:00 PM', '3:30 PM'), D(1, 'Key West', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Duval Street and Mallory Square are a short walk from the pier. Look out for the roosters.'), D(2, 'At sea', 'Full day at sea'), D(3, 'Cozumel', 'In port 8:00 AM – 5:00 PM', '4:30 PM', 'Several piers. Check which one you are docked at before taking a taxi back.'), D(4, 'Grand Cayman', 'In port 7:00 AM – 3:00 PM', '2:30 PM', 'Tender port. Lines for the boats back get long in the last hour.'), D(5, 'At sea', 'Full day at sea'), D(6, 'At sea', 'Full day at sea'), D(7, 'Port Canaveral', 'Arrive early morning · disembark')] },
-        { id: 'beyond', line: 'Celebrity', ship: 'Celebrity Beyond', start: '2027-02-21', nights: 7, embark: 'Fort Lauderdale', goal: 2500, imo: '9838395',
-          days: [D(0, 'Fort Lauderdale', 'Sail 4:00 PM', '3:30 PM'), D(1, 'At sea', 'Full day at sea'), D(2, 'Puerto Plata', 'Amber Cove · 7:00 AM – 2:00 PM', '1:30 PM'), D(3, 'St. Thomas', 'In port 10:30 AM – 6:00 PM', '5:30 PM'), D(4, 'St. Kitts', 'Basseterre · 8:00 AM – 6:00 PM', '5:30 PM'), D(5, 'At sea', 'Full day at sea'), D(6, 'At sea', 'Full day at sea'), D(7, 'Fort Lauderdale', 'Arrive early morning · disembark')] },
-        { id: 'princess', line: 'Princess', ship: 'Princess · Europe', start: '', nights: 0, embark: '', goal: 2000, imo: '', days: [] },
-        { id: 'edge', line: 'Celebrity', ship: 'Celebrity Edge', start: '2026-03-08', nights: 5, embark: 'Fort Lauderdale', goal: 2000, imo: '9812705', sample: true,
-          days: [D(0, 'Fort Lauderdale', 'Sail 4:00 PM'), D(1, 'At sea', 'Full day at sea'), D(2, 'Nassau', 'In port 8:00 AM – 5:00 PM'), D(3, 'Key West', 'In port 8:00 AM – 4:00 PM'), D(4, 'At sea', 'Full day at sea'), D(5, 'Fort Lauderdale', 'Disembark')] },
-      ],
-      db: { apex, beyond: this.emptyData(), princess: this.emptyData(), edge },
-      brands: { Celebrity: { club: 'Blue Chip Club', tiers: { Matthew: '', Toni: '' } }, Princess: { club: 'Casino Rewards', tiers: { Matthew: '', Toni: '' } } },
+      players: ['Player 1', 'Player 2'], active: 'c1',
+      cruises: [{ id: 'c1', line: '', ship: 'My cruise', start: '', nights: 7, embark: '', goal: 2500, imo: '', days: [] }],
+      db: { c1: this.emptyData() },
+      brands: {},
     };
   }
   constructor(p) {
     super(p);
     let saved = {};
     try { saved = JSON.parse(localStorage.getItem(this.KEY) || '{}') || {}; } catch (e) { saved = {}; }
+    const fresh = !saved.players;
     this.state = Object.assign(this.seed(), saved, {
       tab: 'today', planView: 'days', selOff: 0, resFilter: 'all', game: 'slots', tripTab: 'pack', fleetView: 'up',
       preview: null, sheet: null, overlay: null, wrapId: null, fp: {}, fs: {}, ff: {}, fc: {}, fcr: {}, qType: null, qf: {}, whoId: null, viewerId: null,
-      newPlayer: '', filter: 'natural', frame: 'stamp', headline: '', draft: null, cam: 'idle', tq: 0, tWho: 'Matthew', reel: null, syncIn: null, syncMsg: '',
+      newPlayer: '', filter: 'natural', frame: 'stamp', headline: '', draft: null, cam: 'idle', tq: 0, tWho: (saved.players || ['Player 1'])[0], reel: null, syncIn: null, syncMsg: '',
       impText: '', shots: [], impBusy: false, impMsg: '', found: [], now: Date.now(),
       backdrop: null, stickers: [], selSticker: null, cutout: null, cutFor: null, seg: 'idle',
     });
+    if (fresh) Object.assign(this.state, { sheet: 'welcome', fw: { a: '', b: '' } });
     this.stream = null; this.video = null; this.thumbs = new Set();
     this.videoRef = el => { this.video = el; if (el && this.stream && el.srcObject !== this.stream) el.srcObject = this.stream; };
     this.thumbRef = el => { if (el) { this.thumbs.add(el); if (this.stream && el.srcObject !== this.stream) el.srcObject = this.stream; } };
@@ -1265,6 +1263,18 @@ class Component extends DCLogic {
     const chal = Object.entries(dd.challenges || {}).filter(([k, w]) => this.claimers(w).includes(n)).reduce((a, [k]) => a + this.chalPts(dd, k), 0);
     const grid = dd.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
     return { pts, net, money, hasBank, jp, n: ss.length, hunt, triv, chal, bingos, xp: Math.floor(pts / 10) + jp * 25 + hunt + triv * 20 + chal + bingos * 50 };
+  }
+  // Swap a player's name everywhere it's stored.
+  renamePlayer(st, from, to) {
+    const sw = v => v === from ? to : v, rekey = o => { if (!o || !(from in o)) return o; const out = { ...o }; out[to] = out[from]; delete out[from]; return out; };
+    const db = Object.fromEntries(Object.entries(st.db).map(([id, d]) => [id, { ...d,
+      sessions: (d.sessions || []).map(x => ({ ...x, who: sw(x.who) })), hunt: (d.hunt || []).map(h => ({ ...h, by: sw(h.by), author: sw(h.author) })),
+      notes: (d.notes || []).map(x => ({ ...x, by: sw(x.by) })), food: (d.food || []).map(x => ({ ...x, by: sw(x.by) })),
+      trivia: Object.fromEntries(Object.entries(d.trivia || {}).map(([k, a]) => [k, { ...a, who: sw(a.who) }])),
+      challenges: Object.fromEntries(Object.entries(d.challenges || {}).map(([k, w]) => [k, this.claimers(w).map(sw)])),
+      bank: rekey(d.bank), casinoAdj: rekey(d.casinoAdj) }]));
+    const brands = Object.fromEntries(Object.entries(st.brands || {}).map(([k, b]) => [k, { ...b, tiers: rekey(b.tiers) }]));
+    return { players: st.players.map(sw), db, brands, tWho: sw(st.tWho) };
   }
   closedNight(x) { return x.end != null && x.end !== ''; }
   claimers(w) { return Array.isArray(w) ? w : w ? [w] : []; }
@@ -1567,7 +1577,19 @@ class Component extends DCLogic {
       tResult: ans ? (ans.pick === tq.a ? ans.who + ' got it. +20 XP' : ans.who + ' missed it. It’s ' + tq.o[tq.a] + '.') : '',
       tPlayers: players.map(n => ({ name: n, ...chip(s.tWho === n), pick: set({ tWho: n }) })),
       tPrev: () => this.setState(x => ({ tq: (x.tq + this.TRIVIA.length - 1) % this.TRIVIA.length })), tNext: () => this.setState(x => ({ tq: (x.tq + 1) % this.TRIVIA.length })),
-      badges, playerTags: players.map(name => ({ name })), newPlayer: s.newPlayer, setNewPlayer: v('newPlayer'),
+      badges, playerTags: players.map(name => ({ name, edit: () => this.setState({ sheet: 'player', fpl: { from: name, name } }) })),
+      playerNames: players.slice(0, 2).join(' & '), shPlayer: s.sheet === 'player', fpl: s.fpl || {},
+      fplName: e => { const val = e.target.value; this.setState(x => ({ fpl: { ...x.fpl, name: val } })); },
+      playerInvalid: !s.fpl || !(s.fpl.name || '').trim() || (s.fpl.name.trim() !== s.fpl.from && players.includes(s.fpl.name.trim())), canRemovePlayer: players.length > 1,
+      savePlayer: () => { const to = s.fpl.name.trim(); if (to && to !== s.fpl.from) this.setState(st => this.renamePlayer(st, s.fpl.from, to)); this.setState({ sheet: null }); },
+      removePlayer: () => { if (!window.confirm('Remove ' + s.fpl.from + ' from the players? Their past entries stay.')) return; this.setState(st => ({ players: st.players.filter(n => n !== s.fpl.from), sheet: null })); },
+      shWelcome: s.sheet === 'welcome', fw: s.fw || {},
+      fwA: e => { const val = e.target.value; this.setState(x => ({ fw: { ...x.fw, a: val } })); }, fwB: e => { const val = e.target.value; this.setState(x => ({ fw: { ...x.fw, b: val } })); },
+      welcomeInvalid: !s.fw || !(s.fw.a || '').trim(),
+      saveWelcome: () => { const a = s.fw.a.trim(), b = (s.fw.b || '').trim();
+        this.setState(st => { let n = this.renamePlayer(st, 'Player 1', a); n = b && b !== a ? this.renamePlayer({ ...st, ...n }, 'Player 2', b) : { ...n, players: n.players.filter(x => x !== 'Player 2') }; return n; });
+        const cr = s.cruises.find(x => x.id === s.active) || s.cruises[0];
+        this.setState({ sheet: 'cruise', fw: null, fcr: { ...cr, ship: cr.ship === 'My cruise' ? '' : cr.ship, nights: String(cr.nights || ''), goal: String(cr.goal || ''), imo: cr.imo || '' } }); }, newPlayer: s.newPlayer, setNewPlayer: v('newPlayer'),
       addPlayer: () => { const t = s.newPlayer.trim(); if (t && !players.includes(t)) this.setState(x => ({ players: [...x.players, t], newPlayer: '' })); },
       playerKey: enter(() => { const t = s.newPlayer.trim(); if (t && !players.includes(t)) this.setState(x => ({ players: [...x.players, t], newPlayer: '' })); }),
       srcLabel: { live: 'Live camera', draft: 'Your photo', sample: 'Sample scene' }[srcMode], isLive: srcMode === 'live', isDraft: srcMode === 'draft', isSample: srcMode === 'sample',
@@ -1606,13 +1628,13 @@ class Component extends DCLogic {
       openPack: openQuick('pack'), openExpense: openQuick('expense'), openWish: openQuick('wish'), openSpot: openQuick('spot'), openFood, openCrew,
       spent: '$' + spentN.toLocaleString(), budgetLabel: '$' + bud.toLocaleString(), budgetPct: (bud ? Math.min(100, spentN / bud * 100) : 0) + '%', budgetColor: spentN > bud ? 'var(--color-accent-2)' : 'var(--color-accent)', budgetVal: String(d.budget ?? ''), setBudget: e => { const val = e.target.value.replace(/[^0-9.]/g, ''); this.upd(() => ({ budget: val })); },
       spendRows: [...d.spends].reverse().map(x => ({ ...x, amt: '$' + (+x.amt).toLocaleString(), remove: remove('spends', x.id) })),
-      noteRows: d.notes.map(n => ({ ...n, icon: n.done ? 'ph-duotone ph-heart' : 'ph-duotone ph-heart-half', strike: n.done ? 'line-through' : 'none', by: n.by + (n.done ? ' · done' : ''), toggle: () => this.upd(dd => ({ notes: dd.notes.map(x => x.id === n.id ? { ...x, done: !x.done } : x) })) })),
+      noteRows: d.notes.map(n => ({ ...n, remove: remove('notes', n.id), icon: n.done ? 'ph-duotone ph-heart' : 'ph-duotone ph-heart-half', strike: n.done ? 'line-through' : 'none', by: n.by + (n.done ? ' · done' : ''), toggle: () => this.upd(dd => ({ notes: dd.notes.map(x => x.id === n.id ? { ...x, done: !x.done } : x) })) })),
       foodRows: d.food.map(f => ({ ...f, bg: f.photo ? 'center/cover no-repeat url(' + f.photo + ')' : 'var(--color-surface)', noPhoto: !f.photo, byLine: f.by ? ' · ' + f.by : '', edit: () => this.setState({ sheet: 'food', ff: { ...f } }), stars: stars(f.r, r => this.upd(dd => ({ food: dd.food.map(x => x.id === f.id ? { ...x, r } : x) }))) })),
       crewRows: d.crew.map(x => ({ ...x, tipBg: x.tip ? 'var(--color-accent)' : 'transparent', tipFg: x.tip ? 'var(--color-bg)' : 'var(--color-text)', svBg: x.survey ? 'var(--color-accent)' : 'transparent', svFg: x.survey ? 'var(--color-bg)' : 'var(--color-text)',
         toggleTip: () => this.upd(dd => ({ crew: dd.crew.map(y => y.id === x.id ? { ...y, tip: !y.tip } : y) })), toggleSurvey: () => this.upd(dd => ({ crew: dd.crew.map(y => y.id === x.id ? { ...y, survey: !y.survey } : y) })),
         stars: stars(x.r, r => this.upd(dd => ({ crew: dd.crew.map(y => y.id === x.id ? { ...y, r } : y) }))), edit: () => this.setState({ sheet: 'crew', fc: { ...x } }) })),
       hasSurvey: d.crew.some(x => x.survey), surveyList: d.crew.filter(x => x.survey).map(x => x.name + ' (' + x.role + (x.where ? ', ' + x.where : '') + ')').join('; '),
-      spotRows: [...d.spots].sort((a, b) => a.deck - b.deck),
+      spotRows: [...d.spots].sort((a, b) => a.deck - b.deck).map(sp => ({ ...sp, remove: remove('spots', sp.id) })),
       overlayOn: !!s.overlay, closeOverlay: set({ overlay: null }), overlaySub: { fleet: 'Cruises', wrap: 'Wrap-up', itin: c.ship, import: c.ship, sync: 'Share' }[s.overlay] || '',
       ovFleet: s.overlay === 'fleet', ovWrap: s.overlay === 'wrap', ovItin: s.overlay === 'itin', ovImport: s.overlay === 'import', ovSync: s.overlay === 'sync', partner, openSync,
       exportData: () => this.exportData(), pickSync: () => this.syncEl && this.syncEl.click(), syncRef: el => { this.syncEl = el; }, onSyncFile: e => this.onSyncFile(e),
@@ -1634,7 +1656,7 @@ class Component extends DCLogic {
       found: s.found.map(f => ({ title: f.title, meta: dateLabel(f.off) + ' · ' + f.time + (f.place ? ' · ' + f.place : '') + (f.conf ? ' · ' + f.conf : ''), icon: f.pick ? 'ph-duotone ph-check-square' : 'ph-duotone ph-square', toggle: () => this.setState(x => ({ found: x.found.map(y => y.id === f.id ? { ...y, pick: !y.pick } : y) })) })),
       hasFound: s.found.length > 0, foundCount: s.found.length, pickedCount,
       addFound: () => { const add = s.found.filter(f => f.pick).map(({ pick, ...p }) => p); this.upd(dd => ({ plans: [...dd.plans, ...add] })); this.setState({ found: [], impText: '', shots: [], impMsg: '', overlay: null, tab: 'plans', planView: 'days' }); },
-      sheetOpen: !!s.sheet, closeSheet: set({ sheet: null }), stop: e => e.stopPropagation(),
+      sheetOpen: !!s.sheet, closeSheet: () => { if (s.sheet !== 'welcome') this.setState({ sheet: null }); }, stop: e => e.stopPropagation(),
       shAdd: s.sheet === 'add', shPlan: s.sheet === 'plan', shDay: s.sheet === 'day' && !!dayBy(s.selOff), shSession: s.sheet === 'session', shQuick: s.sheet === 'quick', shWho: s.sheet === 'who', shFood: s.sheet === 'food', shCrew: s.sheet === 'crew', shCruise: s.sheet === 'cruise', shViewer: s.sheet === 'viewer' && !!viewer,
       addItems, shipName: c.ship,
       fp: { ...s.fp, off: String(s.fp.off ?? 0) }, planSheetTitle: s.fp.id ? 'Edit plan' : 'Add a plan', planEditing: !!s.fp.id, dayOpts,
