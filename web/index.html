@@ -182,7 +182,19 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="grid-column:1 / -1;font-size:12px;color:var(--color-neutral-700)">{{ p.toNext }}</div>
 </div>
 </sc-for>
-<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">XP comes from hunt finds, trivia, daily challenges, and slots (1 XP per 10 casino points, plus 25 per jackpot). Tap your name on a challenge when you’ve done it; you can both claim the same one.</div>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">XP comes from hunt finds, trivia, daily challenges, steps, and slots (1 XP per 10 casino points, plus 25 per jackpot). Tap your name on a challenge when you’ve done it; you can both claim the same one.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:var(--space-3)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:24px;flex:1;min-width:0">Steps {{ stepsDayLabel }}</h2><button class="btn btn-secondary" onClick="{{ openSteps }}" style="flex:none;padding:6px 12px;font-size:13px"><i class="ph-duotone ph-sneaker-move"></i>Log steps</button></div>
+<sc-for list="{{ stepRows }}" as="sr" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:1fr auto;gap:4px var(--space-3);align-items:baseline">
+<span style="font-size:16px;font-weight:600">{{ sr.name }}</span><span style="font-size:22px;font-weight:600;color:{{ sr.color }}">{{ sr.today }}</span>
+<div style="grid-column:1 / -1;height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ sr.pct }};background:{{ sr.color }}"></div></div>
+<div style="grid-column:1 / -1;font-size:12px;color:var(--color-neutral-700)">{{ sr.note }}</div>
+</div>
+</sc-for>
+<div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">Copy the number from your watch or phone each evening. 6,000+ steps = 10 XP, 10,000+ = 20 XP, 15,000+ = 30 XP.</div>
 </div>
 
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
@@ -559,6 +571,14 @@ body{background:var(--color-bg);overscroll-behavior:none}
 
 <sc-if value="{{ tFood }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-lg);background:var(--color-surface)">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:20px;flex:1">Weigh-in</h2><button class="btn btn-secondary" onClick="{{ openWeigh }}" style="flex:none;padding:6px 12px;font-size:13px"><i class="ph-duotone ph-scales"></i>Weigh in</button></div>
+<sc-for list="{{ weighRows }}" as="wr" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:1fr auto;gap:2px var(--space-3);align-items:baseline"><span style="font-size:16px;font-weight:600">{{ wr.name }}</span><span style="font-size:22px;font-weight:600">{{ wr.latest }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ wr.since }}</span><span style="font-size:14px;font-weight:600;color:{{ wr.deltaColor }}">{{ wr.delta }}</span></div>
+</sc-for>
+<sc-if value="{{ hasWeighs }}"><div style="display:flex;flex-direction:column;gap:6px;padding-top:var(--space-2);border-top:1px solid var(--color-divider)"><sc-for list="{{ weighLog }}" as="wl" hint-placeholder-count="0"><button onClick="{{ wl.edit }}" style="display:flex;justify-content:space-between;gap:var(--space-2);background:none;border:0;padding:0;font-family:var(--font-body);font-size:13px;color:var(--color-neutral-800);cursor:pointer;text-align:left"><span>{{ wl.when }} · {{ wl.who }}</span><span>{{ wl.lbs }}</span></button></sc-for></div></sc-if>
+<sc-if value="{{ noWeighs }}"><div style="font-size:13px;color:var(--color-neutral-700);font-style:italic">Weigh in before you sail, then again during or after, to see the cruise effect.</div></sc-if>
+</div>
 <button class="btn btn-primary" onClick="{{ openFood }}" style="align-self:flex-start"><i class="ph-duotone ph-camera-plus"></i>Log a dish or drink</button>
 <sc-for list="{{ foodRows }}" as="fd" hint-placeholder-count="3">
 <div style="display:grid;grid-template-columns:76px 1fr;gap:var(--space-3);align-items:start">
@@ -802,6 +822,31 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <button class="btn btn-secondary" onClick="{{ a.go }}" style="justify-content:flex-start;padding:12px;font-size:14px"><i class="{{ a.icon }}" style="font-size:22px;color:var(--color-accent)"></i>{{ a.label }}</button>
 </sc-for>
 </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ shSteps }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">Log steps</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Who</label><select class="input" value="{{ fst.who }}" onChange="{{ fstWho }}"><sc-for list="{{ playerOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.v }}</option></sc-for></select></div>
+<div class="field"><label>Day</label><select class="input" value="{{ fstOff }}" onChange="{{ fstDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+</div>
+<div class="field"><label>Steps</label><input class="input" inputMode="numeric" placeholder="8500" value="{{ fst.n }}" onChange="{{ fstN }}"></div>
+<button class="btn btn-primary btn-block" onClick="{{ saveSteps }}">Save</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ shWeigh }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<h2 style="margin:0;font-size:24px">{{ weighTitle }}</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+<div class="field"><label>Who</label><select class="input" value="{{ fwi.who }}" onChange="{{ fwiWho }}"><sc-for list="{{ playerOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o.v }}">{{ o.v }}</option></sc-for></select></div>
+<div class="field"><label>Day</label><select class="input" value="{{ fwiOff }}" onChange="{{ fwiDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
+</div>
+<div class="field"><label>Weight (lb)</label><input class="input" inputMode="decimal" placeholder="180.4" value="{{ fwi.lbs }}" onChange="{{ fwiLbs }}"></div>
+<button class="btn btn-primary btn-block" onClick="{{ saveWeigh }}" disabled="{{ weighInvalid }}">Save</button>
+<sc-if value="{{ weighEditing }}"><button class="btn btn-ghost" onClick="{{ deleteWeigh }}" style="align-self:center;color:var(--color-accent-2-700)">Delete</button></sc-if>
 </div>
 </sc-if>
 
@@ -1126,7 +1171,7 @@ class Component extends DCLogic {
 
   defaultHunt() { return [['A towel animal on the bed', 10], ['Someone in a captain’s hat', 15], ['A rooster in port', 15], ['Matching couple outfits', 20], ['Another cruise line’s ship', 10], ['An iguana', 20], ['Sunset selfie, top deck', 25], ['A conga line', 20], ['Someone hitting a jackpot', 25]].map((x, i) => ({ id: i + 1, title: x[0], pts: x[1], by: null, author: 'App' })); }
   defaultPack() { return ['Passports', 'Boarding documents', 'Casino player cards', 'Magnetic hooks', 'Lanyards', 'Reef-safe sunscreen', 'Swimsuits', 'Evening outfits', 'Seasickness bands', 'Non-surge power strip'].map((t, i) => ({ id: i + 1, text: t, done: false })); }
-  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {}, bank: {} }; }
+  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {}, bank: {}, steps: {}, weighs: [] }; }
   // Fresh installs start blank; the welcome sheet asks for names and the first cruise.
   seed() {
     return {
@@ -1227,6 +1272,7 @@ class Component extends DCLogic {
         const mine = db[cid] || this.emptyData(), out = { ...mine };
         Object.entries(d || {}).forEach(([k, v]) => {
           if (Array.isArray(v)) out[k] = byId(mine[k], v);
+          else if (k === 'steps' && v && typeof v === 'object') { const ms = { ...(mine.steps || {}) }; Object.entries(v).forEach(([off, day]) => { ms[off] = { ...(ms[off] || {}), ...day }; }); out.steps = ms; }
           else if (k === 'bank' && v && typeof v === 'object') {
             const mb = { ...(mine.bank || {}) };
             Object.entries(v).forEach(([n, b]) => { const m = mb[n] || {}, map = new Map((m.nights || []).map(x => [x.id, x]));
@@ -1258,11 +1304,12 @@ class Component extends DCLogic {
   statsOf(dd, n) {
     const ss = dd.sessions.filter(x => x.who === n), adj = (dd.casinoAdj || {})[n] || {}, pts = ss.reduce((a, x) => a + (+x.pts || 0), 0) + (+adj.pts || 0), net = ss.reduce((a, x) => a + (+x.net || 0), 0) + (+adj.net || 0), jp = ss.filter(x => x.jp).length;
     const bk = ((dd.bank || {})[n] || {}).nights || [], closed = bk.filter(x => this.closedNight(x)), hasBank = closed.length > 0, bankNet = closed.reduce((a, x) => a + (+x.end - +x.start), 0), money = hasBank ? bankNet : net;
+    const stepXp = Object.values(dd.steps || {}).reduce((a, day) => a + this.stepXp((day || {})[n]), 0);
     const hunt = dd.hunt.filter(h => h.by === n).reduce((a, h) => a + (+h.pts || 0), 0);
     const triv = Object.entries(dd.trivia || {}).filter(([q, a]) => a.who === n && this.TRIVIA[q] && a.pick === this.TRIVIA[q].a).length;
     const chal = Object.entries(dd.challenges || {}).filter(([k, w]) => this.claimers(w).includes(n)).reduce((a, [k]) => a + this.chalPts(dd, k), 0);
     const grid = dd.hunt.slice(0, 9), bingos = grid.length === 9 ? this.LINES.filter(l => l.every(i => grid[i].by)).length : 0;
-    return { pts, net, money, hasBank, jp, n: ss.length, hunt, triv, chal, bingos, xp: Math.floor(pts / 10) + jp * 25 + hunt + triv * 20 + chal + bingos * 50 };
+    return { pts, net, money, hasBank, jp, n: ss.length, hunt, triv, chal, bingos, stepXp, xp: Math.floor(pts / 10) + jp * 25 + hunt + triv * 20 + chal + bingos * 50 + stepXp };
   }
   // Swap a player's name everywhere it's stored.
   renamePlayer(st, from, to) {
@@ -1272,10 +1319,14 @@ class Component extends DCLogic {
       notes: (d.notes || []).map(x => ({ ...x, by: sw(x.by) })), food: (d.food || []).map(x => ({ ...x, by: sw(x.by) })),
       trivia: Object.fromEntries(Object.entries(d.trivia || {}).map(([k, a]) => [k, { ...a, who: sw(a.who) }])),
       challenges: Object.fromEntries(Object.entries(d.challenges || {}).map(([k, w]) => [k, this.claimers(w).map(sw)])),
-      bank: rekey(d.bank), casinoAdj: rekey(d.casinoAdj) }]));
+      bank: rekey(d.bank), casinoAdj: rekey(d.casinoAdj), weighs: (d.weighs || []).map(x => ({ ...x, who: sw(x.who) })),
+      steps: Object.fromEntries(Object.entries(d.steps || {}).map(([k, v]) => [k, rekey(v)])) }]));
     const brands = Object.fromEntries(Object.entries(st.brands || {}).map(([k, b]) => [k, { ...b, tiers: rekey(b.tiers) }]));
     return { players: st.players.map(sw), db, brands, tWho: sw(st.tWho) };
   }
+  stepXp(n) { n = +n || 0; return n >= 15000 ? 30 : n >= 10000 ? 20 : n >= 6000 ? 10 : 0; }
+  // Today's day number relative to sail day (negative before sailing), or null without a sail date.
+  todayOff() { const { c } = this.cur(); const d0 = this.dateOf(c, 0); if (!d0) return null; const t = new Date(this.state.now); t.setHours(12, 0, 0, 0); return Math.round((t - d0) / 864e5); }
   closedNight(x) { return x.end != null && x.end !== ''; }
   claimers(w) { return Array.isArray(w) ? w : w ? [w] : []; }
   // Keys: "off:i" for the built-in daily three, "x<id>" for ones you wrote.
@@ -1547,7 +1598,29 @@ class Component extends DCLogic {
       noRes: !d.plans.some(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)),
       gSlots: s.game === 'slots', gHunt: s.game === 'hunt', gTrivia: s.game === 'trivia', gBadges: s.game === 'badges',
       setSlots: set({ game: 'slots' }), setHunt: set({ game: 'hunt' }), setTrivia: set({ game: 'trivia' }), setBadges: set({ game: 'badges' }),
-      crowns, slotBoard, clubName: brand.club, openSession, bankRows, shBankSetup: s.sheet === 'bankSetup', shNight: s.sheet === 'night',
+      crowns, slotBoard, clubName: brand.club, openSession,
+      ...(() => { const tOff = this.todayOff(), sOff = tOff != null && days.some(x => x.off === tOff) ? tOff : curOff, today = (d.steps || {})[sOff] || {};
+        return { stepsDayLabel: tOff === sOff ? 'today' : '· ' + dateLabel(sOff),
+          stepRows: players.map(n => { const v = +today[n] || 0, tot = Object.values(d.steps || {}).reduce((a, day) => a + (+(day || {})[n] || 0), 0), xpN = this.stepXp(v);
+            return { name: n, today: v.toLocaleString(), pct: Math.min(100, v / 10000 * 100) + '%', color: v >= 6000 ? colorOf(n) : 'var(--color-neutral-500)',
+              note: (xpN ? '+' + xpN + ' XP' : v ? (6000 - v).toLocaleString() + ' to go for 10 XP' : 'Not logged yet') + ' · ' + tot.toLocaleString() + ' steps this trip (' + st[n].stepXp + ' XP)' }; }),
+          openSteps: () => this.setState({ sheet: 'steps', fst: { who: players[0], off: sOff, n: String(today[players[0]] || '') } }) }; })(),
+      shSteps: s.sheet === 'steps', fst: s.fst || {}, fstOff: String((s.fst || {}).off ?? 0),
+      fstWho: e => { const val = e.target.value; this.setState(x => ({ fst: { ...x.fst, who: val, n: String(((d.steps || {})[x.fst.off] || {})[val] || '') } })); },
+      fstDay: e => { const val = parseInt(e.target.value, 10); this.setState(x => ({ fst: { ...x.fst, off: val, n: String(((d.steps || {})[val] || {})[x.fst.who] || '') } })); },
+      fstN: e => { const val = e.target.value; this.setState(x => ({ fst: { ...x.fst, n: val } })); },
+      saveSteps: () => { const f = s.fst, n = parseInt(String(f.n || '').replace(/[^0-9]/g, ''), 10) || 0; this.upd(dd => { const steps = { ...(dd.steps || {}) }, day = { ...(steps[f.off] || {}) }; if (n) day[f.who] = n; else delete day[f.who]; steps[f.off] = day; return { steps }; }); this.setState({ sheet: null }); },
+      ...(() => { const ws = [...(d.weighs || [])].sort((a, b) => a.off - b.off || a.id - b.id), lb = v => (+v).toFixed(1).replace(/\.0$/, '') + ' lb';
+        return { hasWeighs: ws.length > 0, noWeighs: !ws.length,
+          weighRows: players.map(n => { const mine = ws.filter(x => x.who === n); if (!mine.length) return { name: n, latest: '—', since: 'No weigh-in yet', delta: '', deltaColor: 'inherit' }; const first = mine[0], last = mine[mine.length - 1], dlt = +last.lbs - +first.lbs;
+            return { name: n, latest: lb(last.lbs), since: mine.length > 1 ? 'since ' + dateLabel(first.off) : 'First weigh-in ' + dateLabel(first.off), delta: mine.length > 1 ? (dlt > 0 ? '+' : dlt < 0 ? '−' : '±') + Math.abs(dlt).toFixed(1).replace(/\.0$/, '') + ' lb' : '', deltaColor: dlt > 0 ? 'var(--color-accent-2-700)' : 'var(--color-accent-700)' }; }),
+          weighLog: [...ws].reverse().map(x => ({ when: dateLabel(x.off), who: x.who, lbs: lb(x.lbs), edit: () => this.setState({ sheet: 'weigh', fwi: { ...x, lbs: String(x.lbs) } }) })) }; })(),
+      openWeigh: () => { const t = this.todayOff(); this.setState({ sheet: 'weigh', fwi: { who: players[0], off: t != null && days.some(x => x.off === t) ? t : curOff, lbs: '' } }); },
+      shWeigh: s.sheet === 'weigh', fwi: s.fwi || {}, fwiOff: String((s.fwi || {}).off ?? 0), weighTitle: s.fwi && s.fwi.id ? 'Edit weigh-in' : 'Weigh in', weighEditing: !!(s.fwi && s.fwi.id),
+      fwiWho: e => { const val = e.target.value; this.setState(x => ({ fwi: { ...x.fwi, who: val } })); }, fwiDay: e => { const val = parseInt(e.target.value, 10); this.setState(x => ({ fwi: { ...x.fwi, off: val } })); },
+      fwiLbs: e => { const val = e.target.value; this.setState(x => ({ fwi: { ...x.fwi, lbs: val } })); }, weighInvalid: !s.fwi || !(parseFloat(s.fwi.lbs) > 0),
+      saveWeigh: () => { const f = s.fwi, w = { id: f.id || Date.now(), who: f.who, off: +f.off, lbs: parseFloat(String(f.lbs).replace(/[^0-9.]/g, '')) }; if (!(w.lbs > 0)) return; this.upd(dd => ({ weighs: f.id ? (dd.weighs || []).map(x => x.id === f.id ? w : x) : [...(dd.weighs || []), w] })); this.setState({ sheet: null }); },
+      deleteWeigh: () => { this.upd(dd => ({ weighs: (dd.weighs || []).filter(x => x.id !== s.fwi.id) })); this.setState({ sheet: null }); }, bankRows, shBankSetup: s.sheet === 'bankSetup', shNight: s.sheet === 'night',
       openBankSetup: () => this.setState({ sheet: 'bankSetup', fbt: Object.fromEntries(players.map(n => [n, String(((d.bank || {})[n] || {}).total || '')])) }),
       bankSetupRows: players.map(n => ({ name: n, total: (s.fbt || {})[n] || '', on: e => { const val = e.target.value; this.setState(x => ({ fbt: { ...x.fbt, [n]: val } })); } })),
       saveBankSetup: () => { this.upd(dd => { const bank = { ...(dd.bank || {}) }; players.forEach(n => { const v = parseInt(String((s.fbt || {})[n] || '').replace(/[^0-9]/g, ''), 10) || 0; bank[n] = { ...(bank[n] || { nights: [] }), total: v }; }); return { bank }; }); this.setState({ sheet: null }); },
