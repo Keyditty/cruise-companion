@@ -126,7 +126,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;flex-direction:column;gap:4px;padding-bottom:10px"><span style="font-size:26px;font-weight:600;line-height:1">{{ cdUnit }}</span><span style="font-size:26px;font-style:italic;line-height:1">to sail</span></div>
 </div>
 <div style="font-size:15px;color:var(--color-neutral-700)">{{ cdRest }} · {{ sailLine }}</div>
-<div style="display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center"><button class="btn btn-secondary" onClick="{{ goPacking }}"><i class="ph-duotone ph-suitcase-rolling"></i>Packing {{ packDone }}/{{ packTotal }}</button><sc-if value="{{ hasPreviewPort }}"><button class="btn btn-ghost" onClick="{{ previewPort }}">Preview a port day</button></sc-if></div>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap;align-items:center"><button class="btn btn-secondary" onClick="{{ goPacking }}"><i class="ph-duotone ph-suitcase-rolling"></i>{{ packLabel }}</button><sc-if value="{{ hasPreviewPort }}"><button class="btn btn-ghost" onClick="{{ previewPort }}">Preview a port day</button></sc-if></div>
 </div>
 </sc-if>
 <sc-if value="{{ noDate }}">
@@ -315,7 +315,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <button onClick="{{ nt.edit }}" style="display:grid;grid-template-columns:1fr auto;gap:var(--space-2);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:14px;font-weight:600">{{ nt.when }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ nt.detail }}</span></span><span style="font-size:15px;font-weight:600;color:{{ nt.color }}">{{ nt.result }}</span></button>
 </sc-for>
 </sc-if>
-<sc-if value="{{ br.noTotal }}"><button class="btn btn-secondary" onClick="{{ openBankSetup }}" style="align-self:flex-start"><i class="ph-duotone ph-wallet"></i>Set {{ br.name }}’s bankroll</button></sc-if>
+<sc-if value="{{ br.noTotal }}"><button class="btn btn-secondary" onClick="{{ openBankSetup }}" style="align-self:flex-start"><i class="ph-duotone ph-wallet"></i>{{ br.setLabel }}</button></sc-if>
 </div>
 </sc-for>
 </div>
@@ -330,6 +330,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 <div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ b.pct }};background:{{ b.color }}"></div></div>
 <div style="font-size:12px;color:var(--color-neutral-700)">{{ b.left }}</div>
+<div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;font-size:13px"><i class="ph-duotone ph-tag" style="color:var(--color-accent);align-self:center"></i><span style="font-weight:600">{{ b.cost }}</span><span style="color:var(--color-neutral-700)">{{ b.costNote }}</span></div>
 </div>
 </sc-for>
 </div>
@@ -338,7 +339,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <h2 style="margin:0;font-size:22px">Sessions</h2>
 <sc-for list="{{ sessionRows }}" as="s" hint-placeholder-count="4">
 <button onClick="{{ s.edit }}" style="display:grid;grid-template-columns:1fr auto;gap:var(--space-3);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer">
-<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:16px;font-weight:600">{{ s.who }} · {{ s.machine }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ s.when }} · {{ s.ptsLabel }} pts{{ s.jpLabel }}</span></span>
+<span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:16px;font-weight:600">{{ s.who }} · {{ s.machine }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ s.when }} · {{ s.ptsLabel }} pts{{ s.costLabel }}{{ s.jpLabel }}</span></span>
 <span style="font-size:18px;font-weight:600;color:{{ s.color }}">{{ s.netLabel }}</span>
 </button>
 </sc-for>
@@ -672,7 +673,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </div>
 </sc-for>
-<div style="display:flex;gap:var(--space-2);flex-wrap:wrap"><button class="btn btn-primary" onClick="{{ newCruise }}"><i class="ph-duotone ph-plus"></i>Add a cruise</button><button class="btn btn-secondary" onClick="{{ openSync }}"><i class="ph-duotone ph-share-network"></i>Share with {{ partner }}</button></div>
+<div style="display:flex;gap:var(--space-2);flex-wrap:wrap"><button class="btn btn-primary" onClick="{{ newCruise }}"><i class="ph-duotone ph-plus"></i>Add a cruise</button><button class="btn btn-secondary" onClick="{{ openSync }}"><i class="ph-duotone ph-share-network"></i>{{ shareLabel }}</button></div>
 </div>
 </sc-if>
 <sc-if value="{{ fHist }}">
@@ -697,7 +698,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ cl.line }}</div><input class="input" value="{{ cl.club }}" onChange="{{ cl.setClub }}" aria-label="Club name" style="font-size:20px;font-weight:600;background:transparent;border-color:transparent;padding-left:0"></div>
 <sc-for list="{{ cl.people }}" as="pp" hint-placeholder-count="2">
 <div style="display:grid;grid-template-columns:1fr 110px;gap:var(--space-3);align-items:center">
-<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">{{ pp.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ pp.pts }} pts lifetime · {{ pp.net }} · {{ pp.jp }}</span></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">{{ pp.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ pp.pts }} pts lifetime · {{ pp.net }} · {{ pp.jp }} · {{ pp.cost }}</span></div>
 <input class="input" placeholder="Tier" value="{{ pp.tier }}" onChange="{{ pp.setTier }}" aria-label="Tier">
 </div>
 </sc-for>
@@ -810,7 +811,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <sc-for list="{{ found }}" as="f" hint-placeholder-count="3">
 <button onClick="{{ f.toggle }}" style="display:grid;grid-template-columns:26px 1fr;gap:var(--space-2);align-items:start;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><i class="{{ f.icon }}" style="font-size:22px;color:var(--color-accent)"></i><span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:600">{{ f.title }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ f.meta }}</span></span></button>
 </sc-for>
-<button class="btn btn-primary btn-block" onClick="{{ addFound }}">Add {{ pickedCount }} to plans</button>
+<button class="btn btn-primary btn-block" onClick="{{ addFound }}">{{ addFoundLabel }}</button>
 </div>
 </sc-if>
 </div>
@@ -1345,6 +1346,9 @@ class Component extends DCLogic {
   stepXp(n) { n = +n || 0; return n >= 15000 ? 30 : n >= 10000 ? 20 : n >= 6000 ? 10 : 0; }
   // Today's day number relative to sail day (negative before sailing), or null without a sail date.
   todayOff() { const { c } = this.cur(); const d0 = this.dateOf(c, 0); if (!d0) return null; const t = new Date(this.state.now); t.setHours(12, 0, 0, 0); return Math.round((t - d0) / 864e5); }
+  // Money lost per casino point; negative money means a loss. Null when there are no points yet.
+  costPer(money, pts) { if (!(pts > 0)) return null; return Math.max(0, -money) / pts; }
+  fmtCost(c) { return c == null ? '—' : c < 1 ? Math.round(c * 100) + '¢' : '$' + c.toFixed(2); }
   closedNight(x) { return x.end != null && x.end !== ''; }
   claimers(w) { return Array.isArray(w) ? w : w ? [w] : []; }
   // Keys: "off:i" for the built-in daily three, "x<id>" for ones you wrote.
@@ -1489,7 +1493,9 @@ class Component extends DCLogic {
 
     const brand = s.brands[c.line] || { club: (c.line || 'Casino') + ' club', tiers: {} };
     const goal = +c.goal || 0;
-    const slotBoard = players.map(n => { const x = st[n]; return { name: n, tier: brand.tiers[n] || '', ptsLabel: x.pts.toLocaleString(), n: x.n, meta: x.n + (x.n === 1 ? ' session · ' : ' sessions · ') + x.jp + (x.jp === 1 ? ' jackpot' : ' jackpots'), net: fmt$(x.money), netLabel: x.hasBank ? 'win / loss · bankroll' : 'win / loss', netColor: x.money >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, x.pts / goal * 100) : 0) + '%', left: goal ? (x.pts >= goal ? 'Free-cruise goal reached' : (goal - x.pts).toLocaleString() + ' pts to the ' + goal.toLocaleString() + '-pt free-cruise goal') : 'Set a goal in cruise details' }; }).filter((b, i) => i < 2 || b.n > 0);
+    const slotBoard = players.map(n => { const x = st[n]; return { name: n, tier: brand.tiers[n] || '', ptsLabel: x.pts.toLocaleString(), n: x.n, meta: x.n + (x.n === 1 ? ' session · ' : ' sessions · ') + x.jp + (x.jp === 1 ? ' jackpot' : ' jackpots'), net: fmt$(x.money), netLabel: x.hasBank ? 'win / loss · bankroll' : 'win / loss', netColor: x.money >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, x.pts / goal * 100) : 0) + '%', cost: x.pts > 0 ? this.fmtCost(this.costPer(x.money, x.pts)) + ' per point' : 'Cost per point',
+        costNote: !(x.pts > 0) ? 'shows once you log points' : x.money >= 0 ? '(you’re up, so your points are free so far)' : goal && x.pts < goal ? '(about $' + Math.round(this.costPer(x.money, x.pts) * (goal - x.pts)).toLocaleString() + ' more to reach the goal at this rate)' : '',
+        left: goal ? (x.pts >= goal ? 'Free-cruise goal reached' : (goal - x.pts).toLocaleString() + ' pts to the ' + goal.toLocaleString() + '-pt free-cruise goal') : 'Set a goal in cruise details' }; }).filter((b, i) => i < 2 || b.n > 0);
     const best = (key, fmt) => { const sorted = players.map(n => ({ n, v: st[n][key] })).filter(x => st[x.n].n || st[x.n].hasBank).sort((a, b) => b.v - a.v); if (!sorted.length || sorted[0].v <= 0) return { holder: 'Open', color: 'var(--color-neutral-500)' }; const tie = sorted[1] && sorted[1].v === sorted[0].v; return { holder: tie ? 'Tied' : sorted[0].n, color: tie ? 'var(--color-neutral-600)' : 'var(--color-process-yellow)' }; };
     const bOff = onboard ? on : 0;
     const bankRows = players.map(n => {
@@ -1502,7 +1508,7 @@ class Component extends DCLogic {
       const act = open ? { label: 'End tonight', icon: 'ph-duotone ph-moon-stars', cls: 'btn btn-primary', go: () => this.setState({ sheet: 'night', fb: { mode: 'end', who: n, id: open.id, off: open.off, start: String(open.start), end: '' } }) }
         : tonight ? { label: 'Edit tonight', icon: 'ph-duotone ph-pencil-simple', cls: 'btn btn-secondary', go: edit(tonight) }
         : { label: 'Start tonight', icon: 'ph-duotone ph-coins', cls: 'btn btn-primary', go: () => this.setState({ sheet: 'night', fb: { mode: 'start', who: n, off: bOff, start: suggest ? String(suggest) : '', end: '', suggest } }) };
-      return { name: n, hasTotal: total > 0, noTotal: !total, ofLine: total ? 'of ' + money(total) : 'No bankroll set',
+      return { name: n, setLabel: 'Set ' + n + '’s bankroll', hasTotal: total > 0, noTotal: !total, ofLine: total ? 'of ' + money(total) : 'No bankroll set',
         leftLabel: money(now), overall: up ? (up > 0 ? 'up ' : 'down ') + money(Math.abs(up)) : '', overallColor: up >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)',
         pct: (total ? Math.max(0, Math.min(100, now / total * 100)) : 0) + '%', color: now < total * 0.25 ? 'var(--color-accent-2)' : colorOf(n),
         paceLine: 'On pace: about ' + money(suggest) + ' a night for ' + nightsLeft + (nightsLeft === 1 ? ' night' : ' nights') + ' left',
@@ -1543,7 +1549,7 @@ class Component extends DCLogic {
     const lines = [...new Set(s.cruises.map(x => x.line).filter(Boolean))];
     const clubs = lines.map(line => { const b = s.brands[line] || { club: line + ' casino club', tiers: {} }, crs = s.cruises.filter(x => x.line === line);
       return { line, club: b.club, setClub: e => { const val = e.target.value; this.setState(stt => ({ brands: { ...stt.brands, [line]: { ...(stt.brands[line] || { tiers: {} }), club: val } } })); },
-        people: players.map(n => { const tot = crs.reduce((a, cr) => { const x = this.statsOf(s.db[cr.id] || this.emptyData(), n); return { pts: a.pts + x.pts, net: a.net + x.money, jp: a.jp + x.jp }; }, { pts: 0, net: 0, jp: 0 }); return { name: n, pts: tot.pts.toLocaleString(), net: fmt$(tot.net), jp: tot.jp + (tot.jp === 1 ? ' jackpot' : ' jackpots'), tier: (b.tiers || {})[n] || '', setTier: e => { const val = e.target.value; this.setState(stt => { const bb = stt.brands[line] || { club: line + ' casino club', tiers: {} }; return { brands: { ...stt.brands, [line]: { ...bb, tiers: { ...(bb.tiers || {}), [n]: val } } } }; }); } }; }),
+        people: players.map(n => { const tot = crs.reduce((a, cr) => { const x = this.statsOf(s.db[cr.id] || this.emptyData(), n); return { pts: a.pts + x.pts, net: a.net + x.money, jp: a.jp + x.jp }; }, { pts: 0, net: 0, jp: 0 }); return { name: n, pts: tot.pts.toLocaleString(), net: fmt$(tot.net), cost: this.fmtCost(this.costPer(tot.net, tot.pts)) + ' per point', jp: tot.jp + (tot.jp === 1 ? ' jackpot' : ' jackpots'), tier: (b.tiers || {})[n] || '', setTier: e => { const val = e.target.value; this.setState(stt => { const bb = stt.brands[line] || { club: line + ' casino club', tiers: {} }; return { brands: { ...stt.brands, [line]: { ...bb, tiers: { ...(bb.tiers || {}), [n]: val } } } }; }); } }; }),
         cruises: crs.map(cr => cr.ship.replace(/^(Celebrity|Princess)\s*/, '') + ' (' + whenOf(cr) + ')').join(' · ') }; });
     const wc = s.cruises.find(x => x.id === s.wrapId) || c, wd = s.db[wc.id] || this.emptyData();
     const wst = Object.fromEntries(players.map(n => [n, this.statsOf(wd, n)]));
@@ -1604,7 +1610,7 @@ class Component extends DCLogic {
       trackLink: 'https://www.marinetraffic.com/en/ais/details/ships/imo:' + (c.imo || ''),
       standings, chal, chalHead: onboard ? 'Today’s challenges' : 'Warm-up challenges',
       planHead: onboard ? 'Today’s plans' : 'First up · ' + dateLabel(firstPlanOff), homePlans, noHomePlans: !homePlans.length,
-      goPlans: set({ tab: 'plans' }), goPlay: set({ tab: 'play', game: 'slots' }), goPacking: set({ tab: 'trip', tripTab: 'pack' }), packDone: pDone, packTotal: d.pack.length,
+      goPlans: set({ tab: 'plans' }), goPlay: set({ tab: 'play', game: 'slots' }), goPacking: set({ tab: 'trip', tripTab: 'pack' }), packDone: pDone, packTotal: d.pack.length, packLabel: 'Packing ' + pDone + '/' + d.pack.length,
       openPlan, openImport: set({ overlay: 'import' }), openItin: set({ overlay: 'itin' }),
       planDays: s.planView === 'days', planRes: s.planView === 'res', setPlanDays: set({ planView: 'days' }), setPlanRes: set({ planView: 'res' }),
       noDays: s.planView === 'days' && !days.length, showDays: s.planView === 'days' && days.length > 0,
@@ -1661,7 +1667,7 @@ class Component extends DCLogic {
         this.upd(dd => { const adj = { ...(dd.casinoAdj || {}) }; players.forEach(n => { const f = (s.fcas || {})[n]; if (!f) return; const ss = dd.sessions.filter(x => x.who === n); adj[n] = { pts: Math.round(num(f.pts)) - ss.reduce((a, x) => a + (+x.pts || 0), 0), net: num(f.net) - ss.reduce((a, x) => a + (+x.net || 0), 0) }; }); return { casinoAdj: adj }; });
         this.setState({ sheet: null }); },
       clearCasino: () => { if (!window.confirm('Reset casino points for ' + c.ship + ' to zero? This deletes every slots session on this cruise.')) return; this.upd(() => ({ sessions: [], casinoAdj: {} })); this.setState({ sheet: null }); },
-      sessionRows: [...d.sessions].reverse().map(x => ({ ...x, when: dateLabel(x.off), ptsLabel: (+x.pts || 0).toLocaleString(), jpLabel: x.jp ? ' · jackpot' : '', netLabel: fmt$(+x.net || 0), color: (+x.net || 0) >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: () => this.setState({ sheet: 'session', fs: { ...x, pts: String(x.pts), net: String(x.net) } }) })),
+      sessionRows: [...d.sessions].reverse().map(x => ({ ...x, costLabel: +x.pts > 0 && x.net !== '' && x.net != null ? ' · ' + this.fmtCost(this.costPer(+x.net || 0, +x.pts)) + '/pt' : '', when: dateLabel(x.off), ptsLabel: (+x.pts || 0).toLocaleString(), jpLabel: x.jp ? ' · jackpot' : '', netLabel: fmt$(+x.net || 0), color: (+x.net || 0) >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: () => this.setState({ sheet: 'session', fs: { ...x, pts: String(x.pts), net: String(x.net) } }) })),
       noSessions: !d.sessions.length,
       bingo, bonus, noBonus: !bonus.length, huntFound: d.hunt.filter(h => h.by).length, huntTotal: d.hunt.length, bingoLine: bingos ? bingos + (bingos === 1 ? ' bingo' : ' bingos') : '', openClue: openQuick('clue'), openChal: openQuick('chal'), huntEdit: !!s.huntEdit, toggleHuntEdit: () => this.setState({ huntEdit: !s.huntEdit }), huntEditLabel: s.huntEdit ? 'Done' : 'Edit card', huntEditCls: s.huntEdit ? 'btn btn-primary' : 'btn btn-secondary',
       tq, tqNum: s.tq + 1, tqTotal: this.TRIVIA.length, tOpts, tScore: players.slice(0, 2).map(n => n + ' ' + st[n].triv * 20).join(' · '),
@@ -1727,7 +1733,7 @@ class Component extends DCLogic {
       hasSurvey: d.crew.some(x => x.survey), surveyList: d.crew.filter(x => x.survey).map(x => x.name + ' (' + x.role + (x.where ? ', ' + x.where : '') + ')').join('; '),
       spotRows: [...d.spots].sort((a, b) => a.deck - b.deck).map(sp => ({ ...sp, remove: remove('spots', sp.id) })),
       overlayOn: !!s.overlay, closeOverlay: set({ overlay: null }), overlaySub: { fleet: 'Cruises', wrap: 'Wrap-up', itin: c.ship, import: c.ship, sync: 'Share' }[s.overlay] || '',
-      ovFleet: s.overlay === 'fleet', ovWrap: s.overlay === 'wrap', ovItin: s.overlay === 'itin', ovImport: s.overlay === 'import', ovSync: s.overlay === 'sync', partner, openSync,
+      ovFleet: s.overlay === 'fleet', ovWrap: s.overlay === 'wrap', ovItin: s.overlay === 'itin', ovImport: s.overlay === 'import', ovSync: s.overlay === 'sync', partner, openSync, shareLabel: 'Share with ' + partner,
       exportData: () => this.exportData(), pickSync: () => this.syncEl && this.syncEl.click(), syncRef: el => { this.syncEl = el; }, onSyncFile: e => this.onSyncFile(e),
       exportSummary: (() => { const all = Object.values(s.db); const n = k => all.reduce((a, x) => a + ((x && x[k]) || []).length, 0); return s.cruises.length + ' cruises, ' + n('sessions') + ' slots sessions, ' + n('plans') + ' plans and ' + n('photos') + ' photos'; })(),
       hasSyncIn: !!s.syncIn, syncInWhen: s.syncIn ? 'Saved ' + new Date(s.syncIn.saved).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '',
@@ -1745,7 +1751,7 @@ class Component extends DCLogic {
       shots: s.shots.map(sh => ({ bg: 'center/cover no-repeat url(' + sh.src + ')' })), hasShots: s.shots.length > 0, shotCount: s.shots.length ? s.shots.length + ' added' : '',
       impText: s.impText, setImpText: v('impText'), runImport: () => this.runImport(), impDisabled: s.impBusy || (!s.impText.trim() && !s.shots.length), impBtn: s.impBusy ? 'Reading…' : 'Read schedule', impMsg: s.impMsg,
       found: s.found.map(f => ({ title: f.title, meta: dateLabel(f.off) + ' · ' + f.time + (f.place ? ' · ' + f.place : '') + (f.conf ? ' · ' + f.conf : ''), icon: f.pick ? 'ph-duotone ph-check-square' : 'ph-duotone ph-square', toggle: () => this.setState(x => ({ found: x.found.map(y => y.id === f.id ? { ...y, pick: !y.pick } : y) })) })),
-      hasFound: s.found.length > 0, foundCount: s.found.length, pickedCount,
+      hasFound: s.found.length > 0, foundCount: s.found.length, pickedCount, addFoundLabel: 'Add ' + pickedCount + ' to plans',
       addFound: () => { const add = s.found.filter(f => f.pick).map(({ pick, ...p }) => p); this.upd(dd => ({ plans: [...dd.plans, ...add] })); this.setState({ found: [], impText: '', shots: [], impMsg: '', overlay: null, tab: 'plans', planView: 'days' }); },
       sheetOpen: !!s.sheet, closeSheet: () => { if (s.sheet !== 'welcome') this.setState({ sheet: null }); }, stop: e => e.stopPropagation(),
       shAdd: s.sheet === 'add', shPlan: s.sheet === 'plan', shDay: s.sheet === 'day' && !!dayBy(s.selOff), shSession: s.sheet === 'session', shQuick: s.sheet === 'quick', shWho: s.sheet === 'who', shFood: s.sheet === 'food', shCrew: s.sheet === 'crew', shCruise: s.sheet === 'cruise', shViewer: s.sheet === 'viewer' && !!viewer,
