@@ -905,7 +905,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ fb.who }} · bankroll</div><h2 style="margin:0;font-size:24px">{{ nightTitle }}</h2></div>
 <div class="field"><label>Night</label><select class="input" value="{{ fbOff }}" onChange="{{ fbDay }}"><sc-for list="{{ dayOpts }}" as="o" hint-placeholder-count="8"><option value="{{ o.v }}">{{ o.label }}</option></sc-for></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
-<div class="field"><label>Brought ($)</label><input class="input" inputMode="numeric" placeholder="{{ fbSuggest }}" value="{{ fb.start }}" onChange="{{ fbStart }}"></div>
+<div class="field"><label>Starting with ($)</label><input class="input" inputMode="numeric" placeholder="{{ fbSuggest }}" value="{{ fb.start }}" onChange="{{ fbStart }}"></div>
 <div class="field"><label>Left at end ($)</label><input class="input" inputMode="numeric" placeholder="Still playing" value="{{ fb.end }}" onChange="{{ fbEnd }}"></div>
 </div>
 <div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">{{ nightHint }}</div>
@@ -1507,14 +1507,14 @@ class Component extends DCLogic {
       const edit = x => () => this.setState({ sheet: 'night', fb: { mode: 'edit', who: n, id: x.id, off: x.off, start: String(x.start), end: x.end == null ? '' : String(x.end) } });
       const act = open ? { label: 'End tonight', icon: 'ph-duotone ph-moon-stars', cls: 'btn btn-primary', go: () => this.setState({ sheet: 'night', fb: { mode: 'end', who: n, id: open.id, off: open.off, start: String(open.start), end: '' } }) }
         : tonight ? { label: 'Edit tonight', icon: 'ph-duotone ph-pencil-simple', cls: 'btn btn-secondary', go: edit(tonight) }
-        : { label: 'Start tonight', icon: 'ph-duotone ph-coins', cls: 'btn btn-primary', go: () => this.setState({ sheet: 'night', fb: { mode: 'start', who: n, off: bOff, start: suggest ? String(suggest) : '', end: '', suggest } }) };
+        : { label: 'Start tonight', icon: 'ph-duotone ph-coins', cls: 'btn btn-primary', go: () => { const prev = [...nts].reverse().find(x => this.closedNight(x) && x.off < bOff && +x.end > 0), carry = prev ? +prev.end : 0; this.setState({ sheet: 'night', fb: { mode: 'start', who: n, off: bOff, start: carry ? String(carry) : suggest ? String(suggest) : '', end: '', suggest, carry } }); } };
       return { name: n, setLabel: 'Set ' + n + '’s bankroll', hasTotal: total > 0, noTotal: !total, ofLine: total ? 'of ' + money(total) : 'No bankroll set',
         leftLabel: money(now), overall: up ? (up > 0 ? 'up ' : 'down ') + money(Math.abs(up)) : '', overallColor: up >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)',
         pct: (total ? Math.max(0, Math.min(100, now / total * 100)) : 0) + '%', color: now < total * 0.25 ? 'var(--color-accent-2)' : colorOf(n),
         paceLine: 'On pace: about ' + money(suggest) + ' a night for ' + nightsLeft + (nightsLeft === 1 ? ' night' : ' nights') + ' left',
-        tonightLine: open ? 'In play: brought ' + money(open.start) + (open.off !== bOff ? ' (' + dateLabel(open.off) + ')' : '') : tonight ? 'Tonight: ' + fmt$(+tonight.end - +tonight.start) : 'Not started tonight',
+        tonightLine: open ? 'In play: started with ' + money(open.start) + (open.off !== bOff ? ' (' + dateLabel(open.off) + ')' : '') : tonight ? 'Tonight: ' + fmt$(+tonight.end - +tonight.start) : 'Not started tonight',
         action: act.go, actionLabel: act.label, actionIcon: act.icon, actionCls: act.cls,
-        nights: nts.map(x => { const done = this.closedNight(x), r = done ? +x.end - +x.start : 0; return { when: dateLabel(x.off) + ' · ' + this.short((dayBy(x.off) || {}).name || ''), detail: done ? 'Brought ' + money(x.start) + ' · left with ' + money(x.end) : 'Brought ' + money(x.start) + ' · still playing', result: done ? fmt$(r) : '…', color: !done ? 'var(--color-neutral-700)' : r >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: edit(x) }; }) };
+        nights: nts.map(x => { const done = this.closedNight(x), r = done ? +x.end - +x.start : 0; return { when: dateLabel(x.off) + ' · ' + this.short((dayBy(x.off) || {}).name || ''), detail: done ? 'Started with ' + money(x.start) + ' · ended with ' + money(x.end) : 'Started with ' + money(x.start) + ' · still playing', result: done ? fmt$(r) : '…', color: !done ? 'var(--color-neutral-700)' : r >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: edit(x) }; }) };
     });
     const crowns = [{ title: 'Jackpots', rot: '-5deg', ...best('jp') }, { title: 'Money', rot: '3deg', ...best('money') }, { title: 'Points', rot: '-2deg', ...best('pts') }];
 
@@ -1653,7 +1653,7 @@ class Component extends DCLogic {
       fbStart: e => { const val = e.target.value; this.setState(x => ({ fb: { ...x.fb, start: val } })); },
       fbEnd: e => { const val = e.target.value; this.setState(x => ({ fb: { ...x.fb, end: val } })); },
       nightTitle: !s.fb ? '' : s.fb.mode === 'start' ? 'Start tonight' : s.fb.mode === 'end' ? 'End tonight' : 'Edit night',
-      nightHint: !s.fb ? '' : s.fb.mode === 'end' ? 'Count what’s in your hand and enter it under “Left at end”.' : s.fb.suggest ? 'Suggested $' + s.fb.suggest + ' to stay on pace. Leave “Left at end” blank until you’re done for the night.' : 'Leave “Left at end” blank until you’re done for the night.',
+      nightHint: !s.fb ? '' : s.fb.mode === 'end' ? 'Count what’s in your hand and enter it under “Left at end”.' : s.fb.mode === 'start' && s.fb.carry ? 'Filled in with the $' + s.fb.carry.toLocaleString() + ' you ended last night with. Add any new cash you take out' + (s.fb.suggest ? ' (pace: about $' + s.fb.suggest.toLocaleString() + ' a night)' : '') + '. Leave “Left at end” blank until you’re done.' : s.fb.suggest ? 'Everything you start the night with. Pace: about $' + s.fb.suggest.toLocaleString() + ' a night. Leave “Left at end” blank until you’re done.' : 'Everything you start the night with. Leave “Left at end” blank until you’re done.',
       nightInvalid: !s.fb || !(parseFloat(s.fb.start) > 0), nightEditing: !!(s.fb && s.fb.id),
       saveNight: () => { const f = s.fb, num = v => parseFloat(String(v).replace(/[^0-9.]/g, '')), start = num(f.start), end = String(f.end ?? '').trim() === '' ? null : num(f.end); if (!(start > 0)) return;
         const night = { id: f.id || Date.now(), off: +f.off, start, end: end != null && !isNaN(end) ? end : null };
