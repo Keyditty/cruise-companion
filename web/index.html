@@ -457,6 +457,10 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 <div style="position:absolute;top:12px;right:12px;width:58px;height:70px;border:2px dashed #fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:color-mix(in srgb,var(--color-accent) 70%,transparent)"><i class="ph-duotone ph-anchor" style="font-size:22px"></i>{{ shipShort }}</div>
 </sc-if>
+<sc-if value="{{ isJackpot }}"><div style="position:absolute;inset:0;pointer-events:none;background:{{ jackpotBg }}"></div>
+<div style="position:absolute;top:3.2%;left:0;right:0;text-align:center;pointer-events:none;font-size:52px;font-weight:600;line-height:1;letter-spacing:.02em;color:#ffd84a;-webkit-text-stroke:1.5px #6b4700;text-shadow:0 0 10px rgba(255,216,74,.85),3px 3px 0 #d6006c">JACKPOT!</div>
+<div style="position:absolute;top:24.5%;left:0;right:0;text-align:center;pointer-events:none;font-size:{{ jpSize }};font-weight:600;line-height:1;color:#fff;-webkit-text-stroke:1.5px #201e1d;text-shadow:3px 3px 0 #edbb00,0 0 12px rgba(0,0,0,.45)">{{ headline }}</div>
+<div style="position:absolute;bottom:2.2%;left:0;right:0;text-align:center;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#ffd84a;pointer-events:none">{{ stampTop }}</div></sc-if>
 <sc-if value="{{ isStampF }}"><div style="position:absolute;left:14px;bottom:14px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);pointer-events:none"><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase">{{ stampTop }}</div><div style="font-size:26px;font-weight:600;line-height:1">{{ stampPort }}</div></div></sc-if>
 <sc-if value="{{ showCamMsg }}"><div style="position:absolute;top:10px;left:10px;right:10px;font-size:12px;line-height:1.35;color:#fff;background:color-mix(in srgb,var(--color-neutral-900) 70%,transparent);padding:6px 10px;border-radius:var(--radius-md)">{{ camMsg }}</div></sc-if>
 </div>
@@ -1110,7 +1114,7 @@ class Component extends DCLogic {
     { q: 'What is a ship’s galley?', o: ['The kitchen', 'The art gallery', 'The lifeboat deck'], a: 0 },
   ];
   FILTERS = { natural: ['Natural', 'none'], news: ['Newsprint', 'grayscale(1) contrast(1.35)'], press: ['Press', 'url(#sep-all)'], golden: ['Golden hour', 'sepia(.35) saturate(1.4) contrast(1.05) brightness(1.04)'], carib: ['Caribbean', 'saturate(1.7) hue-rotate(-10deg) brightness(1.05)'], noir: ['Noir', 'grayscale(1) contrast(1.6) brightness(.9)'] };
-  FRAMES = [['plain', 'Plain', 'ph-square'], ['stamp', 'Date stamp', 'ph-calendar-check'], ['front', 'Front page', 'ph-newspaper'], ['postcard', 'Postcard', 'ph-envelope-simple'], ['polaroid', 'Instant', 'ph-image-square']];
+  FRAMES = [['plain', 'Plain', 'ph-square'], ['stamp', 'Date stamp', 'ph-calendar-check'], ['front', 'Front page', 'ph-newspaper'], ['postcard', 'Postcard', 'ph-envelope-simple'], ['polaroid', 'Instant', 'ph-image-square'], ['jackpot', 'Jackpot', 'ph-coins']];
   SYM = [['ph-anchor', 'var(--color-accent)'], ['ph-crown-simple', 'var(--color-process-yellow)'], ['ph-star', 'var(--color-accent-2)'], ['ph-coins', 'var(--color-process-yellow)'], ['ph-diamond', 'var(--color-accent)'], ['ph-heart', 'var(--color-accent-2)']];
   LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
   STK = {
@@ -1153,6 +1157,22 @@ class Component extends DCLogic {
       + this.palm(-20, 960, 560, 70, 170, '#173d32') + this.palm(740, 960, 600, -80, 180, '#173d32') + '</svg>';
     this._scene = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     return this._scene;
+  }
+  // Jackpot frame laid over the photo: marquee with bulbs, falling coins, 7-7-7 reels at the bottom.
+  jackpotUrl() {
+    if (this._jackpot) return this._jackpot;
+    let bulbs = ''; for (let i = 0; i < 18; i++) { const x = 30 + i * 38.8; bulbs += "<circle cx='" + x.toFixed(1) + "' cy='22' r='7' fill='" + (i % 2 ? '#fff6c2' : '#edbb00') + "'/><circle cx='" + x.toFixed(1) + "' cy='204' r='7' fill='" + (i % 2 ? '#edbb00' : '#fff6c2') + "'/>"; }
+    let coins = ''; [[40, 260, 22, -20], [96, 330, 16, 30], [672, 250, 24, 15], [628, 340, 17, -35], [30, 470, 18, 50], [690, 500, 20, -10], [70, 610, 15, 25], [650, 640, 18, 40], [150, 250, 12, 0], [570, 280, 13, 60]].forEach(([cx, cy, r, rot]) => {
+      coins += "<g transform='rotate(" + rot + ' ' + cx + ' ' + cy + ")'><ellipse cx='" + cx + "' cy='" + cy + "' rx='" + r + "' ry='" + (r * 0.82).toFixed(1) + "' fill='#edbb00' stroke='#8a6400' stroke-width='3'/><ellipse cx='" + cx + "' cy='" + cy + "' rx='" + (r * 0.6).toFixed(1) + "' ry='" + (r * 0.48).toFixed(1) + "' fill='none' stroke='#fff3b0' stroke-width='2'/></g>"; });
+    let reels = ''; [150, 300, 450].forEach(x => { reels += "<rect x='" + x + "' y='762' width='120' height='112' rx='14' fill='#fffaf0' stroke='#edbb00' stroke-width='6'/><text x='" + (x + 60) + "' y='852' text-anchor='middle' font-family='Georgia, serif' font-weight='700' font-size='92' fill='#d6006c' stroke='#5a0030' stroke-width='2'>7</text>"; });
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='720' height='960' viewBox='0 0 720 960'><defs>"
+      + "<linearGradient id='mq' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#2a0838'/><stop offset='1' stop-color='#5b0f5e'/></linearGradient>"
+      + "<linearGradient id='bt' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#2a0838' stop-opacity='0'/><stop offset='.35' stop-color='#2a0838' stop-opacity='.85'/><stop offset='1' stop-color='#2a0838'/></linearGradient></defs>"
+      + "<rect width='720' height='226' fill='url(#mq)'/><rect x='6' y='6' width='708' height='214' rx='18' fill='none' stroke='#edbb00' stroke-width='5'/>" + bulbs
+      + coins + "<rect y='690' width='720' height='270' fill='url(#bt)'/>" + reels
+      + "<path d='M128 818 h-40 M592 818 h40' stroke='#edbb00' stroke-width='6' stroke-linecap='round'/><circle cx='80' cy='818' r='10' fill='#d6006c'/><circle cx='640' cy='818' r='10' fill='#d6006c'/></svg>";
+    this._jackpot = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    return this._jackpot;
   }
   // Postcard frame laid over the photo: shade for the title, palm fronds in the corners, surf along the bottom.
   overlayUrl() {
@@ -1388,7 +1408,7 @@ class Component extends DCLogic {
     const t = new Date(new Date(s.now).toDateString()).getTime(), st = new Date(c.start + 'T00:00:00').getTime(), off = Math.floor((t - st) / 864e5);
     return off >= 0 ? Math.min(off, +c.nights || 0) : null;
   }
-  headlineText() { const s = this.state; if (s.headline) return s.headline; const st = this.stampInfo(); return s.frame === 'polaroid' ? st.port + ', ' + st.top.split(' · ')[0] : s.players.slice(0, 2).join(' & ') + ' take ' + st.port; }
+  headlineText() { const s = this.state; if (s.headline) return s.headline; const st = this.stampInfo(); return s.frame === 'jackpot' ? 'BIG WIN!' : s.frame === 'polaroid' ? st.port + ', ' + st.top.split(' · ')[0] : s.players.slice(0, 2).join(' & ') + ' take ' + st.port; }
   async bake() {
     const s = this.state; if (!s.draft) return;
     const img = await this.loadImg(s.draft), W = 720, H = 960, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
@@ -1422,6 +1442,12 @@ class Component extends DCLogic {
       x.font = '600 38px ' + serif; wrap(head, 28, 192, W - 56, 44, 2);
       photo(28, 250, W - 56, H - 320);
       x.fillStyle = ink; x.font = 'italic 18px ' + serif; x.fillText(s.players.slice(0, 2).join(' & ') + ' · ' + c.ship, 28, H - 36);
+    } else if (s.frame === 'jackpot') {
+      photo(0, 0, W, H); x.drawImage(await this.loadImg(this.jackpotUrl()), 0, 0, W, H); x.textAlign = 'center'; x.lineJoin = 'round';
+      x.font = '600 108px ' + serif; x.fillStyle = mag; x.fillText('JACKPOT!', W / 2 + 6, 152); x.shadowColor = 'rgba(255,216,74,.9)'; x.shadowBlur = 18; x.fillStyle = '#ffd84a'; x.fillText('JACKPOT!', W / 2, 146); x.shadowBlur = 0; x.lineWidth = 3; x.strokeStyle = '#6b4700'; x.strokeText('JACKPOT!', W / 2, 146);
+      let jz = head.length > 9 ? 76 : 104; x.font = '600 ' + jz + 'px ' + serif; while (x.measureText(head).width > W - 60 && jz > 40) { jz -= 4; x.font = '600 ' + jz + 'px ' + serif; }
+      x.fillStyle = yellow; x.fillText(head, W / 2 + 6, 236 + jz * 0.9 + 6); x.lineWidth = 6; x.strokeStyle = ink; x.strokeText(head, W / 2, 236 + jz * 0.9); x.fillStyle = '#fff'; x.fillText(head, W / 2, 236 + jz * 0.9);
+      x.fillStyle = '#ffd84a'; x.font = '600 22px ' + serif; x.fillText(st.top.toUpperCase(), W / 2, H - 22); x.textAlign = 'left';
     } else if (s.frame === 'postcard') {
       x.fillStyle = paper; x.fillRect(0, 0, W, H); photo(20, 20, W - 40, H - 40);
       x.shadowColor = 'rgba(0,0,0,.5)'; x.shadowBlur = 8; x.fillStyle = '#fff'; x.font = 'italic 38px ' + serif; x.fillText('Greetings from', 50, H - 180); x.shadowBlur = 0;
@@ -1718,8 +1744,8 @@ class Component extends DCLogic {
       videoRef: this.videoRef, thumbRef: this.thumbRef, fileRef: el => { this.fileEl = el; },
       cssFilter: this.FILTERS[s.filter][1], isNews: s.filter === 'news', draftBg: s.draft ? 'center/cover no-repeat url(' + s.draft + ')' : 'none',
       frameBg, framePad: { front: '14px', postcard: '10px', polaroid: '14px 14px 0' }[fr] || '0', frameGap: fr === 'front' ? '8px' : '0', photoRadius: fr === 'postcard' ? '2px' : '0',
-      isFront: fr === 'front', isPostcard: fr === 'postcard', isPolaroid: fr === 'polaroid', isStampF: fr === 'stamp',
-      stampTop: stI.top, stampPort: stI.port, headline: this.headlineText(), setHeadline: v('headline'), showHeadline: fr === 'front' || fr === 'polaroid', headlineLabel: fr === 'front' ? 'Headline' : 'Caption', shipName: c.ship,
+      isFront: fr === 'front', isPostcard: fr === 'postcard', isPolaroid: fr === 'polaroid', isStampF: fr === 'stamp', isJackpot: fr === 'jackpot', jackpotBg: '0 0/100% 100% no-repeat url("' + this.jackpotUrl() + '")', jpSize: this.headlineText().length > 9 ? '36px' : '50px',
+      stampTop: stI.top, stampPort: stI.port, headline: this.headlineText(), setHeadline: v('headline'), showHeadline: fr === 'front' || fr === 'polaroid' || fr === 'jackpot', headlineLabel: fr === 'front' ? 'Headline' : fr === 'jackpot' ? 'Win amount (or a few words)' : 'Caption', shipName: c.ship,
       showCamMsg: srcMode === 'sample', camMsg,
       filterChips: Object.entries(this.FILTERS).map(([id, f]) => ({ label: f[0], css: f[1], news: id === 'news', ring: s.filter === id ? '2px solid var(--color-accent)' : 'none', fg: s.filter === id ? 'var(--color-accent-700)' : 'var(--color-text)', pick: set({ filter: id }) })),
       frameChips: this.FRAMES.map(([id, label, ic]) => ({ label, icon: 'ph-duotone ' + ic, ...chip(fr === id), pick: () => this.setState({ frame: id, headline: '', backdrop: null }) })),
