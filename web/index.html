@@ -313,8 +313,10 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="font-size:13px;color:var(--color-neutral-700)">{{ br.paceLine }}</div>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-2);padding-top:var(--space-2);border-top:1px solid var(--color-divider)"><span style="font-size:15px;line-height:1.35">{{ br.tonightLine }}</span><button class="{{ br.actionCls }}" onClick="{{ br.action }}" style="flex:none;padding:8px 14px;font-size:14px"><i class="{{ br.actionIcon }}"></i>{{ br.actionLabel }}</button></div>
 <sc-for list="{{ br.nights }}" as="nt" hint-placeholder-count="0">
-<button onClick="{{ nt.edit }}" style="display:grid;grid-template-columns:1fr auto;gap:var(--space-2);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:14px;font-weight:600">{{ nt.when }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ nt.detail }}</span></span><span style="font-size:15px;font-weight:600;color:{{ nt.color }}">{{ nt.result }}</span></button>
+<button onClick="{{ nt.edit }}" style="display:grid;grid-template-columns:1fr auto;gap:var(--space-2);align-items:baseline;background:none;border:0;padding:0;text-align:left;font-family:var(--font-body);color:var(--color-text);cursor:pointer"><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:14px;font-weight:600">{{ nt.when }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ nt.detail }}</span><sc-if value="{{ nt.warn }}"><span style="font-size:12px;font-weight:600;color:var(--color-accent-2-700)"><i class="ph-duotone ph-warning"></i> {{ nt.warn }}</span></sc-if></span><span style="font-size:15px;font-weight:600;color:{{ nt.color }}">{{ nt.result }}</span></button>
 </sc-for>
+<sc-if value="{{ br.hasNights }}"><div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700);padding-top:var(--space-2);border-top:1px dashed var(--color-divider)">{{ br.checkLine }}</div></sc-if>
+<button class="btn btn-ghost" onClick="{{ br.addNight }}" style="align-self:flex-start;padding-left:0;font-size:13px"><i class="ph-duotone ph-plus"></i>Add a night (fill in an earlier one)</button>
 </sc-if>
 <sc-if value="{{ br.noTotal }}"><button class="btn btn-secondary" onClick="{{ openBankSetup }}" style="align-self:flex-start"><i class="ph-duotone ph-wallet"></i>{{ br.setLabel }}</button></sc-if>
 </div>
@@ -1366,7 +1368,7 @@ class Component extends DCLogic {
     return { total, led, reserve, inHand, now, up: now - total, open: led.find(x => !x.done), net: led.filter(x => x.done).reduce((a, x) => a + x.result, 0), hasDone: led.some(x => x.done) };
   }
   // Cash carried into a night: what the night before it ended with (or still has in play).
-  carryFor(b, off, id) { const before = this.bankLedger(b).filter(x => x.id !== id && (x.off < off || (x.off === off && id && x.id < id))); const p = before[before.length - 1]; return p ? (p.done ? p.end : p.start) : 0; }
+  carryFor(b, off, id) { const before = this.bankLedger(b).filter(x => x.id !== id && (x.off < off || (x.off === off && (!id || x.id < id)))); const p = before[before.length - 1]; return p ? (p.done ? p.end : p.start) : 0; }
   closedNight(x) { return x.end != null && x.end !== ''; }
   claimers(w) { return Array.isArray(w) ? w : w ? [w] : []; }
   // Keys: "off:i" for the built-in daily three, "x<id>" for ones you wrote.
@@ -1517,7 +1519,7 @@ class Component extends DCLogic {
     const best = (key, fmt) => { const sorted = players.map(n => ({ n, v: st[n][key] })).filter(x => st[x.n].n || st[x.n].hasBank).sort((a, b) => b.v - a.v); if (!sorted.length || sorted[0].v <= 0) return { holder: 'Open', color: 'var(--color-neutral-500)' }; const tie = sorted[1] && sorted[1].v === sorted[0].v; return { holder: tie ? 'Tied' : sorted[0].n, color: tie ? 'var(--color-neutral-600)' : 'var(--color-process-yellow)' }; };
     const bOff = onboard ? on : 0;
     const bankRows = players.map(n => {
-      const b = (d.bank || {})[n] || {}, sm = this.bankSummary(b), { total, led, now, up, open } = sm, tonight = led.find(x => x.off === bOff);
+      const b = (d.bank || {})[n] || {}, sm = this.bankSummary(b), { total, led, now, up, open } = sm, tonight = [...led].reverse().find(x => x.off === bOff);
       const first = Math.max(0, bOff), nightsLeft = Math.max(1, Array.from({ length: Math.max(0, nights - first) }, (_, i) => first + i).filter(o => !led.some(x => x.off === o && x.done)).length);
       const suggest = Math.max(0, Math.floor(now / nightsLeft / 10) * 10), money = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
       const edit = x => () => this.setState({ sheet: 'night', fb: { mode: 'edit', who: n, id: x.id, off: x.off, added: String(x.added), end: x.done ? String(x.end) : '' } });
@@ -1532,7 +1534,9 @@ class Component extends DCLogic {
         paceLine: 'On pace: about ' + money(suggest) + ' a night for ' + nightsLeft + (nightsLeft === 1 ? ' night' : ' nights') + ' left',
         tonightLine: open ? 'In play: ' + how(open).replace(/^C/, 'c').replace(/^A/, 'a') + (open.off !== bOff ? ' (' + dateLabel(open.off) + ')' : '') : tonight ? 'Tonight: ' + fmt$(tonight.result) : 'Not started tonight',
         action: act.go, actionLabel: act.label, actionIcon: act.icon, actionCls: act.cls,
-        nights: led.map(x => ({ when: dateLabel(x.off) + ' · ' + this.short((dayBy(x.off) || {}).name || ''), detail: how(x) + (x.done ? ' → ended ' + money(x.end) : ' · still playing'), result: x.done ? fmt$(x.result) : '…', color: !x.done ? 'var(--color-neutral-700)' : x.result >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: edit(x) })) };
+        checkLine: total ? 'Check: ' + money(total) + ' bankroll − ' + money(led.reduce((a, x) => a + x.added, 0)) + ' added + ' + money(sm.inHand) + (open ? ' in play' : ' in hand') + ' = ' + money(now) + ' left' : '',
+        hasNights: led.length > 0, addNight: () => { const last = led[led.length - 1], off = last ? Math.max(last.off + 1, Math.min(...days.map(x => x.off))) : bOff; this.setState({ sheet: 'night', fb: { mode: 'start', who: n, off, added: '', end: '', suggest } }); },
+        nights: led.map(x => ({ when: dateLabel(x.off) + ' · ' + this.short((dayBy(x.off) || {}).name || ''), warn: led.filter(y => y.off === x.off).length > 1 ? 'Same date as another night: tap to fix the date' : '', detail: how(x) + (x.done ? ' → ended ' + money(x.end) : ' · still playing'), result: x.done ? fmt$(x.result) : '…', color: !x.done ? 'var(--color-neutral-700)' : x.result >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', edit: edit(x) })) };
     });
     const crowns = [{ title: 'Jackpots', rot: '-5deg', ...best('jp') }, { title: 'Money', rot: '3deg', ...best('money') }, { title: 'Points', rot: '-2deg', ...best('pts') }];
 
