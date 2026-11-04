@@ -1356,10 +1356,10 @@ class Component extends DCLogic {
   costPer(money, pts) { if (!(pts > 0)) return null; return Math.max(0, -money) / pts; }
   fmtCost(c) { return c == null ? '—' : c < 1 ? Math.round(c * 100) + '¢' : '$' + c.toFixed(2); }
   // A player's nights in order. Each night starts with the cash carried over from the
-  // night before plus any new cash added from the reserve; result = ended − started.
+  // night before plus any cash taken from the wallet (never negative); result = ended − started.
   bankLedger(b) {
     const nts = [...((b && b.nights) || [])].sort((x, y) => x.off - y.off || x.id - y.id); let carry = 0;
-    return nts.map(x => { const added = x.added != null ? +x.added : (+x.start || 0) - carry, start = carry + added, done = this.closedNight(x), end = done ? +x.end : null;
+    return nts.map(x => { const added = Math.max(0, x.added != null ? +x.added || 0 : (+x.start || 0) - carry), start = carry + added, done = this.closedNight(x), end = done ? +x.end : null;
       const row = { ...x, carry, added, start, done, end, result: done ? end - start : 0 }; carry = done ? end : start; return row; });
   }
   bankSummary(b) {
@@ -1526,7 +1526,7 @@ class Component extends DCLogic {
       const act = open ? { label: 'End tonight', icon: 'ph-duotone ph-moon-stars', cls: 'btn btn-primary', go: () => this.setState({ sheet: 'night', fb: { mode: 'end', who: n, id: open.id, off: open.off, added: String(open.added), end: '' } }) }
         : tonight ? { label: 'Edit tonight', icon: 'ph-duotone ph-pencil-simple', cls: 'btn btn-secondary', go: edit(tonight) }
         : { label: 'Start tonight', icon: 'ph-duotone ph-coins', cls: 'btn btn-primary', go: () => { const carry = this.carryFor(b, bOff, null); this.setState({ sheet: 'night', fb: { mode: 'start', who: n, off: bOff, added: carry > 0 ? '0' : suggest ? String(suggest) : '', end: '', suggest } }); } };
-      const how = x => (x.carry ? 'Carried ' + money(x.carry) + (x.added > 0 ? ' + ' + money(x.added) + ' from wallet' : x.added < 0 ? ' − ' + money(-x.added) + ' put back in wallet' : '') : money(x.added) + ' from wallet');
+      const how = x => (x.carry ? 'Carried ' + money(x.carry) + (x.added > 0 ? ' + ' + money(x.added) + ' from wallet' : '') : money(x.added) + ' from wallet');
       return { name: n, setLabel: 'Set ' + n + '’s bankroll', hasTotal: total > 0, noTotal: !total, ofLine: total ? 'of ' + money(total) : 'No bankroll set',
         leftLabel: money(now), overall: up ? (up > 0 ? 'up ' : 'down ') + money(Math.abs(up)) : 'even', overallColor: up >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)',
         cashLine: (open ? 'In play ' + money(sm.inHand) : 'Cash in hand ' + money(sm.inHand)) + ' · In wallet ' + money(sm.reserve),
@@ -1670,7 +1670,7 @@ class Component extends DCLogic {
       openBankSetup: () => this.setState({ sheet: 'bankSetup', fbt: Object.fromEntries(players.map(n => [n, String(((d.bank || {})[n] || {}).total || '')])) }),
       bankSetupRows: players.map(n => ({ name: n, total: (s.fbt || {})[n] || '', on: e => { const val = e.target.value; this.setState(x => ({ fbt: { ...x.fbt, [n]: val } })); } })),
       saveBankSetup: () => { this.upd(dd => { const bank = { ...(dd.bank || {}) }; players.forEach(n => { const v = parseInt(String((s.fbt || {})[n] || '').replace(/[^0-9]/g, ''), 10) || 0; bank[n] = { ...(bank[n] || { nights: [] }), total: v }; }); return { bank }; }); this.setState({ sheet: null }); },
-      ...(() => { const f = s.fb, bk = f ? (d.bank || {})[f.who] : null, carry = f ? this.carryFor(bk, +f.off, f.id) : 0, numA = v => parseFloat(String(v ?? '').replace(/[^0-9.-]/g, '')) || 0, added = f ? numA(f.added) : 0, money = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
+      ...(() => { const f = s.fb, bk = f ? (d.bank || {})[f.who] : null, carry = f ? this.carryFor(bk, +f.off, f.id) : 0, numA = v => parseFloat(String(v ?? '').replace(/[^0-9.]/g, '')) || 0, added = f ? numA(f.added) : 0, money = v => (v < 0 ? '−$' : '$') + Math.abs(Math.round(v)).toLocaleString();
         return { fb: f || {}, fbOff: String((f || {}).off ?? curOff), fbSuggest: f && f.suggest ? String(f.suggest) : '0', fbCarry: money(carry),
           fbStartLine: money(carry + added) + (f && String(f.end ?? '').trim() !== '' ? ' → ended ' + money(numA(f.end)) + ' = ' + fmt$(numA(f.end) - carry - added) : ''),
           nightTitle: !f ? '' : f.mode === 'start' ? 'Start tonight' : f.mode === 'end' ? 'End tonight' : 'Edit night',
