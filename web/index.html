@@ -460,7 +460,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <sc-if value="{{ isJackpot }}"><div style="position:absolute;inset:0;pointer-events:none;background:{{ jackpotBg }}"></div>
 <div style="position:absolute;top:3.2%;left:0;right:0;text-align:center;pointer-events:none;font-size:52px;font-weight:600;line-height:1;letter-spacing:.02em;color:#ffd84a;-webkit-text-stroke:1.5px #6b4700;text-shadow:0 0 10px rgba(255,216,74,.85),3px 3px 0 #d6006c">JACKPOT!</div>
 <div style="position:absolute;top:24.5%;left:0;right:0;text-align:center;pointer-events:none;font-size:{{ jpSize }};font-weight:600;line-height:1;color:#fff;-webkit-text-stroke:1.5px #201e1d;text-shadow:3px 3px 0 #edbb00,0 0 12px rgba(0,0,0,.45)">{{ headline }}</div>
-<div style="position:absolute;bottom:2.2%;left:0;right:0;text-align:center;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#ffd84a;pointer-events:none">{{ stampTop }}</div></sc-if>
+<div style="position:absolute;bottom:2.2%;left:0;right:0;text-align:center;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#ffd84a;pointer-events:none">{{ jpStamp }}</div></sc-if>
 <sc-if value="{{ isStampF }}"><div style="position:absolute;left:14px;bottom:14px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);pointer-events:none"><div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase">{{ stampTop }}</div><div style="font-size:26px;font-weight:600;line-height:1">{{ stampPort }}</div></div></sc-if>
 <sc-if value="{{ showCamMsg }}"><div style="position:absolute;top:10px;left:10px;right:10px;font-size:12px;line-height:1.35;color:#fff;background:color-mix(in srgb,var(--color-neutral-900) 70%,transparent);padding:6px 10px;border-radius:var(--radius-md)">{{ camMsg }}</div></sc-if>
 </div>
@@ -482,8 +482,11 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Hats &amp; props · tap to add, drag to place</span><sc-if value="{{ hasStickers }}"><button class="btn btn-ghost" onClick="{{ stkClear }}" style="font-size:12px">Clear</button></sc-if></div>
 <div class="scr" style="display:flex;gap:var(--space-2);overflow-x:auto;margin:0 -20px;padding:0 20px">
 <sc-for list="{{ stickerChips }}" as="k" hint-placeholder-count="6"><button onClick="{{ k.add }}" style="flex:none;width:72px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-body);font-size:11px;color:var(--color-text)"><span style="display:block;width:72px;height:56px;border:1px solid var(--color-divider);border-radius:var(--radius-md);background:{{ k.bg }}"></span>{{ k.label }}</button></sc-for>
+<button onClick="{{ pickMyStk }}" style="flex:none;width:72px;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-body);font-size:11px;color:var(--color-accent-700)"><span style="width:72px;height:56px;border:1px dashed var(--color-accent);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center"><i class="ph-duotone ph-image-square" style="font-size:24px"></i></span>Your own</button>
 </div>
-<sc-if value="{{ hasSel }}"><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ stkSmaller }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-minus"></i>Smaller</button><button class="btn btn-secondary" onClick="{{ stkBigger }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-plus"></i>Bigger</button><button class="btn btn-secondary" onClick="{{ stkTilt }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-arrow-clockwise"></i>Tilt</button><button class="btn btn-ghost" onClick="{{ stkRemove }}" style="font-size:12px;color:var(--color-accent-2-700)">Remove</button></div></sc-if>
+<input type="file" accept="image/*" ref="{{ myStkRef }}" onChange="{{ onMyStk }}" style="display:none">
+<sc-if value="{{ showMyStkHint }}"><div style="font-size:12px;line-height:1.5;color:var(--color-neutral-700)">Tip: a PNG with a see-through background (like a logo) looks best. Your stickers stay on this phone.</div></sc-if>
+<sc-if value="{{ hasSel }}"><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-secondary" onClick="{{ stkSmaller }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-minus"></i>Smaller</button><button class="btn btn-secondary" onClick="{{ stkBigger }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-plus"></i>Bigger</button><button class="btn btn-secondary" onClick="{{ stkTilt }}" style="padding:5px 10px;font-size:12px"><i class="ph-duotone ph-arrow-clockwise"></i>Tilt</button><button class="btn btn-ghost" onClick="{{ stkRemove }}" style="font-size:12px;color:var(--color-accent-2-700)">Remove</button><sc-if value="{{ selIsMine }}"><button class="btn btn-ghost" onClick="{{ stkForget }}" style="font-size:12px;color:var(--color-neutral-700)">Delete from my stickers</button></sc-if></div></sc-if>
 </div>
 <div style="display:flex;flex-direction:column;gap:6px">
 <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-neutral-700)">Island backdrop</div>
@@ -1126,6 +1129,8 @@ class Component extends DCLogic {
     lei: ['Flower lei', 1.45, null],
   };
   leiSvg() { let s = ''; const cols = ['#d6006c', '#edbb00', '#ff90b1', '#62c5ee']; for (let i = 0; i <= 12; i++) { const a = Math.PI * i / 12, x = 80 + 66 * Math.cos(a), y = 22 + 72 * Math.sin(a); if (i < 12) { const a2 = Math.PI * (i + 0.5) / 12; s += "<ellipse cx='" + (80 + 66 * Math.cos(a2)).toFixed(1) + "' cy='" + (22 + 72 * Math.sin(a2)).toFixed(1) + "' rx='7' ry='3.5' fill='#006786' transform='rotate(" + (a2 * 180 / Math.PI + 90).toFixed(0) + ' ' + (80 + 66 * Math.cos(a2)).toFixed(1) + ' ' + (22 + 72 * Math.sin(a2)).toFixed(1) + ")'/>"; } s += "<circle cx='" + x.toFixed(1) + "' cy='" + y.toFixed(1) + "' r='12' fill='" + cols[i % 4] + "' stroke='#201e1d' stroke-width='2'/><circle cx='" + x.toFixed(1) + "' cy='" + y.toFixed(1) + "' r='4' fill='" + (i % 4 === 1 ? '#d6006c' : '#edbb00') + "'/>"; } return "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='220' viewBox='0 0 160 110'>" + s + '</svg>'; }
+  // [label, aspect ratio, image url] for a built-in sticker or one of yours ("my:<id>").
+  stkDef(k) { if (String(k).startsWith('my:')) { const m = (this.cur().d.myStk || []).find(x => 'my:' + x.id === k); return m ? ['Your sticker', m.ar, m.src] : null; } const d = this.STK[k]; return d ? [d[0], d[1], this.stkUrl(k)] : null; }
   stkUrl(k) { const svg = k === 'lei' ? this.leiSvg() : this.STK[k][2]; return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); }
   palm(x, y, h, lean, L, col = '#201e1d') {
     const tx = x + lean, ty = y - h; let s = "<path d='M" + x + ' ' + y + ' Q' + (x + lean * 1.5) + ' ' + (y - h * 0.55) + ' ' + tx + ' ' + ty + "' stroke='" + col + "' stroke-width='" + (h * 0.045).toFixed(1) + "' fill='none' stroke-linecap='round'/>";
@@ -1158,6 +1163,11 @@ class Component extends DCLogic {
     this._scene = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     return this._scene;
   }
+  // An original blue-and-white casino chip (not any casino's logo).
+  chipSvg(cx, cy) {
+    let edge = ''; for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; edge += "<rect x='" + (cx - 7) + "' y='" + (cy - 50) + "' width='14' height='18' rx='3' fill='#fff' transform='rotate(" + (i * 45) + ' ' + cx + ' ' + cy + ")'/>"; }
+    return "<circle cx='" + cx + "' cy='" + cy + "' r='50' fill='#0a4fa3' stroke='#062f63' stroke-width='3'/>" + edge + "<circle cx='" + cx + "' cy='" + cy + "' r='31' fill='#1f6fd1' stroke='#fff' stroke-width='3' stroke-dasharray='6 5'/><circle cx='" + cx + "' cy='" + cy + "' r='19' fill='#fff'/><path d='M" + cx + ' ' + (cy - 11) + ' l9 11 l-9 11 l-9 -11Z' + "' fill='#0a4fa3'/>";
+  }
   // Jackpot frame laid over the photo: marquee with bulbs, falling coins, 7-7-7 reels at the bottom.
   jackpotUrl() {
     if (this._jackpot) return this._jackpot;
@@ -1170,7 +1180,7 @@ class Component extends DCLogic {
       + "<linearGradient id='bt' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#2a0838' stop-opacity='0'/><stop offset='.35' stop-color='#2a0838' stop-opacity='.85'/><stop offset='1' stop-color='#2a0838'/></linearGradient></defs>"
       + "<rect width='720' height='226' fill='url(#mq)'/><rect x='6' y='6' width='708' height='214' rx='18' fill='none' stroke='#edbb00' stroke-width='5'/>" + bulbs
       + coins + "<rect y='690' width='720' height='270' fill='url(#bt)'/>" + reels
-      + "<path d='M128 818 h-40 M592 818 h40' stroke='#edbb00' stroke-width='6' stroke-linecap='round'/><circle cx='80' cy='818' r='10' fill='#d6006c'/><circle cx='640' cy='818' r='10' fill='#d6006c'/></svg>";
+      + this.chipSvg(74, 818) + this.chipSvg(646, 818) + '</svg>';
     this._jackpot = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     return this._jackpot;
   }
@@ -1215,7 +1225,7 @@ class Component extends DCLogic {
 
   defaultHunt() { return [['A towel animal on the bed', 10], ['Someone in a captain’s hat', 15], ['A rooster in port', 15], ['Matching couple outfits', 20], ['Another cruise line’s ship', 10], ['An iguana', 20], ['Sunset selfie, top deck', 25], ['A conga line', 20], ['Someone hitting a jackpot', 25]].map((x, i) => ({ id: i + 1, title: x[0], pts: x[1], by: null, author: 'App' })); }
   defaultPack() { return ['Passports', 'Boarding documents', 'Casino player cards', 'Magnetic hooks', 'Lanyards', 'Reef-safe sunscreen', 'Swimsuits', 'Evening outfits', 'Seasickness bands', 'Non-surge power strip'].map((t, i) => ({ id: i + 1, text: t, done: false })); }
-  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {}, bank: {}, steps: {}, weighs: [] }; }
+  emptyData() { return { plans: [], sessions: [], hunt: this.defaultHunt(), pack: this.defaultPack(), spends: [], budget: 2000, notes: [], food: [], crew: [], spots: [], photos: [], trivia: {}, challenges: {}, myChal: [], casinoAdj: {}, bank: {}, steps: {}, weighs: [], myStk: [] }; }
   // Fresh installs start blank; the welcome sheet asks for names and the first cruise.
   seed() {
     return {
@@ -1395,6 +1405,7 @@ class Component extends DCLogic {
   chalPts(dd, k) { if (k[0] === 'x') { const m = (dd.myChal || []).find(c => 'x' + c.id === k); return m ? m.pts : 0; } const [off, i] = k.split(':').map(Number); const c = this.chalFor(off)[i]; return c ? c[2] : 0; }
   chalFor(off) { const n = this.CHAL.length, base = (((off + 10) * 7) % n + n) % n; return [0, 1, 2].map(i => this.CHAL[(base + i * 3) % n]); }
   rankOf(xp) { let i = 0; this.RANKS.forEach((r, j) => { if (xp >= r[0]) i = j; }); return { name: this.RANKS[i][1], cur: this.RANKS[i][0], next: this.RANKS[i + 1] }; }
+  readPng(file, max) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => { const img = new Image(); img.onload = () => { const sc = Math.min(1, max / Math.max(img.width, img.height)), cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc); cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); res({ src: cv.toDataURL('image/png'), ar: cv.width / cv.height }); }; img.onerror = rej; img.src = r.result; }; r.onerror = rej; r.readAsDataURL(file); }); }
   readImg(file, max) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => { const img = new Image(); img.onload = () => { const sc = Math.min(1, max / Math.max(img.width, img.height)), cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc); cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); res(cv.toDataURL('image/jpeg', 0.8)); }; img.onerror = rej; img.src = r.result; }; r.onerror = rej; r.readAsDataURL(file); }); }
   loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
   stampInfo() {
@@ -1408,6 +1419,7 @@ class Component extends DCLogic {
     const t = new Date(new Date(s.now).toDateString()).getTime(), st = new Date(c.start + 'T00:00:00').getTime(), off = Math.floor((t - st) / 864e5);
     return off >= 0 ? Math.min(off, +c.nights || 0) : null;
   }
+  jpStamp() { const { c } = this.cur(), club = ((this.state.brands || {})[c.line] || {}).club, st = this.stampInfo(); return club ? club + ' · ' + st.top.split(' · ')[0] : st.top; }
   headlineText() { const s = this.state; if (s.headline) return s.headline; const st = this.stampInfo(); return s.frame === 'jackpot' ? 'BIG WIN!' : s.frame === 'polaroid' ? st.port + ', ' + st.top.split(' · ')[0] : s.players.slice(0, 2).join(' & ') + ' take ' + st.port; }
   async bake() {
     const s = this.state; if (!s.draft) return;
@@ -1447,7 +1459,7 @@ class Component extends DCLogic {
       x.font = '600 108px ' + serif; x.fillStyle = mag; x.fillText('JACKPOT!', W / 2 + 6, 152); x.shadowColor = 'rgba(255,216,74,.9)'; x.shadowBlur = 18; x.fillStyle = '#ffd84a'; x.fillText('JACKPOT!', W / 2, 146); x.shadowBlur = 0; x.lineWidth = 3; x.strokeStyle = '#6b4700'; x.strokeText('JACKPOT!', W / 2, 146);
       let jz = head.length > 9 ? 76 : 104; x.font = '600 ' + jz + 'px ' + serif; while (x.measureText(head).width > W - 60 && jz > 40) { jz -= 4; x.font = '600 ' + jz + 'px ' + serif; }
       x.fillStyle = yellow; x.fillText(head, W / 2 + 6, 236 + jz * 0.9 + 6); x.lineWidth = 6; x.strokeStyle = ink; x.strokeText(head, W / 2, 236 + jz * 0.9); x.fillStyle = '#fff'; x.fillText(head, W / 2, 236 + jz * 0.9);
-      x.fillStyle = '#ffd84a'; x.font = '600 22px ' + serif; x.fillText(st.top.toUpperCase(), W / 2, H - 22); x.textAlign = 'left';
+      x.fillStyle = '#ffd84a'; x.font = '600 22px ' + serif; x.fillText(this.jpStamp().toUpperCase(), W / 2, H - 22); x.textAlign = 'left';
     } else if (s.frame === 'postcard') {
       x.fillStyle = paper; x.fillRect(0, 0, W, H); photo(20, 20, W - 40, H - 40);
       x.shadowColor = 'rgba(0,0,0,.5)'; x.shadowBlur = 8; x.fillStyle = '#fff'; x.font = 'italic 38px ' + serif; x.fillText('Greetings from', 50, H - 180); x.shadowBlur = 0;
@@ -1461,7 +1473,7 @@ class Component extends DCLogic {
       photo(0, 0, W, H);
       if (s.frame === 'stamp') { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 8; x.fillStyle = '#fff'; x.font = '18px ' + serif; x.fillText(st.top.toUpperCase(), 30, H - 76); x.font = '600 52px ' + serif; x.fillText(st.port, 28, H - 28); }
     }
-    for (const sk of s.stickers) { const def = this.STK[sk.kind]; if (!def) continue; try { const si = await this.loadImg(this.stkUrl(sk.kind)), sw = sk.w / 100 * W, sh = sw / def[1]; x.save(); x.translate(sk.x / 100 * W, sk.y / 100 * H); x.rotate(sk.rot * Math.PI / 180); x.drawImage(si, -sw / 2, -sh / 2, sw, sh); x.restore(); } catch (e) {} }
+    for (const sk of s.stickers) { const def = this.stkDef(sk.kind); if (!def) continue; try { const si = await this.loadImg(def[2]), sw = sk.w / 100 * W, sh = sw / def[1]; x.save(); x.translate(sk.x / 100 * W, sk.y / 100 * H); x.rotate(sk.rot * Math.PI / 180); x.drawImage(si, -sw / 2, -sh / 2, sw, sh); x.restore(); } catch (e) {} }
     const out = cv.toDataURL('image/jpeg', 0.78), on = this.onOff();
     this.upd(dd => ({ photos: [{ id: Date.now(), src: out, off: on }, ...dd.photos].slice(0, 24) }));
     this.setState({ draft: null, headline: '' });
@@ -1744,7 +1756,7 @@ class Component extends DCLogic {
       videoRef: this.videoRef, thumbRef: this.thumbRef, fileRef: el => { this.fileEl = el; },
       cssFilter: this.FILTERS[s.filter][1], isNews: s.filter === 'news', draftBg: s.draft ? 'center/cover no-repeat url(' + s.draft + ')' : 'none',
       frameBg, framePad: { front: '14px', postcard: '10px', polaroid: '14px 14px 0' }[fr] || '0', frameGap: fr === 'front' ? '8px' : '0', photoRadius: fr === 'postcard' ? '2px' : '0',
-      isFront: fr === 'front', isPostcard: fr === 'postcard', isPolaroid: fr === 'polaroid', isStampF: fr === 'stamp', isJackpot: fr === 'jackpot', jackpotBg: '0 0/100% 100% no-repeat url("' + this.jackpotUrl() + '")', jpSize: this.headlineText().length > 9 ? '36px' : '50px',
+      isFront: fr === 'front', isPostcard: fr === 'postcard', isPolaroid: fr === 'polaroid', isStampF: fr === 'stamp', isJackpot: fr === 'jackpot', jpStamp: this.jpStamp(), jackpotBg: '0 0/100% 100% no-repeat url("' + this.jackpotUrl() + '")', jpSize: this.headlineText().length > 9 ? '36px' : '50px',
       stampTop: stI.top, stampPort: stI.port, headline: this.headlineText(), setHeadline: v('headline'), showHeadline: fr === 'front' || fr === 'polaroid' || fr === 'jackpot', headlineLabel: fr === 'front' ? 'Headline' : fr === 'jackpot' ? 'Win amount (or a few words)' : 'Caption', shipName: c.ship,
       showCamMsg: srcMode === 'sample', camMsg,
       filterChips: Object.entries(this.FILTERS).map(([id, f]) => ({ label: f[0], css: f[1], news: id === 'news', ring: s.filter === id ? '2px solid var(--color-accent)' : 'none', fg: s.filter === id ? 'var(--color-accent-700)' : 'var(--color-text)', pick: set({ filter: id }) })),
@@ -1753,8 +1765,12 @@ class Component extends DCLogic {
       stageRef: el => { this.stage = el; },
       onDragMove: e => { const dg = this.drag; if (!dg || !this.stage) return; const r = this.stage.getBoundingClientRect(), nx = Math.max(0, Math.min(100, dg.ox + (e.clientX - dg.sx) / r.width * 100)), ny = Math.max(0, Math.min(100, dg.oy + (e.clientY - dg.sy) / r.height * 100)); this.setState(x => ({ stickers: x.stickers.map(k => k.id === dg.id ? { ...k, x: nx, y: ny } : k) })); },
       onDragEnd: () => { this.drag = null; },
-      stickers: s.stickers.map(sk => ({ left: sk.x + '%', top: sk.y + '%', w: sk.w + '%', ar: String(this.STK[sk.kind][1]), rot: sk.rot + 'deg', bg: 'center/contain no-repeat url("' + this.stkUrl(sk.kind) + '")', ring: s.selSticker === sk.id ? '2px dashed var(--color-accent)' : 'none', down: e => this.dragStart(e, sk) })),
-      stickerChips: Object.keys(this.STK).map(k => ({ label: this.STK[k][0], bg: 'var(--color-neutral-100) center/62% no-repeat url("' + this.stkUrl(k) + '")', add: () => { const id = Date.now(), pos = { captain: [50, 20, 50], sunhat: [50, 20, 56], pirate: [50, 20, 50], party: [50, 18, 24], shades: [50, 42, 42], lei: [50, 74, 60] }[k]; this.setState(x => ({ stickers: [...x.stickers, { id, kind: k, x: pos[0], y: pos[1], w: pos[2], rot: 0 }], selSticker: id })); } })),
+      stickers: s.stickers.filter(sk => this.stkDef(sk.kind)).map(sk => ({ left: sk.x + '%', top: sk.y + '%', w: sk.w + '%', ar: String(this.stkDef(sk.kind)[1]), rot: sk.rot + 'deg', bg: 'center/contain no-repeat url("' + this.stkDef(sk.kind)[2] + '")', ring: s.selSticker === sk.id ? '2px dashed var(--color-accent)' : 'none', down: e => this.dragStart(e, sk) })),
+      stickerChips: Object.keys(this.STK).map(k => ({ label: this.STK[k][0], bg: 'var(--color-neutral-100) center/62% no-repeat url("' + this.stkUrl(k) + '")', add: () => { const id = Date.now(), pos = { captain: [50, 20, 50], sunhat: [50, 20, 56], pirate: [50, 20, 50], party: [50, 18, 24], shades: [50, 42, 42], lei: [50, 74, 60] }[k]; this.setState(x => ({ stickers: [...x.stickers, { id, kind: k, x: pos[0], y: pos[1], w: pos[2], rot: 0 }], selSticker: id })); } })).concat((d.myStk || []).map(m => ({ label: 'Yours', bg: 'var(--color-neutral-100) center/70% no-repeat url("' + m.src + '")', add: () => { const id = Date.now(); this.setState(x => ({ stickers: [...x.stickers, { id, kind: 'my:' + m.id, x: 50, y: 56, w: 40, rot: 0 }], selSticker: id })); } }))),
+      showMyStkHint: !(d.myStk || []).length, myStkRef: el => { this.myStkEl = el; }, pickMyStk: () => this.myStkEl && this.myStkEl.click(),
+      onMyStk: async e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return; try { const m = await this.readPng(f, 600); const item = { id: Date.now(), src: m.src, ar: m.ar }; this.upd(dd => ({ myStk: [...(dd.myStk || []), item].slice(-8) })); const sid = Date.now() + 1; this.setState(x => ({ stickers: [...x.stickers, { id: sid, kind: 'my:' + item.id, x: 50, y: 56, w: 40, rot: 0 }], selSticker: sid })); } catch (err) {} },
+      selIsMine: !!(s.stickers.find(k => k.id === s.selSticker) || { kind: '' }).kind.startsWith('my:'),
+      stkForget: () => { const sk = s.stickers.find(k => k.id === s.selSticker); if (!sk) return; const id = +sk.kind.slice(3); this.upd(dd => ({ myStk: (dd.myStk || []).filter(m => m.id !== id) })); this.setState(x => ({ stickers: x.stickers.filter(k => k.kind !== sk.kind), selSticker: null })); },
       hasStickers: s.stickers.length > 0, hasSel: s.stickers.some(k => k.id === s.selSticker),
       stkBigger: () => this.setState(x => ({ stickers: x.stickers.map(k => k.id === x.selSticker ? { ...k, w: Math.min(120, k.w * 1.15) } : k) })),
       stkSmaller: () => this.setState(x => ({ stickers: x.stickers.map(k => k.id === x.selSticker ? { ...k, w: Math.max(8, k.w / 1.15) } : k) })),
