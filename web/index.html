@@ -899,6 +899,17 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </div>
 </sc-if>
 
+<sc-if value="{{ shGoals }}">
+<div style="display:flex;flex-direction:column;gap:var(--space-4)">
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ clubName }} · {{ shipName }}</div><h2 style="margin:0;font-size:24px">Free-cruise points goals</h2></div>
+<div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">The casino points each of you is aiming for on this cruise. They can be different, for example if you’re at different tiers.</div>
+<sc-for list="{{ goalRows }}" as="r" hint-placeholder-count="2">
+<div class="field"><label>{{ r.name }} (points)</label><input class="input" inputMode="numeric" placeholder="2500" value="{{ r.value }}" onChange="{{ r.on }}"></div>
+</sc-for>
+<button class="btn btn-primary btn-block" onClick="{{ saveGoals }}">Save</button>
+</div>
+</sc-if>
+
 <sc-if value="{{ shBankSetup }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
 <div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ shipName }}</div><h2 style="margin:0;font-size:24px">Casino bankrolls</h2></div>
@@ -1061,7 +1072,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:grid;grid-template-columns:1fr 90px;gap:var(--space-3)"><div class="field"><label>Sail date</label><input class="input" type="date" value="{{ fcr.start }}" onChange="{{ fcrStart }}"></div><div class="field"><label>Nights</label><input class="input" inputMode="numeric" value="{{ fcr.nights }}" onChange="{{ fcrNights }}"></div></div>
 <div class="field"><label>Departure port</label><input class="input" placeholder="Miami" value="{{ fcr.embark }}" onChange="{{ fcrEmbark }}"></div>
 <div class="field"><label>Ship IMO number (for live tracking)</label><input class="input" inputMode="numeric" placeholder="7-digit number" value="{{ fcr.imo }}" onChange="{{ fcrImo }}"></div>
-<div class="field"><label>Free-cruise points goal (casino points each of you needs)</label><input class="input" inputMode="numeric" value="{{ fcr.goal }}" onChange="{{ fcrGoal }}"></div>
+<div class="field"><label>Default points goal (each person can set their own on Play › Slots)</label><input class="input" inputMode="numeric" value="{{ fcr.goal }}" onChange="{{ fcrGoal }}"></div>
 <button class="btn btn-primary btn-block" onClick="{{ saveCruise }}" disabled="{{ cruiseInvalid }}">{{ cruiseSaveLabel }}</button>
 <sc-if value="{{ cruiseEditing }}"><button class="btn btn-ghost" onClick="{{ deleteCruise }}" style="align-self:center;color:var(--color-accent-2-700)">Delete cruise</button></sc-if>
 </div>
@@ -1377,7 +1388,7 @@ class Component extends DCLogic {
       bank: rekey(d.bank), casinoAdj: rekey(d.casinoAdj), weighs: (d.weighs || []).map(x => ({ ...x, who: sw(x.who) })),
       steps: Object.fromEntries(Object.entries(d.steps || {}).map(([k, v]) => [k, rekey(v)])) }]));
     const brands = Object.fromEntries(Object.entries(st.brands || {}).map(([k, b]) => [k, { ...b, tiers: rekey(b.tiers) }]));
-    return { players: st.players.map(sw), db, brands, tWho: sw(st.tWho) };
+    return { players: st.players.map(sw), db, brands, tWho: sw(st.tWho), cruises: st.cruises.map(c => c.goals ? { ...c, goals: rekey(c.goals) } : c) };
   }
   stepXp(n) { n = +n || 0; return n >= 15000 ? 30 : n >= 10000 ? 20 : n >= 6000 ? 10 : 0; }
   // Today's day number relative to sail day (negative before sailing), or null without a sail date.
@@ -1399,6 +1410,8 @@ class Component extends DCLogic {
   }
   // Cash carried into a night: what the night before it ended with (or still has in play).
   carryFor(b, off, id) { const before = this.bankLedger(b).filter(x => x.id !== id && (x.off < off || (x.off === off && (!id || x.id < id)))); const p = before[before.length - 1]; return p ? (p.done ? p.end : p.start) : 0; }
+  // Each player's free-cruise points goal on a cruise, falling back to the cruise's default.
+  goalOf(c, n) { const g = (c && c.goals) || {}; return g[n] != null && g[n] !== '' ? +g[n] || 0 : +(c && c.goal) || 0; }
   closedNight(x) { return x.end != null && x.end !== ''; }
   claimers(w) { return Array.isArray(w) ? w : w ? [w] : []; }
   // Keys: "off:i" for the built-in daily three, "x<id>" for ones you wrote.
@@ -1551,9 +1564,9 @@ class Component extends DCLogic {
 
     const brand = s.brands[c.line] || { club: (c.line || 'Casino') + ' club', tiers: {} };
     const goal = +c.goal || 0;
-    const slotBoard = players.map(n => { const x = st[n]; return { name: n, tier: brand.tiers[n] || '', ptsLabel: x.pts.toLocaleString(), n: x.n, meta: x.n + (x.n === 1 ? ' session · ' : ' sessions · ') + x.jp + (x.jp === 1 ? ' jackpot' : ' jackpots'), net: fmt$(x.money), netLabel: x.hasBank ? 'win / loss · bankroll' : 'win / loss', netColor: x.money >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, x.pts / goal * 100) : 0) + '%', cost: x.pts > 0 ? this.fmtCost(this.costPer(x.money, x.pts)) + ' per point' : 'Cost per point',
+    const slotBoard = players.map(n => { const x = st[n], goal = this.goalOf(c, n); return { name: n, tier: brand.tiers[n] || '', ptsLabel: x.pts.toLocaleString(), n: x.n, meta: x.n + (x.n === 1 ? ' session · ' : ' sessions · ') + x.jp + (x.jp === 1 ? ' jackpot' : ' jackpots'), net: fmt$(x.money), netLabel: x.hasBank ? 'win / loss · bankroll' : 'win / loss', netColor: x.money >= 0 ? 'var(--color-accent-700)' : 'var(--color-accent-2-700)', color: colorOf(n), pct: (goal ? Math.min(100, x.pts / goal * 100) : 0) + '%', cost: x.pts > 0 ? this.fmtCost(this.costPer(x.money, x.pts)) + ' per point' : 'Cost per point',
         costNote: !(x.pts > 0) ? 'shows once you log points' : x.money >= 0 ? '(you’re up, so your points are free so far)' : goal && x.pts < goal ? '(about $' + Math.round(this.costPer(x.money, x.pts) * (goal - x.pts)).toLocaleString() + ' more to reach the goal at this rate)' : '',
-        left: goal ? (x.pts >= goal ? 'Free-cruise goal reached' : (goal - x.pts).toLocaleString() + ' pts to the ' + goal.toLocaleString() + '-pt free-cruise goal') : 'Set a goal in cruise details' }; }).filter((b, i) => i < 2 || b.n > 0);
+        left: goal ? (x.pts >= goal ? 'Free-cruise goal reached' : (goal - x.pts).toLocaleString() + ' pts to the ' + goal.toLocaleString() + '-pt free-cruise goal') : 'Tap to set a points goal' }; }).filter((b, i) => i < 2 || b.n > 0);
     const best = (key, fmt) => { const sorted = players.map(n => ({ n, v: st[n][key] })).filter(x => st[x.n].n || st[x.n].hasBank).sort((a, b) => b.v - a.v); if (!sorted.length || sorted[0].v <= 0) return { holder: 'Open', color: 'var(--color-neutral-500)' }; const tie = sorted[1] && sorted[1].v === sorted[0].v; return { holder: tie ? 'Tied' : sorted[0].n, color: tie ? 'var(--color-neutral-600)' : 'var(--color-process-yellow)' }; };
     const bOff = onboard ? on : 0;
     const bankRows = players.map(n => {
@@ -1682,7 +1695,10 @@ class Component extends DCLogic {
       noRes: !d.plans.some(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)),
       gSlots: s.game === 'slots', gHunt: s.game === 'hunt', gTrivia: s.game === 'trivia', gBadges: s.game === 'badges',
       setSlots: set({ game: 'slots' }), setHunt: set({ game: 'hunt' }), setTrivia: set({ game: 'trivia' }), setBadges: set({ game: 'badges' }),
-      crowns, slotBoard, clubName: brand.club, openSession, editGoal: openCruiseEdit(c),
+      crowns, slotBoard, clubName: brand.club, openSession,
+      editGoal: () => this.setState({ sheet: 'goals', fgo: Object.fromEntries(players.map(n => [n, String(this.goalOf(c, n) || '')])) }), shGoals: s.sheet === 'goals',
+      goalRows: players.map(n => ({ name: n, value: (s.fgo || {})[n] || '', on: e => { const val = e.target.value; this.setState(x => ({ fgo: { ...x.fgo, [n]: val } })); } })),
+      saveGoals: () => { const goals = { ...(c.goals || {}) }; players.forEach(n => { goals[n] = parseInt(String((s.fgo || {})[n] || '').replace(/[^0-9]/g, ''), 10) || 0; }); this.updCruise(() => ({ goals })); this.setState({ sheet: null }); },
       ...(() => { const tOff = this.todayOff(), sOff = tOff != null && days.some(x => x.off === tOff) ? tOff : curOff, today = (d.steps || {})[sOff] || {};
         return { stepsDayLabel: tOff === sOff ? 'today' : '· ' + dateLabel(sOff),
           stepRows: players.map(n => { const v = +today[n] || 0, tot = Object.values(d.steps || {}).reduce((a, day) => a + (+(day || {})[n] || 0), 0), xpN = this.stepXp(v);
