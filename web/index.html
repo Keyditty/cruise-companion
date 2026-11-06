@@ -302,10 +302,10 @@ body{background:var(--color-bg);overscroll-behavior:none}
 </sc-for>
 </div>
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1;min-width:0">Bankroll</h2><button class="btn btn-ghost" onClick="{{ openBankSetup }}" style="font-size:13px"><i class="ph-duotone ph-wallet"></i>Set amounts</button></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><h2 style="margin:0;font-size:22px;flex:1;min-width:0">Bankroll</h2><button class="btn btn-ghost" onClick="{{ openBankSetup }}" style="font-size:13px"><i class="ph-duotone ph-wallet"></i>Edit bankrolls</button></div>
 <sc-for list="{{ bankRows }}" as="br" hint-placeholder-count="2">
 <div style="display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-lg);background:var(--color-surface)">
-<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:18px;font-weight:600">{{ br.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ br.ofLine }}</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-2)"><span style="font-size:18px;font-weight:600">{{ br.name }}</span><button class="btn btn-ghost" onClick="{{ openBankSetup }}" style="padding:2px 4px;font-size:13px"><i class="ph-duotone ph-pencil-simple"></i>{{ br.ofLine }}</button></div>
 <sc-if value="{{ br.hasTotal }}">
 <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap"><span style="font-size:36px;font-weight:600;line-height:1;color:{{ br.color }}">{{ br.leftLabel }}</span><span style="font-size:14px;color:var(--color-neutral-700)">left</span><span style="font-size:14px;font-weight:600;color:{{ br.overallColor }}">{{ br.overall }}</span></div>
 <div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ br.pct }};background:{{ br.color }}"></div></div>
@@ -901,8 +901,8 @@ body{background:var(--color-bg);overscroll-behavior:none}
 
 <sc-if value="{{ shBankSetup }}">
 <div style="display:flex;flex-direction:column;gap:var(--space-4)">
-<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ shipName }}</div><h2 style="margin:0;font-size:24px">Casino bankroll</h2></div>
-<div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">How much each of you is putting in your casino wallet for the whole cruise. Separate from the trip budget.</div>
+<div style="display:flex;flex-direction:column;gap:2px"><div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">{{ shipName }}</div><h2 style="margin:0;font-size:24px">Casino bankrolls</h2></div>
+<div style="font-size:14px;line-height:1.5;color:var(--color-neutral-700)">How much each of you is putting in your casino wallet for the whole cruise. Change it any time, for example if you add more money mid-cruise. Separate from the trip budget.</div>
 <sc-for list="{{ bankSetupRows }}" as="r" hint-placeholder-count="2">
 <div class="field"><label>{{ r.name }} ($)</label><input class="input" inputMode="numeric" placeholder="700" value="{{ r.total }}" onChange="{{ r.on }}"></div>
 </sc-for>
