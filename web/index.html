@@ -332,7 +332,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div><div style="font-size:40px;font-weight:600;line-height:1;color:{{ b.netColor }}">{{ b.net }}</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ b.netLabel }}</div></div>
 </div>
 <div style="height:6px;background:var(--color-neutral-200);border-radius:var(--radius-md)"><div style="height:6px;border-radius:var(--radius-md);width:{{ b.pct }};background:{{ b.color }}"></div></div>
-<div style="font-size:12px;color:var(--color-neutral-700)">{{ b.left }}</div>
+<button onClick="{{ editGoal }}" style="align-self:flex-start;display:flex;align-items:center;gap:4px;background:none;border:0;padding:0;font-family:var(--font-body);font-size:12px;color:var(--color-accent-700);cursor:pointer;text-align:left">{{ b.left }}<i class="ph-duotone ph-pencil-simple"></i></button>
 <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;font-size:13px"><i class="ph-duotone ph-tag" style="color:var(--color-accent);align-self:center"></i><span style="font-weight:600">{{ b.cost }}</span><span style="color:var(--color-neutral-700)">{{ b.costNote }}</span></div>
 </div>
 </sc-for>
@@ -1061,7 +1061,7 @@ body{background:var(--color-bg);overscroll-behavior:none}
 <div style="display:grid;grid-template-columns:1fr 90px;gap:var(--space-3)"><div class="field"><label>Sail date</label><input class="input" type="date" value="{{ fcr.start }}" onChange="{{ fcrStart }}"></div><div class="field"><label>Nights</label><input class="input" inputMode="numeric" value="{{ fcr.nights }}" onChange="{{ fcrNights }}"></div></div>
 <div class="field"><label>Departure port</label><input class="input" placeholder="Miami" value="{{ fcr.embark }}" onChange="{{ fcrEmbark }}"></div>
 <div class="field"><label>Ship IMO number (for live tracking)</label><input class="input" inputMode="numeric" placeholder="7-digit number" value="{{ fcr.imo }}" onChange="{{ fcrImo }}"></div>
-<div class="field"><label>Free-cruise goal (casino points each)</label><input class="input" inputMode="numeric" value="{{ fcr.goal }}" onChange="{{ fcrGoal }}"></div>
+<div class="field"><label>Free-cruise points goal (casino points each of you needs)</label><input class="input" inputMode="numeric" value="{{ fcr.goal }}" onChange="{{ fcrGoal }}"></div>
 <button class="btn btn-primary btn-block" onClick="{{ saveCruise }}" disabled="{{ cruiseInvalid }}">{{ cruiseSaveLabel }}</button>
 <sc-if value="{{ cruiseEditing }}"><button class="btn btn-ghost" onClick="{{ deleteCruise }}" style="align-self:center;color:var(--color-accent-2-700)">Delete cruise</button></sc-if>
 </div>
@@ -1682,7 +1682,7 @@ class Component extends DCLogic {
       noRes: !d.plans.some(p => p.conf && (s.resFilter === 'all' || p.kind === s.resFilter)),
       gSlots: s.game === 'slots', gHunt: s.game === 'hunt', gTrivia: s.game === 'trivia', gBadges: s.game === 'badges',
       setSlots: set({ game: 'slots' }), setHunt: set({ game: 'hunt' }), setTrivia: set({ game: 'trivia' }), setBadges: set({ game: 'badges' }),
-      crowns, slotBoard, clubName: brand.club, openSession,
+      crowns, slotBoard, clubName: brand.club, openSession, editGoal: openCruiseEdit(c),
       ...(() => { const tOff = this.todayOff(), sOff = tOff != null && days.some(x => x.off === tOff) ? tOff : curOff, today = (d.steps || {})[sOff] || {};
         return { stepsDayLabel: tOff === sOff ? 'today' : '· ' + dateLabel(sOff),
           stepRows: players.map(n => { const v = +today[n] || 0, tot = Object.values(d.steps || {}).reduce((a, day) => a + (+(day || {})[n] || 0), 0), xpN = this.stepXp(v);
